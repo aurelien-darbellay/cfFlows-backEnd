@@ -18,7 +18,7 @@ import java.util.List;
 class JwtConfigTest {
 
     @Autowired
-    ReactiveJwtDecoder jwtDecoder;
+    JwtDecoder jwtDecoder;
     @Autowired
     JwtEncoder jwtEncoder;
 
