@@ -18,9 +18,9 @@ class JwtUtilsTest {
 
     @Test
     void createJwtTest() {
-        Jwt jwt = jwtUtils.createJwt("alice", List.of(Role.ADMIN));
+        Jwt jwt = jwtUtils.createJwt("alice", List.of(Role.ADMIN.getAuthorityName()));
         assertEquals("alice", jwt.getClaims().get("sub"));
         assertInstanceOf(List.class, jwt.getClaims().get("roles"));
-        assertSame(Role.ADMIN, ((List<Role>) jwt.getClaims().get("roles")).get(0));
+        assertSame(Role.ADMIN.getAuthorityName(), ((List<String>) jwt.getClaims().get("roles")).get(0));
     }
 }

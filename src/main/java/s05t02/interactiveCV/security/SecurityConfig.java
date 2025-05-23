@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
-import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.reactive.EnableWebFluxSecurity;
 import org.springframework.security.config.web.server.ServerHttpSecurity;
 import org.springframework.security.web.server.SecurityWebFilterChain;
@@ -16,6 +15,7 @@ import org.springframework.security.web.server.csrf.ServerCsrfTokenRepository;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.reactive.CorsConfigurationSource;
 import org.springframework.web.cors.reactive.UrlBasedCorsConfigurationSource;
+import s05t02.interactiveCV.security.jwt.JwtCookieLoginSuccessHandler;
 import s05t02.interactiveCV.security.jwt.JwtCookieSecurityContextRepository;
 
 import java.util.List;
@@ -32,13 +32,13 @@ public class SecurityConfig {
 
 
     @Bean
-    public SecurityWebFilterChain securityWebFilterChain(ServerHttpSecurity http, JwtCookieSecurityContextRepository jwtCookieSecurityContextRepository) {
+    public SecurityWebFilterChain securityWebFilterChain(ServerHttpSecurity http, JwtCookieSecurityContextRepository jwtCookieSecurityContextRepository, JwtCookieLoginSuccessHandler jwtSuccessHandler) {
         log.info("Security filter chain initialized with JWT cookie support");
         return http
                 .csrf(csrfSpec -> csrfSpec.csrfTokenRepository(csrfTokenRepository()))
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .securityContextRepository(jwtCookieSecurityContextRepository)
-                .formLogin(Customizer.withDefaults())
+                .formLogin(formLoginSpec -> formLoginSpec.authenticationSuccessHandler(jwtSuccessHandler))
                 .authorizeExchange(exchanges -> exchanges
                         .pathMatchers(HttpMethod.OPTIONS, apiBasePath + "/**").permitAll()
                         .pathMatchers(apiBasePath + "/**").authenticated()
@@ -46,7 +46,6 @@ public class SecurityConfig {
                 )
                 .build();
     }
-
 
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
@@ -72,4 +71,6 @@ public class SecurityConfig {
         );
         return csrfTokenRepository;
     }
+
+
 }
