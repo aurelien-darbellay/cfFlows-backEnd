@@ -5,16 +5,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
-import org.springframework.context.annotation.Profile;
 import org.springframework.security.oauth2.jose.jws.MacAlgorithm;
 import org.springframework.security.oauth2.jwt.*;
-import reactor.test.StepVerifier;
 
 import java.util.List;
 
+import static org.junit.jupiter.api.Assertions.*;
+
 @Import(JwtConfig.class)
 @SpringBootTest(classes = JwtConfig.class)
-
 class JwtConfigTest {
 
     @Autowired
@@ -25,8 +24,7 @@ class JwtConfigTest {
     @Test
     void jwtDecoderFailsWithRandomString() {
         String test = "4444444444444449.22222.11100";
-        StepVerifier.create(jwtDecoder.decode(test))
-                .expectError();
+        assertThrows(Exception.class, () -> jwtDecoder.decode(test));
     }
 
     @Test
@@ -40,11 +38,8 @@ class JwtConfigTest {
 
         JwsHeader headers = JwsHeader.with(MacAlgorithm.HS256).build();
         Jwt jwt = jwtEncoder.encode(JwtEncoderParameters.from(headers, claims));
-
-        StepVerifier.create(jwtDecoder.decode(jwt.getTokenValue()))
-                .expectNext(jwt)
-                .expectComplete();
-
-
+        Jwt returnJwt = jwtDecoder.decode(jwt.getTokenValue());
+        assertNotNull(returnJwt);
+        assertEquals("your-app", returnJwt.getClaims().get("iss"));
     }
 }

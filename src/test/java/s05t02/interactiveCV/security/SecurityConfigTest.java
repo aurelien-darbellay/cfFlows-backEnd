@@ -5,11 +5,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.annotation.Profile;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import org.springframework.web.reactive.function.BodyInserters;
+import s05t02.interactiveCV.model.Role;
+import s05t02.interactiveCV.security.jwt.JwtUtils;
+
+import java.util.List;
+
 import static org.springframework.security.test.web.reactive.server.SecurityMockServerConfigurers.csrf;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -19,21 +24,24 @@ public class SecurityConfigTest {
     @Autowired
     private WebTestClient client;
 
+    @Autowired
+    private JwtUtils jwtUtils;
+
     @Value("${app.api.base-path}")
     private String apiBasePath;
 
     @Test
-    void whenNoCredentials_thenProtectedEndpointReturnsUnauthorized() {
+    void whenNoCredentials_thenProtectedEndpointRedirectTowardsLogin() {
         client.get()
-                .uri(apiBasePath+"/protected")      // ← your secured URI
+                .uri(apiBasePath + "/protected")      // ← your secured URI
                 .exchange()
                 .expectStatus().isFound();
     }
 
     @Test
-    void whenPreflightRequestWithoutCorsConfig_thenNoCorsHeaders() {
+    void whenPreflightRequestWithUnauthorizedOrigin_thenNoCorsHeaders() {
         client.options()
-                .uri(apiBasePath+"/protected")
+                .uri(apiBasePath + "/protected")
                 .header("Origin", "http://localhost:3000")
                 .header("Access-Control-Request-Method", "GET")
                 .exchange()
@@ -42,9 +50,9 @@ public class SecurityConfigTest {
     }
 
     @Test
-    void whenPreflightRequestExpectCors_thenFailingAssertion() {
+    void whenPreflightRequestWithAuthorizedOrigin_thenCorsHeaders() {
         client.options()
-                .uri("http://hostname-ignored:666"+apiBasePath+"/protected")
+                .uri("http://hostname-ignored:666" + apiBasePath + "/protected")
                 .header("Origin", "http://localhost:5173")
                 .header("Access-Control-Request-Method", "GET")
                 .exchange()
@@ -53,19 +61,17 @@ public class SecurityConfigTest {
                 .expectHeader().valueEquals("Access-Control-Allow-Methods", "GET,POST,PUT,DELETE,OPTIONS");
     }
 
-    @Test// authenticate so we’re only testing CSRF, not authentication
-    void whenPostWithoutCsrfToken_andCsrfEnabled_thenReturnsForbidden() {
+    @Test
+// authenticate so we’re only testing CSRF, not authentication
+    void whenPostWithoutCsrfToken_thenReturnsForbidden() {
         client.post()
-                .uri("http://hostname-ignored:666"+apiBasePath + "/protected")
-                // no CSRF token header or cookie supplied
+                .uri("http://hostname-ignored:666" + apiBasePath + "/protected")
                 .exchange()
-                // if CSRF is enabled, this must be 403;
-                // if you’ve disabled CSRF, you’ll get 200 OK and this test will fail.
                 .expectStatus().isForbidden();
     }
 
     @Test
-    void whenPostingWithCsrfTokenOnAuthorizedPath_thenReturnsOk(){
+    void whenPostingWithCsrfTokenOnWithoutAuthentication_thenRedirectedToLogin() {
         client.mutateWith(csrf())
                 .post()
                 .uri("http://hostname-ignored:666/login")
@@ -85,5 +91,17 @@ public class SecurityConfigTest {
                 .exchange()
                 .expectStatus().isFound()
                 .expectHeader().valueEquals(HttpHeaders.LOCATION, "/");
+    }
+
+    @Test
+    void whenValidJwtIsSubmittedForUnexistingRessource_thenUserIdentifiedAndWeGet404() {
+        Jwt jwt = jwtUtils.createJwt("alice", List.of(Role.USER));
+        client.mutateWith(csrf())
+                .get()
+                .uri(apiBasePath + "/my-cv-is-not-found")
+                .cookie("jwt", jwt.getTokenValue())
+                .exchange()
+                .expectStatus().isNotFound();
+
     }
 }

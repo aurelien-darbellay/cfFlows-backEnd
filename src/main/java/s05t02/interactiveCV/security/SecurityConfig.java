@@ -1,9 +1,11 @@
 package s05t02.interactiveCV.security;
 
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.reactive.EnableWebFluxSecurity;
@@ -14,6 +16,7 @@ import org.springframework.security.web.server.csrf.ServerCsrfTokenRepository;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.reactive.CorsConfigurationSource;
 import org.springframework.web.cors.reactive.UrlBasedCorsConfigurationSource;
+import s05t02.interactiveCV.security.jwt.JwtCookieSecurityContextRepository;
 
 import java.util.List;
 
@@ -22,28 +25,34 @@ import java.util.List;
 @EnableWebFluxSecurity
 public class SecurityConfig {
 
+    private final Logger log = LoggerFactory.getLogger(SecurityConfig.class);
+
     @Value("${app.api.base-path}")
     private String apiBasePath;
 
+
     @Bean
-    public SecurityWebFilterChain securityWebFilterChain(ServerHttpSecurity http) {
+    public SecurityWebFilterChain securityWebFilterChain(ServerHttpSecurity http, JwtCookieSecurityContextRepository jwtCookieSecurityContextRepository) {
+        log.info("Security filter chain initialized with JWT cookie support");
         return http
                 .csrf(csrfSpec -> csrfSpec.csrfTokenRepository(csrfTokenRepository()))
-                .cors(cors ->cors.configurationSource(corsConfigurationSource()))
+                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
+                .securityContextRepository(jwtCookieSecurityContextRepository)
+                .formLogin(Customizer.withDefaults())
                 .authorizeExchange(exchanges -> exchanges
                         .pathMatchers(HttpMethod.OPTIONS, apiBasePath + "/**").permitAll()
-                        .pathMatchers(apiBasePath+"/**").authenticated()
+                        .pathMatchers(apiBasePath + "/**").authenticated()
                         .anyExchange().permitAll()
                 )
-                .formLogin(Customizer.withDefaults())
                 .build();
     }
+
 
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();
         config.setAllowedOrigins(List.of("http://localhost:5173"));
-        config.setAllowedMethods(List.of("GET","POST","PUT","DELETE","OPTIONS"));
+        config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         config.setAllowedHeaders(List.of("*"));
         config.setExposedHeaders(List.of("Authorization"));
         config.setAllowCredentials(true);
@@ -57,8 +66,8 @@ public class SecurityConfig {
     public ServerCsrfTokenRepository csrfTokenRepository() {
         CookieServerCsrfTokenRepository csrfTokenRepository = CookieServerCsrfTokenRepository.withHttpOnlyFalse();
         csrfTokenRepository.setCookieCustomizer(builder -> builder
-                .sameSite("None")   // or "Lax", "None"
-                .secure(true)         // important if using SameSite=None
+                .sameSite("Lax")   // or "Lax", "None"
+                .secure(false)         // important if using SameSite=None
                 .path("/")            // optional, sets cookie path
         );
         return csrfTokenRepository;
