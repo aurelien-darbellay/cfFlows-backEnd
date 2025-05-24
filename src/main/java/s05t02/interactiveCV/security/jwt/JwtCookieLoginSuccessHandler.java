@@ -1,5 +1,7 @@
 package s05t02.interactiveCV.security.jwt;
 
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseCookie;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.server.WebFilterExchange;
@@ -7,6 +9,7 @@ import org.springframework.security.web.server.authentication.ServerAuthenticati
 import org.springframework.stereotype.Component;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
+import s05t02.interactiveCV.globalVariables.ApiPaths;
 
 import java.time.Duration;
 import java.util.List;
@@ -42,6 +45,8 @@ public class JwtCookieLoginSuccessHandler implements ServerAuthenticationSuccess
         exchange.getResponse().addCookie(cookie);
 
         // You can redirect or just complete response here
+        exchange.getResponse().setStatusCode(HttpStatus.FOUND);
+        exchange.getResponse().getHeaders().add(HttpHeaders.LOCATION, ApiPaths.USER_DASHBOARD_PATH.replace("{username}", username));
         return exchange.getResponse().setComplete();
     }
 }

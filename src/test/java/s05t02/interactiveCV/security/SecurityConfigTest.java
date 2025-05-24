@@ -2,7 +2,6 @@ package s05t02.interactiveCV.security;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpHeaders;
@@ -12,6 +11,7 @@ import org.springframework.security.oauth2.jwt.*;
 import org.springframework.test.web.reactive.server.FluxExchangeResult;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import org.springframework.web.reactive.function.BodyInserters;
+import s05t02.interactiveCV.globalVariables.ApiPaths;
 import s05t02.interactiveCV.model.Role;
 import s05t02.interactiveCV.security.jwt.JwtUtils;
 
@@ -39,13 +39,11 @@ public class SecurityConfigTest {
     @Autowired
     private JwtDecoder jwtDecoder;
 
-    @Value("${app.api.base-path}")
-    private String apiBasePath;
 
     @Test
     void whenNoCredentials_thenProtectedEndpointRedirectTowardsLogin() {
         client.get()
-                .uri(apiBasePath + "/protected")      // ← your secured URI
+                .uri(ApiPaths.PROTECTED_BASE_PATH + "/protected")      // ← your secured URI
                 .exchange()
                 .expectStatus().isFound();
     }
@@ -53,7 +51,7 @@ public class SecurityConfigTest {
     @Test
     void whenPreflightRequestWithUnauthorizedOrigin_thenNoCorsHeaders() {
         client.options()
-                .uri(apiBasePath + "/protected")
+                .uri(ApiPaths.PROTECTED_BASE_PATH + "/protected")
                 .header("Origin", "http://localhost:3000")
                 .header("Access-Control-Request-Method", "GET")
                 .exchange()
@@ -64,7 +62,7 @@ public class SecurityConfigTest {
     @Test
     void whenPreflightRequestWithAuthorizedOrigin_thenCorsHeaders() {
         client.options()
-                .uri("http://hostname-ignored:666" + apiBasePath + "/protected")
+                .uri("http://hostname-ignored:666" + ApiPaths.PROTECTED_BASE_PATH + "/protected")
                 .header("Origin", "http://localhost:5173")
                 .header("Access-Control-Request-Method", "GET")
                 .exchange()
@@ -77,7 +75,7 @@ public class SecurityConfigTest {
 // authenticate so we’re only testing CSRF, not authentication
     void whenPostWithoutCsrfToken_thenReturnsForbidden() {
         client.post()
-                .uri("http://hostname-ignored:666" + apiBasePath + "/protected")
+                .uri("http://hostname-ignored:666" + ApiPaths.PROTECTED_BASE_PATH + "/protected")
                 .exchange()
                 .expectStatus().isForbidden();
     }
@@ -86,7 +84,7 @@ public class SecurityConfigTest {
     void whenPostingWithCsrfTokenOnWithoutAuthentication_thenRedirectedToLogin() {
         client.mutateWith(csrf())
                 .post()
-                .uri("http://hostname-ignored:666/login")
+                .uri("http://hostname-ignored:666" + ApiPaths.LOGIN_PATH)
                 .exchange()
                 .expectStatus().isFound();
     }
@@ -95,7 +93,7 @@ public class SecurityConfigTest {
     void whenFormLoginWithValidCredentials_thenRedirectsAndSetLocationHeader() {
         client.mutateWith(csrf())
                 .post()
-                .uri("/login")
+                .uri(ApiPaths.LOGIN_PATH)
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED)
                 .body(BodyInserters
                         .fromFormData("username", "user")
@@ -110,7 +108,7 @@ public class SecurityConfigTest {
         Jwt jwt = jwtUtils.createJwt("alice", List.of(Role.USER.getAuthorityName()));
         client.mutateWith(csrf())
                 .get()
-                .uri(apiBasePath + "/my-cv-is-not-found")
+                .uri(ApiPaths.PROTECTED_BASE_PATH + "/my-cv-is-not-found")
                 .cookie("jwt", jwt.getTokenValue())
                 .exchange()
                 .expectStatus().isNotFound();
@@ -127,7 +125,7 @@ public class SecurityConfigTest {
         Jwt jwt = jwtEncoder.encode(JwtEncoderParameters.from(headers, claimsSet));
         client.mutateWith(csrf())
                 .get()
-                .uri(apiBasePath + "/protected-route")
+                .uri(ApiPaths.PROTECTED_BASE_PATH + "/protected-route")
                 .cookie("jwt", jwt.getTokenValue())
                 .exchange()
                 .expectStatus().isFound();
@@ -137,7 +135,7 @@ public class SecurityConfigTest {
     void cookieWithJwtGeneratedUponSuccessfulLogin() {
         client.mutateWith(csrf())
                 .post()
-                .uri("/login")
+                .uri(ApiPaths.LOGIN_PATH)
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED)
                 .body(BodyInserters
                         .fromFormData("username", "user")
@@ -151,7 +149,7 @@ public class SecurityConfigTest {
     void cookieReturnedAfterSuccessulLoginPermitsAuthentication() {
         FluxExchangeResult<byte[]> result = client.mutateWith(csrf())
                 .post()
-                .uri("/login")
+                .uri(ApiPaths.LOGIN_PATH)
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED)
                 .body(BodyInserters
                         .fromFormData("username", "user")
@@ -166,7 +164,7 @@ public class SecurityConfigTest {
 
         client.mutateWith(csrf())
                 .get()
-                .uri(apiBasePath + "/my-cv-is-not-found")
+                .uri(ApiPaths.PROTECTED_BASE_PATH + "/my-cv-is-not-found")
                 .cookie("jwt", jwt)
                 .exchange()
                 .expectStatus().isNotFound();
@@ -176,7 +174,7 @@ public class SecurityConfigTest {
     void JwtReturnedContainsProperUsernameAndClaims() {
         FluxExchangeResult<byte[]> result = client.mutateWith(csrf())
                 .post()
-                .uri("/login")
+                .uri(ApiPaths.LOGIN_PATH)
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED)
                 .body(BodyInserters
                         .fromFormData("username", "user")
@@ -196,5 +194,49 @@ public class SecurityConfigTest {
 
         assertEquals("user", username);
         assertLinesMatch(List.of("ROLE_USER"), authorities);
+    }
+
+    @Test
+    void UnAuthorizedWhenTryingToAccessSomeoneElseSpace() {
+        Jwt jwt = jwtUtils.createJwt("alice", List.of(Role.USER.getAuthorityName()));
+        client.mutateWith(csrf())
+                .get()
+                .uri(ApiPaths.USER_BASE_PATH.replace("{username}", "aurelien"))
+                .cookie("jwt", jwt.getTokenValue())
+                .exchange()
+                .expectStatus().isForbidden();
+    }
+
+    @Test
+    void AuthorizedWhenTryingToAccessMySpace() {
+        Jwt jwt = jwtUtils.createJwt("unexistingUser", List.of(Role.USER.getAuthorityName()));
+        client.mutateWith(csrf())
+                .get()
+                .uri(ApiPaths.USER_BASE_PATH.replace("{username}", "unexistingUser"))
+                .cookie("jwt", jwt.getTokenValue())
+                .exchange()
+                .expectStatus().isNotFound();
+    }
+
+    @Test
+    void UnAuthorizedWhenTryingAccessAdminWithoutAuthority() {
+        Jwt jwt = jwtUtils.createJwt("alice", List.of(Role.USER.getAuthorityName()));
+        client.mutateWith(csrf())
+                .get()
+                .uri(ApiPaths.ADMIN_BASE_PATH)
+                .cookie("jwt", jwt.getTokenValue())
+                .exchange()
+                .expectStatus().isForbidden();
+    }
+
+    @Test
+    void AuthorizedWhenTryingAccessAdminWithAuthority() {
+        Jwt jwt = jwtUtils.createJwt("alice", List.of(Role.ADMIN.getAuthorityName()));
+        client.mutateWith(csrf())
+                .get()
+                .uri(ApiPaths.ADMIN_BASE_PATH + "/inexistent-ressource")
+                .cookie("jwt", jwt.getTokenValue())
+                .exchange()
+                .expectStatus().isNotFound();
     }
 }
