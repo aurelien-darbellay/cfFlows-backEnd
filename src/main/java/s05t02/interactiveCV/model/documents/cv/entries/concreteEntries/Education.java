@@ -5,7 +5,6 @@ import lombok.Getter;
 import lombok.Setter;
 import s05t02.interactiveCV.model.documents.genEntriesFeatures.Entry;
 
-import java.time.Year;
 import java.util.UUID;
 
 @Getter
@@ -17,7 +16,7 @@ public class Education extends Entry {
     private final String id = UUID.randomUUID().toString();
     private String title;
     private String trainingCenter;
-    private Year graduationYear;
+    private int graduationYear;
     private String comments;
     private String documentName;
     private String documentUrl;

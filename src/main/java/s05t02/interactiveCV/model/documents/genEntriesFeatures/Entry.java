@@ -6,6 +6,6 @@ import lombok.Setter;
 @Getter
 @Setter
 public abstract class Entry {
-    private boolean projected;
-    private boolean highlighted;
+    private boolean projected = true;
+    private boolean highlighted = false;
 }

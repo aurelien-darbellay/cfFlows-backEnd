@@ -9,10 +9,10 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 )
 public interface InteractiveDocument {
     default void printToPdf() {
-
     }
 
     default void exportToPublicView() {
-
     }
+
+    String getId();
 }
