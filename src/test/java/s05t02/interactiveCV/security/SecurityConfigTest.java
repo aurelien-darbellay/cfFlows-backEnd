@@ -1,19 +1,25 @@
 package s05t02.interactiveCV.security;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.jose.jws.MacAlgorithm;
 import org.springframework.security.oauth2.jwt.*;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.reactive.server.FluxExchangeResult;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import org.springframework.web.reactive.function.BodyInserters;
+import reactor.core.publisher.Mono;
 import s05t02.interactiveCV.globalVariables.ApiPaths;
 import s05t02.interactiveCV.model.Role;
 import s05t02.interactiveCV.security.jwt.JwtUtils;
+import s05t02.interactiveCV.service.MyUserDetailsService;
 
 import java.time.Duration;
 import java.time.Instant;
@@ -21,7 +27,9 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertLinesMatch;
+import static org.mockito.Mockito.when;
 import static org.springframework.security.test.web.reactive.server.SecurityMockServerConfigurers.csrf;
+
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureWebTestClient
@@ -39,6 +47,16 @@ public class SecurityConfigTest {
     @Autowired
     private JwtDecoder jwtDecoder;
 
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
+    @MockitoBean
+    private MyUserDetailsService myUserDetailsService;
+
+    @BeforeEach
+    void setUp() {
+        when(myUserDetailsService.findByUsername("user")).thenReturn(Mono.just(User.builder().username("user").password(passwordEncoder.encode("secret")).roles("USER").build()));
+    }
 
     @Test
     void whenNoCredentials_thenProtectedEndpointRedirectTowardsLogin() {
@@ -112,7 +130,6 @@ public class SecurityConfigTest {
                 .cookie("jwt", jwt.getTokenValue())
                 .exchange()
                 .expectStatus().isNotFound();
-
     }
 
     @Test

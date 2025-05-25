@@ -16,6 +16,7 @@ public class InteractiveCv implements InteractiveDocument {
     @Builder.Default
     @EqualsAndHashCode.Include
     private String id = UUID.randomUUID().toString();
+    private String title;
     private Identity identity;
     private Profession profession;
     private ProfilePicture picture;

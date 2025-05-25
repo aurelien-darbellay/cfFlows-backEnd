@@ -1,5 +1,6 @@
 package s05t02.interactiveCV.security.jwt;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseCookie;
@@ -15,13 +16,10 @@ import java.time.Duration;
 import java.util.List;
 
 @Component
+@RequiredArgsConstructor
 public class JwtCookieLoginSuccessHandler implements ServerAuthenticationSuccessHandler {
 
     private final JwtUtils jwtUtils;
-
-    public JwtCookieLoginSuccessHandler(JwtUtils jwtUtils) {
-        this.jwtUtils = jwtUtils;
-    }
 
     @Override
     public Mono<Void> onAuthenticationSuccess(WebFilterExchange webFilterExchange, Authentication authentication) {

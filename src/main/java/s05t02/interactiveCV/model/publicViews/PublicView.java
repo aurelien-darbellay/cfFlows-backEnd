@@ -9,11 +9,11 @@ import s05t02.interactiveCV.model.documents.InteractiveDocument;
 import java.time.LocalDate;
 import java.time.Period;
 
+@ToString
 @Getter
 @Setter
 @Document
 @Builder
-@RequiredArgsConstructor
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class PublicView {
     @EqualsAndHashCode.Include
@@ -24,5 +24,5 @@ public class PublicView {
     @Builder.Default
     private final LocalDate dateCreation = LocalDate.now();
     @Builder.Default
-    private final LocalDate dateExpiration = LocalDate.now().plus(Period.ofDays(200));
+    private LocalDate dateExpiration = LocalDate.now().plus(Period.ofDays(200));
 }
