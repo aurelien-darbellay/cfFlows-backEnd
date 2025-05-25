@@ -1,8 +1,6 @@
 package s05t02.interactiveCV.model.documents.cv;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 import s05t02.interactiveCV.model.documents.InteractiveDocument;
 import s05t02.interactiveCV.model.documents.cv.entries.concreteEntries.*;
 import s05t02.interactiveCV.model.documents.genEntriesFeatures.ListEntries;
@@ -12,9 +10,12 @@ import java.util.UUID;
 @Getter
 @Setter
 @Builder
-public class InteractiveCv implements InteractiveDocument {
+@ToString
+@EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = false)
+public class InteractiveCv extends InteractiveDocument {
+    @EqualsAndHashCode.Include
     @Builder.Default
-    private String id = UUID.randomUUID().toString();
+    private final String id = UUID.randomUUID().toString();
     private Identity identity;
     private Profession profession;
     private ProfilePicture picture;

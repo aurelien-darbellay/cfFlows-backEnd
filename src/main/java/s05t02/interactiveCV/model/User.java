@@ -6,6 +6,7 @@ import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 import s05t02.interactiveCV.model.documents.InteractiveDocument;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -23,7 +24,8 @@ public class User {
     private String userName;
 
     private String hashedPassword;
-    private List<InteractiveDocument> documents;
+    @Builder.Default
+    private List<InteractiveDocument> documents = new ArrayList<>();
 
     @Builder.Default
     private Role role = Role.USER;

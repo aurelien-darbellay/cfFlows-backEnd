@@ -60,8 +60,6 @@ public class UserService {
                     user.setDocuments(documents);
                     return user;
                 })
-                .flatMap(userRepository::save);
+                .flatMap(this::saveUser);
     }
-
-
 }
