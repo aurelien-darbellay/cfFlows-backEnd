@@ -4,12 +4,15 @@ import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
+import reactor.util.function.Tuple2;
 import s05t02.interactiveCV.exception.EntityNotFoundException;
 import s05t02.interactiveCV.model.User;
 import s05t02.interactiveCV.model.documents.InteractiveDocument;
 import s05t02.interactiveCV.repository.UserRepository;
 
+import java.util.Comparator;
 import java.util.List;
 
 @Service
@@ -61,5 +64,14 @@ public class UserService {
                     return user;
                 })
                 .flatMap(this::saveUser);
+    }
+
+    public Flux<User> getAllUser() {
+        return userRepository.findAll()
+                .sort(Comparator.comparing(User::getUserName))
+                .index()
+                .doOnNext(tuple -> log.debug("User number {}, with username {}, retrieved successfully", tuple.getT1(), tuple.getT2().getUserName()))
+                .doOnError(error -> log.error("Error retrieving user, message : {}", error.getMessage()))
+                .map(Tuple2::getT2);
     }
 }

@@ -1,17 +1,21 @@
 package s05t02.interactiveCV.model.documents.cv;
 
 import lombok.*;
-import lombok.experimental.SuperBuilder;
 import s05t02.interactiveCV.model.documents.InteractiveDocument;
 import s05t02.interactiveCV.model.documents.cv.entries.concreteEntries.*;
 import s05t02.interactiveCV.model.documents.genEntriesFeatures.ListEntries;
 
+import java.util.UUID;
+
 @Getter
 @Setter
-@SuperBuilder(toBuilder = true)
+@Builder(toBuilder = true)
 @ToString
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = false)
-public class InteractiveCv extends InteractiveDocument {
+public class InteractiveCv implements InteractiveDocument {
+    @Builder.Default
+    @EqualsAndHashCode.Include
+    private String id = UUID.randomUUID().toString();
     private Identity identity;
     private Profession profession;
     private ProfilePicture picture;
