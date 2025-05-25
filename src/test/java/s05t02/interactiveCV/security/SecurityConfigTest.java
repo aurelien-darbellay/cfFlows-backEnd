@@ -56,6 +56,7 @@ public class SecurityConfigTest {
     @BeforeEach
     void setUp() {
         when(myUserDetailsService.findByUsername("user")).thenReturn(Mono.just(User.builder().username("user").password(passwordEncoder.encode("secret")).roles("USER").build()));
+        when(myUserDetailsService.findByUsername("")).thenReturn(Mono.empty());
     }
 
     @Test

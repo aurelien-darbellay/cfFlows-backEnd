@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="ca" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>CV</title>
+    <style>
+        body {
+          font-family: Arial, sans-serif;
+          margin: 0;
+          padding: 0;
+          color: #333;
+          width: 800px;
+        }
+        .container {
+          display: table;
+          width: 100%;
+          table-layout: fixed;
+        }
+
+        .left-column,
+        .right-column {
+          display: table-cell;
+          vertical-align: top;
+        }
+
+        .left-column {
+          width: 35%;
+          background-color: #f4f4f4;
+          padding: 20px;
+        }
+
+        .right-column {
+          width: 65%;
+          padding: 20px;
+        }
+        h2 {
+          margin-top: 20px;
+          border-bottom: 1px solid #ccc;
+          padding-bottom: 5px;
+        }
+        ul {
+          padding-left: 20px;
+        }
+        .section {
+          margin-bottom: 25px;
+        }
+        .photo {
+          width: 100%;
+          height: auto;
+          margin-bottom: 20px;
+        }
+        .contact-info, .socials {
+          font-size: 0.9em;
+        }
+        .experience, .education {
+          margin-bottom: 15px;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <!-- LEFT COLUMN -->
+    <div class="left-column">
+        <img class="photo" th:if="${cv.picture != null}" th:src="${cv.picture.urlPicture}" alt="Foto"/>
+
+        <div class="section" th:if="${cv.contact != null}">
+            <h2>Contacte</h2>
+            <div class="contact-info">
+                <p th:if="${cv.contact.phoneNumber != null}" th:text="${cv.contact.phoneNumber}">Telèfon</p>
+                <p th:if="${cv.contact.email != null}" th:text="${cv.contact.email}">Correu electrònic</p>
+                <p th:if="${cv.contact.cityOfResidence != null}"
+                   th:text="${cv.contact.cityOfResidence + ' (' + cv.contact.zipCode + ')'}">Municipi + CP</p>
+            </div>
+        </div>
+
+        <div class="section" th:if="${cv.technicalSkills != null and !cv.technicalSkills.isEmpty()}">
+            <h2>Tech Skills</h2>
+            <ul>
+                <li th:each="skill : ${cv.technicalSkills}" th:if="${skill.keyWords != null}"
+                    th:text="${skill.keyWords}">Skill
+                </li>
+            </ul>
+        </div>
+
+        <div class="section" th:if="${cv.softSkills != null and !cv.softSkills.isEmpty()}">
+            <h2>Soft Skills</h2>
+            <ul>
+                <li th:each="skill : ${cv.softSkills}" th:if="${skill.keyWords != null}" th:text="${skill.keyWords}">
+                    Soft Skill
+                </li>
+            </ul>
+        </div>
+
+        <div class="section" th:if="${cv.languages != null and !cv.languages.isEmpty()}">
+            <h2>Idiomes</h2>
+            <ul>
+                <li th:each="lang : ${cv.languages}" th:if="${lang.name != null && lang.level != null}"
+                    th:text="${lang.name + ' - ' + lang.level}">Llengua
+                </li>
+            </ul>
+        </div>
+
+        <div class="section socials" th:if="${cv.contact != null}">
+            <p th:if="${cv.contact.gitHubAccount != null}">
+                <a th:href="${cv.contact.gitHubAccount}">GitHub</a>
+            </p>
+            <p th:if="${cv.contact.linkedInAccount != null}">
+                <a th:href="${cv.contact.linkedInAccount}">LinkedIn</a>
+            </p>
+        </div>
+    </div>
+
+    <!-- RIGHT COLUMN -->
+    <div class="right-column">
+        <h1 th:if="${cv.identity != null and !cv.identity.names.isEmpty()}"
+            th:text="${cv.identity.names[0] + ' ' + (!cv.identity.lastNames.isEmpty() ? cv.identity.lastNames[0] : '')}">
+            NOM I COGNOM
+        </h1>
+        <h3 th:if="${cv.profession != null and cv.profession.specificTitle != null}"
+            th:text="${cv.profession.specificTitle}">
+            Web Developer / Data Analyst
+        </h3>
+
+        <div class="section" th:if="${cv.summary != null and cv.summary.text != null}">
+            <h2>Perfil</h2>
+            <p th:text="${cv.summary.text}">Descripció breu del perfil professional.</p>
+        </div>
+
+        <div class="section" th:if="${cv.experiences != null and !cv.experiences.isEmpty()}">
+            <h2>Experiència</h2>
+            <div class="experience" th:each="exp : ${cv.experiences}">
+                <strong th:if="${exp.position != null}" th:text="${exp.position}">Posició</strong><br/>
+                <em th:if="${exp.nameCompany != null}"
+                    th:text="${exp.nameCompany + ' (' + (exp.startDate != null ? exp.startDate : '') + ' - ' + (exp.endDate != null ? exp.endDate : '') + ')'}">
+                    Empresa i dates
+                </em><br/>
+                <p th:if="${exp.description != null}" th:text="${exp.description}">Descripció breu del projecte i
+                    funcions.</p>
+            </div>
+        </div>
+
+        <div class="section" th:if="${cv.education != null and !cv.education.isEmpty()}">
+            <h2>Formació</h2>
+            <div class="education" th:each="edu : ${cv.education}">
+                <strong th:if="${edu.title != null}" th:text="${edu.title}">Titulació</strong><br/>
+                <em th:if="${edu.trainingCenter != null}"
+                    th:text="${edu.trainingCenter + ' (' + edu.graduationYear + ')'}">Centre i any</em><br/>
+                <p th:if="${edu.comments != null}" th:text="${edu.comments}">Detalls de la formació.</p>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
