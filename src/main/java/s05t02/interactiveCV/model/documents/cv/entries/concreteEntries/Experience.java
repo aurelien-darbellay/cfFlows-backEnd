@@ -3,6 +3,8 @@ package s05t02.interactiveCV.model.documents.cv.entries.concreteEntries;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
+import lombok.experimental.SuperBuilder;
 import s05t02.interactiveCV.model.documents.genEntriesFeatures.Entry;
 
 import java.time.LocalDate;
@@ -11,7 +13,8 @@ import java.util.UUID;
 
 @Getter
 @Setter
-@Builder
+@SuperBuilder
+@ToString
 public class Experience extends Entry {
     @Builder.Default
     private final String id = UUID.randomUUID().toString();

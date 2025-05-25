@@ -1,13 +1,15 @@
 package s05t02.interactiveCV.model.documents.cv.entries.concreteEntries;
 
-import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
+import lombok.experimental.SuperBuilder;
 import s05t02.interactiveCV.model.documents.genEntriesFeatures.ContainerEntry;
 
 @Getter
 @Setter
-@Builder
+@SuperBuilder
+@ToString
 public class Contact extends ContainerEntry {
     private String phoneNumber;
     private String email;

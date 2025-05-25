@@ -2,9 +2,11 @@ package s05t02.interactiveCV.model.documents.genEntriesFeatures;
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.experimental.SuperBuilder;
 
 @Getter
 @Setter
+@SuperBuilder
 public abstract class ContainerEntry extends Entry implements Positioned, Colored {
     private Position position;
     private String color;
