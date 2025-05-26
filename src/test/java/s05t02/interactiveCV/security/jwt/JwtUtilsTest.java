@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.oauth2.jwt.Jwt;
 import s05t02.interactiveCV.model.Role;
+import s05t02.interactiveCV.service.security.jwt.JwtUtils;
 
 import java.util.List;
 

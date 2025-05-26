@@ -14,6 +14,8 @@ import s05t02.interactiveCV.model.User;
 import s05t02.interactiveCV.model.documents.InteractiveDocument;
 import s05t02.interactiveCV.model.publicViews.PublicView;
 import s05t02.interactiveCV.repository.PublicViewRepository;
+import s05t02.interactiveCV.service.entities.PublicViewService;
+import s05t02.interactiveCV.service.entities.UserService;
 
 import java.time.LocalDate;
 import java.time.Period;

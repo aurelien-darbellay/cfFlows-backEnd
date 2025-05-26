@@ -12,6 +12,7 @@ import s05t02.interactiveCV.exception.EntityNotFoundException;
 import s05t02.interactiveCV.model.User;
 import s05t02.interactiveCV.model.documents.cv.InteractiveCv;
 import s05t02.interactiveCV.repository.UserRepository;
+import s05t02.interactiveCV.service.entities.UserService;
 
 import java.util.Collections;
 

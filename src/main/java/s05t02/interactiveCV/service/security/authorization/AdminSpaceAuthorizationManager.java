@@ -1,0 +1,28 @@
+package s05t02.interactiveCV.service.security.authorization;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.security.authorization.AuthorizationDecision;
+import org.springframework.security.authorization.ReactiveAuthorizationManager;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.web.server.authorization.AuthorizationContext;
+import reactor.core.publisher.Mono;
+
+public class AdminSpaceAuthorizationManager implements ReactiveAuthorizationManager<AuthorizationContext> {
+
+    private final static Logger log = LoggerFactory.getLogger(AdminSpaceAuthorizationManager.class);
+
+
+    @Override
+    public Mono<AuthorizationDecision> check(Mono<Authentication> authenticationMono, AuthorizationContext context) {
+        log.debug("In admin authorization manager");
+        return authenticationMono
+                .map(authentication ->
+                        new AuthorizationDecision(authentication.getAuthorities().stream()
+                                .map(GrantedAuthority::getAuthority)
+                                .toList()
+                                .contains("ROLE_ADMIN")))
+                .defaultIfEmpty(new AuthorizationDecision(false));
+    }
+}

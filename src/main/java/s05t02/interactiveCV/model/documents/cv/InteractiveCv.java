@@ -2,8 +2,8 @@ package s05t02.interactiveCV.model.documents.cv;
 
 import lombok.*;
 import s05t02.interactiveCV.model.documents.InteractiveDocument;
-import s05t02.interactiveCV.model.documents.cv.entries.concreteEntries.*;
-import s05t02.interactiveCV.model.documents.genEntriesFeatures.ListEntries;
+import s05t02.interactiveCV.model.documents.entries.concreteEntries.*;
+import s05t02.interactiveCV.model.documents.entries.genEntriesFeatures.ListEntries;
 
 import java.util.UUID;
 
@@ -32,6 +32,8 @@ public class InteractiveCv implements InteractiveDocument {
     private ListEntries<TechnicalSkill> technicalSkills = ListEntries.<TechnicalSkill>builder().build();
     @Builder.Default
     private ListEntries<SoftSkill> softSkills = ListEntries.<SoftSkill>builder().build();
+    @Builder.Default
+    private ListEntries<Portfolio> portfolio = ListEntries.<Portfolio>builder().build();
 
     @SuppressWarnings("unchecked")
     @Override
@@ -45,6 +47,7 @@ public class InteractiveCv implements InteractiveDocument {
                 .summary(summary.selfProject())
                 .education(education.selfProject())
                 .experiences(experiences.selfProject())
+                .portfolio(portfolio.selfProject())
                 .languages(languages.selfProject())
                 .technicalSkills(technicalSkills.selfProject())
                 .softSkills(softSkills.selfProject())

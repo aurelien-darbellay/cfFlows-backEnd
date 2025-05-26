@@ -12,8 +12,8 @@ import reactor.test.StepVerifier;
 import s05t02.interactiveCV.model.User;
 import s05t02.interactiveCV.model.documents.InteractiveDocument;
 import s05t02.interactiveCV.model.documents.cv.InteractiveCv;
-import s05t02.interactiveCV.model.documents.cv.entries.concreteEntries.*;
-import s05t02.interactiveCV.model.documents.genEntriesFeatures.ListEntries;
+import s05t02.interactiveCV.model.documents.entries.concreteEntries.*;
+import s05t02.interactiveCV.model.documents.entries.genEntriesFeatures.ListEntries;
 
 import java.util.List;
 

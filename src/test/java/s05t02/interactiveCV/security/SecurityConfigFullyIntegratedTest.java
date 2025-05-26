@@ -19,7 +19,7 @@ import org.springframework.web.reactive.function.BodyInserters;
 import s05t02.interactiveCV.globalVariables.ApiPaths;
 import s05t02.interactiveCV.model.Role;
 import s05t02.interactiveCV.model.User;
-import s05t02.interactiveCV.service.UserService;
+import s05t02.interactiveCV.service.entities.UserService;
 
 import java.util.List;
 
