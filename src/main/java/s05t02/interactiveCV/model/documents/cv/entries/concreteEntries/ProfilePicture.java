@@ -12,7 +12,7 @@ import s05t02.interactiveCV.model.documents.genEntriesFeatures.Sized;
 @Setter
 @SuperBuilder
 @ToString
-public class ProfilePicture extends ContainerEntry implements Sized {
+public class ProfilePicture extends ContainerEntry {
     public enum Shape {
         SQUARE, TRIANGLE, RECTANGLE, STAR, ROUND
     }
@@ -20,7 +20,5 @@ public class ProfilePicture extends ContainerEntry implements Sized {
     private final String urlPicture;
     @Builder.Default
     private Shape shape = Shape.ROUND;
-    @Builder.Default
-    private double size = 10;
 
 }

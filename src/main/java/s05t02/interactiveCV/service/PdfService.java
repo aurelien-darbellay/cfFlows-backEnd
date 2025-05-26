@@ -5,9 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
-import s05t02.interactiveCV.exception.IllegalDocumentTypeException;
 import s05t02.interactiveCV.model.documents.InteractiveDocument;
-import s05t02.interactiveCV.model.documents.cv.InteractiveCv;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -18,21 +16,14 @@ public class PdfService {
 
     private final TemplateEngine templateEngine;
 
-    private String generateHtml(InteractiveDocument document, Class<? extends InteractiveDocument> clazz) throws IllegalDocumentTypeException {
-        return switch (clazz.getSimpleName()) {
-            case "InteractiveCv" -> generateCvHtml((InteractiveCv) document);
-            default -> throw new IllegalDocumentTypeException();
-        };
-    }
-
-    public String generateCvHtml(InteractiveCv interactiveCv) {
+    public String generateHtml(InteractiveDocument document) {
         Context context = new Context();
-        context.setVariable("cv", interactiveCv);
-        return templateEngine.process("cv-template", context); // renders cv-template.html
+        context.setVariable(document.getHtmlTargetCoordinate().getVariableName(), document);
+        return templateEngine.process(document.getHtmlTargetCoordinate().getTemplateName(), context); // renders cv-template.html
     }
 
-    public byte[] generatePdf(InteractiveDocument document, Class<? extends InteractiveDocument> clazz) throws IllegalDocumentTypeException, IOException {
-        String html = generateHtml(document, clazz);  // Get rendered HTML
+    public byte[] generatePdf(InteractiveDocument document) throws IOException {
+        String html = generateHtml(document);  // Get rendered HTML
 
         ByteArrayOutputStream out = new ByteArrayOutputStream();
         PdfRendererBuilder builder = new PdfRendererBuilder();

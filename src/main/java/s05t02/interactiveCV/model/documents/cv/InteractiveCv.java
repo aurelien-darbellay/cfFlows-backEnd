@@ -50,4 +50,9 @@ public class InteractiveCv implements InteractiveDocument {
                 .softSkills(softSkills.selfProject())
                 .build();
     }
+
+    @Override
+    public HtmlTargetCoordinate getHtmlTargetCoordinate() {
+        return new HtmlTargetCoordinate("cv","cv-template");
+    }
 }

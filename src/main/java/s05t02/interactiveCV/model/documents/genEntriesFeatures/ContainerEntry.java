@@ -7,9 +7,10 @@ import lombok.experimental.SuperBuilder;
 @Getter
 @Setter
 @SuperBuilder
-public abstract class ContainerEntry extends Entry implements Positioned, Colored {
+public abstract class ContainerEntry extends Entry implements Positioned, Colored, Sized {
     private Position position;
     private String color;
     private Entry previousEntry;
     private Entry nextEntry;
+    private double size;
 }

@@ -45,7 +45,7 @@ public class PdfServiceTest {
         InteractiveCv sampleCv = DocumentFactory.populatedInteractiveCv("test");
 
         // Act: Generate HTML
-        String html = pdfService.generateCvHtml(sampleCv);
+        String html = pdfService.generateHtml(sampleCv);
 
         // Ensure output folder exists
         Files.createDirectories(Paths.get("test-output"));
@@ -64,7 +64,7 @@ public class PdfServiceTest {
     @Test
     void generatePdfAndSaveToFile() throws IllegalDocumentTypeException, IOException {
         InteractiveCv sampleCv = DocumentFactory.populatedInteractiveCv("test");
-        byte[] pdfBytes = pdfService.generatePdf(sampleCv, InteractiveCv.class);
+        byte[] pdfBytes = pdfService.generatePdf(sampleCv);
         Files.createDirectories(Paths.get("test-output"));
         Path path = Paths.get("test-output/generated-cv.pdf");
         Files.write(path, pdfBytes);
