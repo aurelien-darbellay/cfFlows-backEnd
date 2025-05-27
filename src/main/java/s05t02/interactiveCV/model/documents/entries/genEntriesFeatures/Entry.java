@@ -17,4 +17,9 @@ public abstract class Entry {
     public <T extends Entry> T selfProject() {
         return this.projected ? (T) this : null;
     }
+
+    public String getKeyNameInDB() {
+        String className = this.getClass().getSimpleName();
+        return className.substring(0, 1).toLowerCase() + className.substring(1);
+    }
 }

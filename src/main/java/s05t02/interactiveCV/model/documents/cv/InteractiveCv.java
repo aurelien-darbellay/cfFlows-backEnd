@@ -1,5 +1,6 @@
 package s05t02.interactiveCV.model.documents.cv;
 
+import customCompileChecks.MatchesTypeName;
 import lombok.*;
 import s05t02.interactiveCV.model.documents.InteractiveDocument;
 import s05t02.interactiveCV.model.documents.entries.concreteEntries.*;
@@ -12,26 +13,29 @@ import java.util.UUID;
 @Builder(toBuilder = true)
 @ToString
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = false)
+@MatchesTypeName
 public class InteractiveCv implements InteractiveDocument {
+    @MatchesTypeName(ignore = true)
     @Builder.Default
     @EqualsAndHashCode.Include
     private String id = UUID.randomUUID().toString();
+    @MatchesTypeName(ignore = true)
     private String title;
     private Identity identity;
     private Profession profession;
-    private ProfilePicture picture;
+    private ProfilePicture profilePicture;
     private Contact contact;
     private Summary summary;
     @Builder.Default
     private ListEntries<Education> education = ListEntries.<Education>builder().build();
     @Builder.Default
-    private ListEntries<Experience> experiences = ListEntries.<Experience>builder().build();
+    private ListEntries<Experience> experience = ListEntries.<Experience>builder().build();
     @Builder.Default
-    private ListEntries<Language> languages = ListEntries.<Language>builder().build();
+    private ListEntries<Language> language = ListEntries.<Language>builder().build();
     @Builder.Default
-    private ListEntries<TechnicalSkill> technicalSkills = ListEntries.<TechnicalSkill>builder().build();
+    private ListEntries<TechnicalSkill> technicalSkill = ListEntries.<TechnicalSkill>builder().build();
     @Builder.Default
-    private ListEntries<SoftSkill> softSkills = ListEntries.<SoftSkill>builder().build();
+    private ListEntries<SoftSkill> softSkill = ListEntries.<SoftSkill>builder().build();
     @Builder.Default
     private ListEntries<Portfolio> portfolio = ListEntries.<Portfolio>builder().build();
 
@@ -42,15 +46,15 @@ public class InteractiveCv implements InteractiveDocument {
                 .id(null)
                 .identity(identity.selfProject())
                 .profession(profession.selfProject())
-                .picture(picture.selfProject())
+                .profilePicture(profilePicture.selfProject())
                 .contact(contact.selfProject())
                 .summary(summary.selfProject())
                 .education(education.selfProject())
-                .experiences(experiences.selfProject())
+                .experience(experience.selfProject())
                 .portfolio(portfolio.selfProject())
-                .languages(languages.selfProject())
-                .technicalSkills(technicalSkills.selfProject())
-                .softSkills(softSkills.selfProject())
+                .language(language.selfProject())
+                .technicalSkill(technicalSkill.selfProject())
+                .softSkill(softSkill.selfProject())
                 .build();
     }
 

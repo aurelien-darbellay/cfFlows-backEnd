@@ -12,7 +12,7 @@ public class DocumentFactory {
                 .id(id)
                 .identity(Identity.builder().projected(true).names(List.of("John Doe")).build())
                 .profession(Profession.builder().projected(true).generalTitle("Software Engineer").build())
-                .picture(ProfilePicture.builder().projected(false).urlPicture("https://example.com/pic.jpg").build())
+                .profilePicture(ProfilePicture.builder().projected(false).urlPicture("https://example.com/pic.jpg").build())
                 .contact(Contact.builder().projected(true).email("john@example.com").build())
                 .summary(Summary.builder().projected(false).text("Summary that should be excluded.").build())
                 .education(ListEntries.<Education>builder()
@@ -20,20 +20,20 @@ public class DocumentFactory {
                                 Education.builder().projected(true).trainingCenter("Harvard").build(),
                                 Education.builder().projected(false).trainingCenter("Should be filtered").build()
                         )).projected(true).build())
-                .experiences(ListEntries.<Experience>builder()
+                .experience(ListEntries.<Experience>builder()
                         .entries(List.of(
                                 Experience.builder().projected(true).nameCompany("Google").build()
                         )).projected(true).build())
-                .languages(ListEntries.<Language>builder()
+                .language(ListEntries.<Language>builder()
                         .entries(List.of(
                                 Language.builder().projected(false).name("Latin").build()
                         )).projected(true).build())
-                .technicalSkills(ListEntries.<TechnicalSkill>builder()
+                .technicalSkill(ListEntries.<TechnicalSkill>builder()
                         .entries(List.of(
                                 TechnicalSkill.builder().projected(true).keyWords("Java").build(),
                                 TechnicalSkill.builder().projected(true).keyWords("JS").build()
                         )).projected(true).build())
-                .softSkills(ListEntries.<SoftSkill>builder()
+                .softSkill(ListEntries.<SoftSkill>builder()
                         .entries(List.of(
                                 SoftSkill.builder().projected(true).keyWords("Communication").build()
 

@@ -73,13 +73,13 @@ class UserRepositoryTest {
                     assertInstanceOf(InteractiveCv.class, retrievedCv);
                     ListEntries<Education> education = ((InteractiveCv) retrievedCv).getEducation();
                     assertNotNull(education);
-                    ListEntries<Experience> experiences = ((InteractiveCv) retrievedCv).getExperiences();
+                    ListEntries<Experience> experiences = ((InteractiveCv) retrievedCv).getExperience();
                     assertNotNull(experiences);
-                    ListEntries<SoftSkill> softSkills = ((InteractiveCv) retrievedCv).getSoftSkills();
+                    ListEntries<SoftSkill> softSkills = ((InteractiveCv) retrievedCv).getSoftSkill();
                     assertNotNull(softSkills);
-                    ListEntries<TechnicalSkill> technicalSkills = ((InteractiveCv) retrievedCv).getTechnicalSkills();
+                    ListEntries<TechnicalSkill> technicalSkills = ((InteractiveCv) retrievedCv).getTechnicalSkill();
                     assertNotNull(technicalSkills);
-                    ListEntries<Language> languages = ((InteractiveCv) retrievedCv).getLanguages();
+                    ListEntries<Language> languages = ((InteractiveCv) retrievedCv).getLanguage();
                     assertNotNull(languages);
                 }).verifyComplete();
     }
@@ -101,9 +101,9 @@ class UserRepositoryTest {
         ListEntries<TechnicalSkill> technicalSkills = ListEntries.<TechnicalSkill>builder().build();
         technicalSkills.add(TechnicalSkill.builder().keyWords("NodeJs").build());
         InteractiveCv cv = InteractiveCv.builder()
-                .identity(identity).picture(picture)
+                .identity(identity).profilePicture(picture)
                 .summary(summary).profession(profession)
-                .education(education).experiences(experiences).languages(languages).softSkills(softSkills).technicalSkills(technicalSkills).build();
+                .education(education).experience(experiences).language(languages).softSkill(softSkills).technicalSkill(technicalSkills).build();
         User user = User.builder().userName("testCV").hashedPassword("testPass").interactiveDocuments(List.of(cv)).id("683209dd65a9dc3bb63f5097").build();
         userRepository.save(user).block();
     }

@@ -6,7 +6,7 @@ import reactor.core.publisher.Mono;
 import s05t02.interactiveCV.model.User;
 
 @Repository
-public interface UserRepository extends ReactiveMongoRepository<User, String>, InteractiveDocumentRepository {
+public interface UserRepository extends ReactiveMongoRepository<User, String>, InteractiveDocumentRepository, EntryRepository {
     Mono<User> findByUserName(String username);
 
     Mono<Void> deleteByUserName(String username);

@@ -18,10 +18,10 @@ class InteractiveCvTest {
         InteractiveCv original = DocumentFactory.populatedInteractiveCv("cv-123");
 
         InteractiveCv projectedCV = original.getProjectedDocument();
-        assertEquals(0, projectedCV.getLanguages().size());
-        assertNull(projectedCV.getPicture());
-        assertNull(projectedCV.getSoftSkills());
-        assertEquals(2, projectedCV.getTechnicalSkills().size());
+        assertEquals(0, projectedCV.getLanguage().size());
+        assertNull(projectedCV.getProfilePicture());
+        assertNull(projectedCV.getSoftSkill());
+        assertEquals(2, projectedCV.getTechnicalSkill().size());
         assertEquals(1, projectedCV.getEducation().size());
         log.info(projectedCV.getEducation().get(0).toString());
         log.info(projectedCV.getEducation().toString());

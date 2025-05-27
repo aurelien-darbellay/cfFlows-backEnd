@@ -23,7 +23,21 @@ repositories {
     mavenCentral()
 }
 
+sourceSets {
+    processor {
+        java {
+            srcDir 'src/processor/java'
+        }
+        resources {
+            srcDir 'src/processor/resources'
+        }
+    }
+}
+
 dependencies {
+    // Use compiled processor classes during main compilation
+    annotationProcessor sourceSets.processor.output
+
     implementation 'org.springframework.boot:spring-boot-starter-data-mongodb-reactive'
     implementation 'org.springframework.boot:spring-boot-starter-security'
     implementation 'org.springframework.boot:spring-boot-starter-oauth2-resource-server'
@@ -32,15 +46,33 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
     implementation 'com.cloudinary:cloudinary-http44:1.32.0'
     implementation 'com.openhtmltopdf:openhtmltopdf-pdfbox:1.0.10'
+
     compileOnly 'org.projectlombok:lombok'
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
     annotationProcessor 'org.projectlombok:lombok'
+
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'io.projectreactor:reactor-test'
     testImplementation 'org.springframework.security:spring-security-test'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }
 
+tasks.register('compileProcessor', JavaCompile) {
+    source = sourceSets.processor.java
+    classpath = sourceSets.processor.compileClasspath
+    destinationDirectory = file("$buildDir/classes/processor")
+}
+
+tasks.named('compileJava') {
+    dependsOn tasks.named('compileProcessor')
+}
+
+tasks.named('processProcessorResources') {
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+}
+
 tasks.named('test') {
     useJUnitPlatform()
 }
+
+

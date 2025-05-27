@@ -61,7 +61,7 @@
 <div class="container">
     <!-- LEFT COLUMN -->
     <div class="left-column">
-        <img class="photo" th:if="${cv.picture != null}" th:src="${cv.picture.urlPicture}" alt="Foto"/>
+        <img class="photo" th:if="${cv.profilePicture != null}" th:src="${cv.profilePicture.urlPicture}" alt="Foto"/>
 
         <div class="section" th:if="${cv.contact != null}">
             <h2>Contacte</h2>
@@ -73,28 +73,28 @@
             </div>
         </div>
 
-        <div class="section" th:if="${cv.technicalSkills != null and !cv.technicalSkills.isEmpty()}">
+        <div class="section" th:if="${cv.technicalSkill != null and !cv.technicalSkill.isEmpty()}">
             <h2>Tech Skills</h2>
             <ul>
-                <li th:each="skill : ${cv.technicalSkills}" th:if="${skill.keyWords != null}"
+                <li th:each="skill : ${cv.technicalSkill}" th:if="${skill.keyWords != null}"
                     th:text="${skill.keyWords}">Skill
                 </li>
             </ul>
         </div>
 
-        <div class="section" th:if="${cv.softSkills != null and !cv.softSkills.isEmpty()}">
+        <div class="section" th:if="${cv.softSkill != null and !cv.softSkill.isEmpty()}">
             <h2>Soft Skills</h2>
             <ul>
-                <li th:each="skill : ${cv.softSkills}" th:if="${skill.keyWords != null}" th:text="${skill.keyWords}">
+                <li th:each="skill : ${cv.softSkill}" th:if="${skill.keyWords != null}" th:text="${skill.keyWords}">
                     Soft Skill
                 </li>
             </ul>
         </div>
 
-        <div class="section" th:if="${cv.languages != null and !cv.languages.isEmpty()}">
+        <div class="section" th:if="${cv.language != null and !cv.language.isEmpty()}">
             <h2>Idiomes</h2>
             <ul>
-                <li th:each="lang : ${cv.languages}" th:if="${lang.name != null && lang.level != null}"
+                <li th:each="lang : ${cv.language}" th:if="${lang.name != null && lang.level != null}"
                     th:text="${lang.name + ' - ' + lang.level}">Llengua
                 </li>
             </ul>
@@ -126,9 +126,9 @@
             <p th:text="${cv.summary.text}">Descripció breu del perfil professional.</p>
         </div>
 
-        <div class="section" th:if="${cv.experiences != null and !cv.experiences.isEmpty()}">
+        <div class="section" th:if="${cv.experience != null and !cv.experience.isEmpty()}">
             <h2>Experiència</h2>
-            <div class="experience" th:each="exp : ${cv.experiences}">
+            <div class="experience" th:each="exp : ${cv.experience}">
                 <strong th:if="${exp.position != null}" th:text="${exp.position}">Posició</strong><br/>
                 <em th:if="${exp.nameCompany != null}"
                     th:text="${exp.nameCompany + ' (' + (exp.startDate != null ? exp.startDate : '') + ' - ' + (exp.endDate != null ? exp.endDate : '') + ')'}">
