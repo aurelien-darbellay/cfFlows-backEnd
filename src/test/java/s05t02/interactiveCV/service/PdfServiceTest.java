@@ -5,7 +5,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.thymeleaf.spring6.SpringTemplateEngine;
 import org.thymeleaf.templateresolver.ClassLoaderTemplateResolver;
-import s05t02.interactiveCV.exception.IllegalDocumentTypeException;
 import s05t02.interactiveCV.model.documents.cv.InteractiveCv;
 import s05t02.interactiveCV.testClasses.DocumentFactory;
 
@@ -62,7 +61,7 @@ public class PdfServiceTest {
     }
 
     @Test
-    void generatePdfAndSaveToFile() throws IllegalDocumentTypeException, IOException {
+    void generatePdfAndSaveToFile() throws IOException {
         InteractiveCv sampleCv = DocumentFactory.populatedInteractiveCv("test");
         byte[] pdfBytes = pdfService.generatePdf(sampleCv);
         Files.createDirectories(Paths.get("test-output"));

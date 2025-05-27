@@ -9,7 +9,7 @@ public class ApiPaths {
     public static final String PROTECTED_BASE_PATH = "/api";
     public static final String USER_BASE_PATH = PROTECTED_BASE_PATH + "/users/{username}";
     public static final String USER_DASHBOARD_PATH = USER_BASE_PATH + "/dashboard";
-    public static final String CLOUDINARY_PATH = USER_BASE_PATH + "/cloudinary";
+    public static final String CLOUD_STORAGE_PATH = USER_BASE_PATH + "/cloud-storage";
     public static final String ADMIN_BASE_PATH = PROTECTED_BASE_PATH + "/admin";
     public static final String LOGIN_PATH = "/login";
 

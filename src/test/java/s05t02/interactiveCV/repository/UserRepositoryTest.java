@@ -64,12 +64,12 @@ class UserRepositoryTest {
     @Test
     void interactiveCvInitializeListByDefault() {
         InteractiveCv cv = InteractiveCv.builder().build();
-        User newUser = User.builder().userName("leo").id("4").hashedPassword("jpl").documents(List.of(cv)).build();
+        User newUser = User.builder().userName("leo").id("4").hashedPassword("jpl").interactiveDocuments(List.of(cv)).build();
         Mono<User> userMono = userRepository.save(newUser);
         StepVerifier.create(userMono)
                 .consumeNextWith(user ->
                 {
-                    InteractiveDocument retrievedCv = user.getDocuments().get(0);
+                    InteractiveDocument retrievedCv = user.getInteractiveDocuments().get(0);
                     assertInstanceOf(InteractiveCv.class, retrievedCv);
                     ListEntries<Education> education = ((InteractiveCv) retrievedCv).getEducation();
                     assertNotNull(education);
@@ -104,7 +104,7 @@ class UserRepositoryTest {
                 .identity(identity).picture(picture)
                 .summary(summary).profession(profession)
                 .education(education).experiences(experiences).languages(languages).softSkills(softSkills).technicalSkills(technicalSkills).build();
-        User user = User.builder().userName("testCV").hashedPassword("testPass").documents(List.of(cv)).id("683209dd65a9dc3bb63f5097").build();
+        User user = User.builder().userName("testCV").hashedPassword("testPass").interactiveDocuments(List.of(cv)).id("683209dd65a9dc3bb63f5097").build();
         userRepository.save(user).block();
     }
 }

@@ -25,7 +25,7 @@ public class User {
 
     private String hashedPassword;
     @Builder.Default
-    private List<InteractiveDocument> documents = new ArrayList<>();
+    private List<InteractiveDocument> interactiveDocuments = new ArrayList<>();
 
     @Builder.Default
     private Role role = Role.USER;

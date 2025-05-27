@@ -103,7 +103,7 @@ class UserServiceTest {
         InteractiveCv document = InteractiveCv.builder().build();
 
         User copyUser = User.builder().id(mockUser.getId()).userName(mockUser.getUserName()).build();
-        copyUser.setDocuments(Collections.singletonList(document));
+        copyUser.setInteractiveDocuments(Collections.singletonList(document));
 
         when(userRepository.findByUserName("testuser")).thenReturn(Mono.just(mockUser));
         when(userRepository.save(any(User.class))).thenAnswer(invocation -> Mono.just(invocation.getArgument(0)));

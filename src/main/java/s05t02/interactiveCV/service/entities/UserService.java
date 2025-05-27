@@ -57,10 +57,10 @@ public class UserService {
     public Mono<User> updateDocumentFromUserByUserName(String username, InteractiveDocument document) {
         return userRepository.findByUserName(username)
                 .map(user -> {
-                    List<InteractiveDocument> documents = user.getDocuments();
+                    List<InteractiveDocument> documents = user.getInteractiveDocuments();
                     documents.removeIf(interactiveDocument -> interactiveDocument.getId().equals(document.getId()));
                     documents.add(document);
-                    user.setDocuments(documents);
+                    user.setInteractiveDocuments(documents);
                     return user;
                 })
                 .flatMap(this::saveUser);

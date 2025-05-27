@@ -56,6 +56,6 @@ public class InteractiveCv implements InteractiveDocument {
 
     @Override
     public HtmlTargetCoordinate getHtmlTargetCoordinate() {
-        return new HtmlTargetCoordinate("cv","cv-template");
+        return new HtmlTargetCoordinate("cv", "cv-template");
     }
 }

@@ -1,12 +1,8 @@
 package s05t02.interactiveCV.model.documents.entries.genEntriesFeatures;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 import lombok.experimental.Delegate;
 import lombok.experimental.SuperBuilder;
-//import s05t02.interactiveCV.model.documents.cv.entries.EntryType;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,6 +11,7 @@ import java.util.List;
 @Setter
 @SuperBuilder
 @ToString
+@NoArgsConstructor
 public class ListEntries<T extends Entry> extends ContainerEntry implements List<T> {
     //private EntryType type;
     @Delegate
