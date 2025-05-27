@@ -45,6 +45,7 @@ class InteractiveDocumentRepositoryImplTest {
         repository.deleteDocInUser(USERNAME, DOC_ID).block();
         Mono<InteractiveDocument> result3 = repository.getDocInUserById(USERNAME, DOC_ID);
         StepVerifier.create(result3).verifyComplete();
+        repository.deleteById(USER_ID).block();
     }
 
 
