@@ -53,4 +53,14 @@ public class InteractiveDocumentRepositoryImpl implements InteractiveDocumentRep
                                 .filter(doc -> doc.getId().equals(updatedDoc.getId()))
                                 .findFirst()));
     }
+
+    @Override
+    public Mono<InteractiveDocument> getDocInUserById(String username, String docId) {
+        Query query = Query.query(Criteria.where("userName").is(username).and("interactiveDocuments._id").is(docId));
+        return reactiveMongoTemplate.findOne(query, User.class)
+                .flatMap(user -> Mono.justOrEmpty(
+                        user.getInteractiveDocuments().stream()
+                                .filter(doc -> doc.getId().equals(docId))
+                                .findFirst()));
+    }
 }

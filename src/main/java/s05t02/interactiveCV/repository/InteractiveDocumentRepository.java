@@ -11,4 +11,6 @@ public interface InteractiveDocumentRepository {
     Mono<Void> deleteDocInUser(String username, String docId);
 
     Mono<InteractiveDocument> updateDocInUser(String username, InteractiveDocument updatedDoc);
+
+    Mono<InteractiveDocument> getDocInUserById(String username, String id);
 }
