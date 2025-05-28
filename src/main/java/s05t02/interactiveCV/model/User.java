@@ -23,6 +23,8 @@ public class User {
     @Indexed(unique = true)
     private String username;
 
+    private String firstname;
+    private String lastname;
     private String hashedPassword;
     @Builder.Default
     private List<InteractiveDocument> interactiveDocuments = new ArrayList<>();
