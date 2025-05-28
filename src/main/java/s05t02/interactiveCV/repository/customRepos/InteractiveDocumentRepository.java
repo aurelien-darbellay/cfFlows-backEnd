@@ -1,4 +1,4 @@
-package s05t02.interactiveCV.repository;
+package s05t02.interactiveCV.repository.customRepos;
 
 import org.springframework.stereotype.Repository;
 import reactor.core.publisher.Mono;

@@ -1,11 +1,10 @@
 package s05t02.interactiveCV.model.documents.entries.concreteEntries;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 import lombok.experimental.SuperBuilder;
-import s05t02.interactiveCV.model.documents.entries.genEntriesFeatures.Entry;
+import org.springframework.data.annotation.PersistenceCreator;
+import s05t02.interactiveCV.model.documents.entries.genEntriesFeatures.ContainedEntry;
+import s05t02.interactiveCV.model.documents.entries.genEntriesFeatures.interfaces.HasId;
 
 import java.util.UUID;
 
@@ -13,7 +12,8 @@ import java.util.UUID;
 @Setter
 @SuperBuilder
 @ToString
-public class TechnicalSkill extends Entry {
+@RequiredArgsConstructor(onConstructor = @__(@PersistenceCreator))
+public class TechnicalSkill extends ContainedEntry {
     @Builder.Default
     private final String id = UUID.randomUUID().toString();
     private String keyWords;

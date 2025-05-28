@@ -34,13 +34,13 @@ public class SecurityConfigFullyIntegratedTest {
 
     static final Logger log = LoggerFactory.getLogger(SecurityConfigFullyIntegratedTest.class);
 
-    static final String USERNAME_1 = "user1";
+    static final String USERNAME_1 = "SecurityConfigFullyIntegratedTest-user1";
     static final String PASSWORD_1 = "pass1";
     static final Role ROLE_1 = Role.USER;
-    static final String USERNAME_2 = "user2";
+    static final String USERNAME_2 = "SecurityConfigFullyIntegratedTest-user2";
     static final String PASSWORD_2 = "pass2";
     static final Role ROLE_2 = Role.USER;
-    static final String USERNAME_3 = "user3";
+    static final String USERNAME_3 = "SecurityConfigFullyIntegratedTest-user3";
     static final String PASSWORD_3 = "pass3";
     static final Role ROLE_3 = Role.ADMIN;
 
@@ -59,9 +59,9 @@ public class SecurityConfigFullyIntegratedTest {
 
     @BeforeEach
     void setUp() {
-        User user1 = userService.saveUser(User.builder().id(USERNAME_1).userName(USERNAME_1).hashedPassword(passwordEncoder.encode(PASSWORD_1)).role(ROLE_1).build()).block();
-        User user2 = userService.saveUser(User.builder().id(USERNAME_2).userName(USERNAME_2).hashedPassword(passwordEncoder.encode(PASSWORD_2)).role(ROLE_2).build()).block();
-        User user3 = userService.saveUser(User.builder().id(USERNAME_3).userName(USERNAME_3).hashedPassword(passwordEncoder.encode(PASSWORD_3)).role(ROLE_3).build()).block();
+        User user1 = userService.saveUser(User.builder().id(USERNAME_1).username(USERNAME_1).hashedPassword(passwordEncoder.encode(PASSWORD_1)).role(ROLE_1).build()).block();
+        User user2 = userService.saveUser(User.builder().id(USERNAME_2).username(USERNAME_2).hashedPassword(passwordEncoder.encode(PASSWORD_2)).role(ROLE_2).build()).block();
+        User user3 = userService.saveUser(User.builder().id(USERNAME_3).username(USERNAME_3).hashedPassword(passwordEncoder.encode(PASSWORD_3)).role(ROLE_3).build()).block();
     }
 
     @Test

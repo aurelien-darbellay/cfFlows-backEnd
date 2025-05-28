@@ -4,6 +4,10 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
+import org.springframework.data.mongodb.core.query.Update;
+import s05t02.interactiveCV.model.documents.entries.genEntriesFeatures.interfaces.Colored;
+import s05t02.interactiveCV.model.documents.entries.genEntriesFeatures.interfaces.Positioned;
+import s05t02.interactiveCV.model.documents.entries.genEntriesFeatures.interfaces.Sized;
 
 @Getter
 @Setter
@@ -15,4 +19,13 @@ public abstract class ContainerEntry extends Entry implements Positioned, Colore
     private Entry previousEntry;
     private Entry nextEntry;
     private double size;
+
+    @Override
+    public Update createAddUpdate(){
+        return new Update().set("interactiveDocuments.$." + this.getKeyNameInDB(), this);
+    }
+    @Override
+    public Update createRemoveUpdate() {
+        return new Update().unset("interactiveDocuments.$." +this.getKeyNameInDB());
+    }
 }

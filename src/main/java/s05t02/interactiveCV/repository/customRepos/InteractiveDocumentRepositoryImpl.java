@@ -1,4 +1,4 @@
-package s05t02.interactiveCV.repository;
+package s05t02.interactiveCV.repository.customRepos;
 
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
@@ -22,7 +22,7 @@ public class InteractiveDocumentRepositoryImpl implements InteractiveDocumentRep
 
     @Override
     public Mono<InteractiveDocument> addDocToUser(String username, InteractiveDocument document) {
-        Query query = Query.query(Criteria.where("userName").is(username).and("interactiveDocuments._id").ne(document.getId()));
+        Query query = Query.query(Criteria.where("username").is(username).and("interactiveDocuments._id").ne(document.getId()));
         Update update = new Update().push("interactiveDocuments", document);
         return reactiveMongoTemplate.findAndModify(query, update, FindAndModifyOptions.options().returnNew(true), User.class)
                 .flatMap(user ->
@@ -37,7 +37,7 @@ public class InteractiveDocumentRepositoryImpl implements InteractiveDocumentRep
 
     @Override
     public Mono<Void> deleteDocInUser(String username, String docId) {
-        Query query = Query.query(Criteria.where("userName").is(username).and("interactiveDocuments._id").is(docId));
+        Query query = Query.query(Criteria.where("username").is(username).and("interactiveDocuments._id").is(docId));
         Update update = new Update().pull("interactiveDocuments", Collections.singletonMap("_id", docId));
         return reactiveMongoTemplate.updateFirst(query, update, User.class)
                 .then();
@@ -45,7 +45,7 @@ public class InteractiveDocumentRepositoryImpl implements InteractiveDocumentRep
 
     @Override
     public Mono<InteractiveDocument> updateDocInUser(String username, InteractiveDocument updatedDoc) {
-        Query query = Query.query(Criteria.where("userName").is(username).and("interactiveDocuments._id").is(updatedDoc.getId()));
+        Query query = Query.query(Criteria.where("username").is(username).and("interactiveDocuments._id").is(updatedDoc.getId()));
         Update update = new Update().set("interactiveDocuments.$", updatedDoc);
         return reactiveMongoTemplate.findAndModify(query, update, User.class)
                 .flatMap(user ->
@@ -56,7 +56,7 @@ public class InteractiveDocumentRepositoryImpl implements InteractiveDocumentRep
 
     @Override
     public Mono<InteractiveDocument> getDocInUserById(String username, String docId) {
-        Query query = Query.query(Criteria.where("userName").is(username).and("interactiveDocuments._id").is(docId));
+        Query query = Query.query(Criteria.where("username").is(username).and("interactiveDocuments._id").is(docId));
         return reactiveMongoTemplate.findOne(query, User.class)
                 .flatMap(user -> Mono.justOrEmpty(
                         user.getInteractiveDocuments().stream()

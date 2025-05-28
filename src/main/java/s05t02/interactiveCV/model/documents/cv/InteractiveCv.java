@@ -3,6 +3,7 @@ package s05t02.interactiveCV.model.documents.cv;
 import customCompileChecks.MatchesTypeName;
 import lombok.*;
 import s05t02.interactiveCV.model.documents.InteractiveDocument;
+import s05t02.interactiveCV.model.documents.entries.EntryType;
 import s05t02.interactiveCV.model.documents.entries.concreteEntries.*;
 import s05t02.interactiveCV.model.documents.entries.genEntriesFeatures.ListEntries;
 
@@ -31,7 +32,7 @@ public class InteractiveCv implements InteractiveDocument {
     @Builder.Default
     private ListEntries<Experience> experience = ListEntries.<Experience>builder().build();
     @Builder.Default
-    private ListEntries<Language> language = ListEntries.<Language>builder().build();
+    private ListEntries<Language> language =ListEntries.<Language>builder().build();
     @Builder.Default
     private ListEntries<TechnicalSkill> technicalSkill = ListEntries.<TechnicalSkill>builder().build();
     @Builder.Default

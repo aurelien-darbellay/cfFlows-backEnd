@@ -1,10 +1,8 @@
 package s05t02.interactiveCV.model.documents.entries.concreteEntries;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 import lombok.experimental.SuperBuilder;
+import org.springframework.data.annotation.PersistenceCreator;
 import s05t02.interactiveCV.model.documents.entries.genEntriesFeatures.ContainerEntry;
 
 import java.util.ArrayList;
@@ -14,6 +12,7 @@ import java.util.List;
 @Setter
 @SuperBuilder
 @ToString
+@RequiredArgsConstructor(onConstructor = @__(@PersistenceCreator))
 public class Identity extends ContainerEntry {
     @Builder.Default
     private List<String> names = new ArrayList<>();

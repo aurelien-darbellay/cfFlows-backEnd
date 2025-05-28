@@ -1,12 +1,11 @@
 package s05t02.interactiveCV.model.documents.entries.concreteEntries;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 import lombok.experimental.SuperBuilder;
-import s05t02.interactiveCV.model.documents.entries.genEntriesFeatures.Entry;
-import s05t02.interactiveCV.model.documents.entries.genEntriesFeatures.PointsToFileInCloud;
+import org.springframework.data.annotation.PersistenceCreator;
+import s05t02.interactiveCV.model.documents.entries.genEntriesFeatures.ContainedEntry;
+import s05t02.interactiveCV.model.documents.entries.genEntriesFeatures.interfaces.HasId;
+import s05t02.interactiveCV.model.documents.entries.genEntriesFeatures.interfaces.PointsToFileInCloud;
 import s05t02.interactiveCV.service.cloud.CloudMetaData;
 
 import java.time.LocalDate;
@@ -17,7 +16,8 @@ import java.util.UUID;
 @Setter
 @SuperBuilder
 @ToString
-public class Experience extends Entry implements PointsToFileInCloud {
+@RequiredArgsConstructor(onConstructor = @__(@PersistenceCreator))
+public class Experience extends ContainedEntry implements PointsToFileInCloud {
     @Builder.Default
     private final String id = UUID.randomUUID().toString();
     private String position;

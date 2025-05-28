@@ -31,19 +31,19 @@ class UserRepositoryTest {
 
     @Test
     void saveUserWithNoDocument() {
-        User newUser = User.builder().id("6831fa6dcc1ac71fbe347d1d").userName("aure").hashedPassword("777jlllope2").build();
+        User newUser = User.builder().id("6831fa6dcc1ac71fbe347d1d").username("aure").hashedPassword("777jlllope2").build();
         Mono<User> userMono = userRepository.save(newUser);
         StepVerifier.create(userMono)
-                .consumeNextWith(user -> log.info("Username : {}", user.getUserName()))
+                .consumeNextWith(user -> log.info("Username : {}", user.getUsername()))
                 .verifyComplete();
-        Mono<Void> mono = userRepository.deleteByUserName("aure");
+        Mono<Void> mono = userRepository.deleteByUsername("aure");
         StepVerifier.create(mono).verifyComplete();
     }
 
     @Test
     void savingFailWhenDuplicateUserName() {
-        User newUser = User.builder().userName("duplicate").id("1").hashedPassword("jpl").build();
-        User duplicateUser = User.builder().userName("duplicate").id("2").hashedPassword("jpl").build();
+        User newUser = User.builder().username("duplicate").id("1").hashedPassword("jpl").build();
+        User duplicateUser = User.builder().username("duplicate").id("2").hashedPassword("jpl").build();
         userRepository.save(newUser).block();
         Mono<User> duplicateMono = userRepository.save(duplicateUser);
         StepVerifier.create(duplicateMono)
@@ -52,8 +52,8 @@ class UserRepositoryTest {
 
     @Test
     void ifIdIsSame_thenNoDuplicateKeyError() {
-        User newUser = User.builder().userName("newDuplicate").id("3").hashedPassword("jpl").build();
-        User duplicateUser = User.builder().userName("newDuplicate").id("3").hashedPassword("exito").build();
+        User newUser = User.builder().username("newDuplicate").id("3").hashedPassword("jpl").build();
+        User duplicateUser = User.builder().username("newDuplicate").id("3").hashedPassword("exito").build();
         userRepository.save(newUser).block();
         Mono<User> duplicateMono = userRepository.save(duplicateUser);
         StepVerifier.create(duplicateMono)
@@ -64,7 +64,7 @@ class UserRepositoryTest {
     @Test
     void interactiveCvInitializeListByDefault() {
         InteractiveCv cv = InteractiveCv.builder().build();
-        User newUser = User.builder().userName("leo").id("4").hashedPassword("jpl").interactiveDocuments(List.of(cv)).build();
+        User newUser = User.builder().username("leo").id("4").hashedPassword("jpl").interactiveDocuments(List.of(cv)).build();
         Mono<User> userMono = userRepository.save(newUser);
         StepVerifier.create(userMono)
                 .consumeNextWith(user ->
@@ -104,7 +104,7 @@ class UserRepositoryTest {
                 .identity(identity).profilePicture(picture)
                 .summary(summary).profession(profession)
                 .education(education).experience(experiences).language(languages).softSkill(softSkills).technicalSkill(technicalSkills).build();
-        User user = User.builder().userName("testCV").hashedPassword("testPass").interactiveDocuments(List.of(cv)).id("683209dd65a9dc3bb63f5097").build();
+        User user = User.builder().username("testCV").hashedPassword("testPass").interactiveDocuments(List.of(cv)).id("683209dd65a9dc3bb63f5097").build();
         userRepository.save(user).block();
     }
 }

@@ -3,6 +3,7 @@ package s05t02.interactiveCV.model.documents.entries.genEntriesFeatures;
 import lombok.*;
 import lombok.experimental.Delegate;
 import lombok.experimental.SuperBuilder;
+import s05t02.interactiveCV.model.documents.entries.EntryType;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,9 +12,8 @@ import java.util.List;
 @Setter
 @SuperBuilder
 @ToString
-@NoArgsConstructor
+@RequiredArgsConstructor
 public class ListEntries<T extends Entry> extends ContainerEntry implements List<T> {
-    //private EntryType type;
     @Delegate
     @Builder.Default
     private List<T> entries = new ArrayList<>();
@@ -27,9 +27,16 @@ public class ListEntries<T extends Entry> extends ContainerEntry implements List
     @SuppressWarnings("unchecked")
     @Override
     public ListEntries<T> selfProject() {
-        if (!this.isProjected()) return null;
+        if (!this.isProjected() || entries.isEmpty()) return null;
         Class<T> clazz = (Class<T>) entries.get(0).getClass();
         return of(entries.stream().filter(Entry::isProjected).toList(), clazz);
     }
+    
+    @Override
+    public String getKeyNameInDB(){
+        if (this.isEmpty()) return null;
+        return this.get(0).getKeyNameInDB();
+    }
+
 
 }

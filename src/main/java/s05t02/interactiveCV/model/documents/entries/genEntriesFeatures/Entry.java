@@ -4,12 +4,14 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
+import org.springframework.data.mongodb.core.query.Update;
+import s05t02.interactiveCV.repository.CreatesMongoDbUpdate;
 
 @Getter
 @Setter
 @SuperBuilder
 @NoArgsConstructor
-public abstract class Entry {
+public abstract class Entry implements CreatesMongoDbUpdate {
     private boolean projected;
     private boolean highlighted;
 

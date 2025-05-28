@@ -34,7 +34,7 @@ class UserServiceTest {
     void setUp() {
         mockUser = User.builder().build();
         mockUser.setId("123");
-        mockUser.setUserName("testuser");
+        mockUser.setUsername("testuser");
     }
 
     @Test
@@ -66,7 +66,7 @@ class UserServiceTest {
 
     @Test
     void getUserByUserName_shouldReturnUser() {
-        when(userRepository.findByUserName("testuser")).thenReturn(Mono.just(mockUser));
+        when(userRepository.findByUsername("testuser")).thenReturn(Mono.just(mockUser));
 
         StepVerifier.create(userService.getUserByUserName("testuser"))
                 .expectNext(mockUser)
@@ -75,7 +75,7 @@ class UserServiceTest {
 
     @Test
     void getUserByUserName_shouldReturnErrorIfNotFound() {
-        when(userRepository.findByUserName("testuser")).thenReturn(Mono.empty());
+        when(userRepository.findByUsername("testuser")).thenReturn(Mono.empty());
 
         StepVerifier.create(userService.getUserByUserName("testuser"))
                 .expectError(EntityNotFoundException.class)
@@ -92,7 +92,7 @@ class UserServiceTest {
 
     @Test
     void deleteUserByUserName_shouldDeleteSuccessfully() {
-        when(userRepository.deleteByUserName("testuser")).thenReturn(Mono.empty());
+        when(userRepository.deleteByUsername("testuser")).thenReturn(Mono.empty());
 
         StepVerifier.create(userService.deleteUserByUserName("testuser"))
                 .verifyComplete();
@@ -102,10 +102,10 @@ class UserServiceTest {
     void updateDocumentFromUserByUserName_shouldUpdateDocument() {
         InteractiveCv document = InteractiveCv.builder().build();
 
-        User copyUser = User.builder().id(mockUser.getId()).userName(mockUser.getUserName()).build();
+        User copyUser = User.builder().id(mockUser.getId()).username(mockUser.getUsername()).build();
         copyUser.setInteractiveDocuments(Collections.singletonList(document));
 
-        when(userRepository.findByUserName("testuser")).thenReturn(Mono.just(mockUser));
+        when(userRepository.findByUsername("testuser")).thenReturn(Mono.just(mockUser));
         when(userRepository.save(any(User.class))).thenAnswer(invocation -> Mono.just(invocation.getArgument(0)));
 
         StepVerifier.create(userService.updateDocumentFromUserByUserName("testuser", document))

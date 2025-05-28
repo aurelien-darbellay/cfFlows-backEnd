@@ -24,21 +24,21 @@ public class UserService {
 
     public Mono<User> saveUser(User user) {
         return userRepository.save(user)
-                .doOnSuccess(retrievedUser -> log.debug("User with id : {} and userName : {} saved.", retrievedUser.getId(), retrievedUser.getUserName()))
+                .doOnSuccess(retrievedUser -> log.debug("User with id : {} and userName : {} saved.", retrievedUser.getId(), retrievedUser.getUsername()))
                 .doOnError(error -> log.error("Error saving user with id : {} - Error Message: {}", user.getId(), error.getMessage()));
     }
 
     public Mono<User> getUserById(String id) {
         return userRepository.findById(id)
                 .switchIfEmpty(Mono.error(new EntityNotFoundException(id)))
-                .doOnSuccess(retrievedUser -> log.debug("User with id : {} and userName : {} retrieved.", retrievedUser.getId(), retrievedUser.getUserName()))
+                .doOnSuccess(retrievedUser -> log.debug("User with id : {} and userName : {} retrieved.", retrievedUser.getId(), retrievedUser.getUsername()))
                 .doOnError(error -> log.error("Error retrieving user with id : {} - Error Message: {}", id, error.getMessage()));
     }
 
     public Mono<User> getUserByUserName(String userName) {
-        return userRepository.findByUserName(userName)
+        return userRepository.findByUsername(userName)
                 .switchIfEmpty(Mono.error(new EntityNotFoundException(userName)))
-                .doOnSuccess(retrievedUser -> log.debug("User with username : {} and userName : {} retrieved.", retrievedUser.getUserName(), retrievedUser.getUserName()))
+                .doOnSuccess(retrievedUser -> log.debug("User with username : {} and userName : {} retrieved.", retrievedUser.getUsername(), retrievedUser.getUsername()))
                 .doOnError(error -> log.error("Error retrieving user with username : {} - Error Message: {}", userName, error.getMessage()));
     }
 
@@ -49,13 +49,13 @@ public class UserService {
     }
 
     public Mono<Void> deleteUserByUserName(String username) {
-        return userRepository.deleteByUserName(username)
+        return userRepository.deleteByUsername(username)
                 .doOnSuccess(retrievedUser -> log.debug("User with username : {} deleted.", username))
                 .doOnError(error -> log.error("Error deleting user with username : {}", username));
     }
 
     public Mono<User> updateDocumentFromUserByUserName(String username, InteractiveDocument document) {
-        return userRepository.findByUserName(username)
+        return userRepository.findByUsername(username)
                 .map(user -> {
                     List<InteractiveDocument> documents = user.getInteractiveDocuments();
                     documents.removeIf(interactiveDocument -> interactiveDocument.getId().equals(document.getId()));
@@ -68,9 +68,9 @@ public class UserService {
 
     public Flux<User> getAllUser() {
         return userRepository.findAll()
-                .sort(Comparator.comparing(User::getUserName))
+                .sort(Comparator.comparing(User::getUsername))
                 .index()
-                .doOnNext(tuple -> log.debug("User number {}, with username {}, retrieved successfully", tuple.getT1(), tuple.getT2().getUserName()))
+                .doOnNext(tuple -> log.debug("User number {}, with username {}, retrieved successfully", tuple.getT1(), tuple.getT2().getUsername()))
                 .doOnError(error -> log.error("Error retrieving user, message : {}", error.getMessage()))
                 .map(Tuple2::getT2);
     }
