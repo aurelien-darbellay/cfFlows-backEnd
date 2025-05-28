@@ -9,11 +9,9 @@ import reactor.core.publisher.Mono;
 import reactor.util.function.Tuple2;
 import s05t02.interactiveCV.exception.EntityNotFoundException;
 import s05t02.interactiveCV.model.User;
-import s05t02.interactiveCV.model.documents.InteractiveDocument;
 import s05t02.interactiveCV.repository.UserRepository;
 
 import java.util.Comparator;
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -52,18 +50,6 @@ public class UserService {
         return userRepository.deleteByUsername(username)
                 .doOnSuccess(retrievedUser -> log.debug("User with username : {} deleted.", username))
                 .doOnError(error -> log.error("Error deleting user with username : {}", username));
-    }
-
-    public Mono<User> updateDocumentFromUserByUserName(String username, InteractiveDocument document) {
-        return userRepository.findByUsername(username)
-                .map(user -> {
-                    List<InteractiveDocument> documents = user.getInteractiveDocuments();
-                    documents.removeIf(interactiveDocument -> interactiveDocument.getId().equals(document.getId()));
-                    documents.add(document);
-                    user.setInteractiveDocuments(documents);
-                    return user;
-                })
-                .flatMap(this::saveUser);
     }
 
     public Flux<User> getAllUser() {

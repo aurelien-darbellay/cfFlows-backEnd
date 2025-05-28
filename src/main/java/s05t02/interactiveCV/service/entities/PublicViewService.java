@@ -20,13 +20,12 @@ import java.util.Comparator;
 @RequiredArgsConstructor
 public class PublicViewService {
     private final PublicViewRepository publicViewRepository;
-    private final UserService userService;
+    private final InteractiveDocumentService interactiveDocumentService;
     private static final Logger log = LoggerFactory.getLogger(PublicViewService.class);
 
     public Mono<PublicView> savePublicView(String username, InteractiveDocument document) {
-        PublicView newView = createNewPublicView(username, document);
-        return userService.updateDocumentFromUserByUserName(username, document)
-                .flatMap(user -> publicViewRepository.save(newView))
+        return interactiveDocumentService.updateDocumentInUser(username, document)
+                .flatMap(doc -> publicViewRepository.save(createNewPublicView(username, doc)))
                 .doOnSuccess(savedView -> log.debug("Document with id : {}, of type : {} saved as public view by {}.", document.getId(), document.getClass(), username))
                 .doOnError(error -> log.error("Error saving document with id : {} for user {} - Error Message: {}", document.getId(), username, error.getMessage()));
     }

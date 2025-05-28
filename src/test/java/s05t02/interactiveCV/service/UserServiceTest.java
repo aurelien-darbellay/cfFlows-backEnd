@@ -10,13 +10,9 @@ import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 import s05t02.interactiveCV.exception.EntityNotFoundException;
 import s05t02.interactiveCV.model.User;
-import s05t02.interactiveCV.model.documents.cv.InteractiveCv;
 import s05t02.interactiveCV.repository.UserRepository;
 import s05t02.interactiveCV.service.entities.UserService;
 
-import java.util.Collections;
-
-import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -95,21 +91,6 @@ class UserServiceTest {
         when(userRepository.deleteByUsername("testuser")).thenReturn(Mono.empty());
 
         StepVerifier.create(userService.deleteUserByUserName("testuser"))
-                .verifyComplete();
-    }
-
-    @Test
-    void updateDocumentFromUserByUserName_shouldUpdateDocument() {
-        InteractiveCv document = InteractiveCv.builder().build();
-
-        User copyUser = User.builder().id(mockUser.getId()).username(mockUser.getUsername()).build();
-        copyUser.setInteractiveDocuments(Collections.singletonList(document));
-
-        when(userRepository.findByUsername("testuser")).thenReturn(Mono.just(mockUser));
-        when(userRepository.save(any(User.class))).thenAnswer(invocation -> Mono.just(invocation.getArgument(0)));
-
-        StepVerifier.create(userService.updateDocumentFromUserByUserName("testuser", document))
-                .expectNext(copyUser)
                 .verifyComplete();
     }
 }

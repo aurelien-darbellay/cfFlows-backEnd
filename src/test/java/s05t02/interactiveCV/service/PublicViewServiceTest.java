@@ -10,10 +10,11 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 import s05t02.interactiveCV.exception.EntityNotFoundException;
-import s05t02.interactiveCV.model.User;
 import s05t02.interactiveCV.model.documents.InteractiveDocument;
+import s05t02.interactiveCV.model.documents.cv.InteractiveCv;
 import s05t02.interactiveCV.model.publicViews.PublicView;
 import s05t02.interactiveCV.repository.PublicViewRepository;
+import s05t02.interactiveCV.service.entities.InteractiveDocumentService;
 import s05t02.interactiveCV.service.entities.PublicViewService;
 import s05t02.interactiveCV.service.entities.UserService;
 
@@ -31,6 +32,9 @@ class PublicViewServiceTest {
 
     @Mock
     private UserService userService;
+
+    @Mock
+    private InteractiveDocumentService interactiveDocumentService;
 
     @InjectMocks
     private PublicViewService publicViewService;
@@ -55,8 +59,8 @@ class PublicViewServiceTest {
 
     @Test
     void savePublicView_shouldSaveNewView() {
-        when(userService.updateDocumentFromUserByUserName(USERNAME, document))
-                .thenReturn(Mono.just(User.builder().build())); // user returned but unused
+        when(interactiveDocumentService.updateDocumentInUser(USERNAME, document))
+                .thenReturn(Mono.just(InteractiveCv.builder().build())); // user returned but unused
 
         when(publicViewRepository.save(any())).thenReturn(Mono.just(publicView));
 
