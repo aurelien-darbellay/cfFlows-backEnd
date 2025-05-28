@@ -3,6 +3,7 @@ package s05t02.interactiveCV.repository;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.mongodb.core.FindAndModifyOptions;
 import org.springframework.data.mongodb.core.ReactiveMongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
@@ -21,9 +22,10 @@ public class EntryRepositoryImpl implements EntryRepository {
     public Mono<User> insertEntryIntoDocument(String username, String docId, EntryUpdateCreator updateCreator) {
         Entry entry = updateCreator.getEntry();
         log.atDebug().log(entry.getKeyNameInDB());
-        Query query = Query.query(Criteria.where("username").is(username).and("interactiveDocument._id").is(docId));
+        Query query = Query.query(Criteria.where("userName").is(username).and("interactiveDocuments._id").is(docId));
         Update update = new Update().push("interactiveDocuments.$.experience", entry);
-        return reactiveMongoTemplate.findAndModify(query, update, User.class);
+        FindAndModifyOptions options = FindAndModifyOptions.options().returnNew(true);
+        return reactiveMongoTemplate.findAndModify(query, update, options, User.class);
                 /*.map(User::getInteractiveDocuments)
                 .flatMapMany(Flux::fromIterable)
                 .filter(doc -> (doc.getId().equals(docId)))
@@ -32,5 +34,6 @@ public class EntryRepositoryImpl implements EntryRepository {
                 .flatMapMany(Flux::fromIterable)
                 .filter(retrievedEntry -> retrievedEntry.getKeyNameInDB().equals(entry.getKeyNameInDB()))
                 .next();*/
+
     }
 }

@@ -4,6 +4,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
 import org.springframework.test.context.ActiveProfiles;
+import reactor.core.publisher.Mono;
+import reactor.test.StepVerifier;
 import s05t02.interactiveCV.model.User;
 import s05t02.interactiveCV.model.documents.cv.InteractiveCv;
 import s05t02.interactiveCV.model.documents.entries.concreteEntries.Experience;
@@ -34,7 +36,9 @@ class EntryRepositoryImplTest {
         /*Entry newEntry = Summary.builder().title("Yo").build();
         repository.insertEntryIntoDocument(USERNAME, DOC_ID, new SimpleEntryUpdateCreator(newEntry)).block();*/
         Entry anotherEntry = Experience.builder().description("buufff").build();
-        repository.insertEntryIntoDocument(USERNAME, DOC_ID, new ListEntryUpdateCreator(anotherEntry)).block();
-
+        Mono<User> result = repository.insertEntryIntoDocument(USERNAME, DOC_ID, new ListEntryUpdateCreator(anotherEntry));
+        StepVerifier.create(result)
+                .expectNext()
+                .verifyComplete();
     }
 }
