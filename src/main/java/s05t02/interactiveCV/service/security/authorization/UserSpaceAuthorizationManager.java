@@ -9,7 +9,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.web.server.authorization.AuthorizationContext;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
-import s05t02.interactiveCV.globalVariables.ApiPaths;
 
 public class UserSpaceAuthorizationManager implements ReactiveAuthorizationManager<AuthorizationContext> {
 
@@ -17,11 +16,10 @@ public class UserSpaceAuthorizationManager implements ReactiveAuthorizationManag
 
     @Override
     public Mono<AuthorizationDecision> check(Mono<Authentication> authenticationMono, AuthorizationContext context) {
-        log.debug("In authorization manager");
+        log.debug("In user authorization manager");
         ServerWebExchange exchange = context.getExchange();
-        String pathUsername = ApiPaths.extractUserNameFromBaseUserSpaceUrl(exchange.getRequest().getURI().getPath());
         return authenticationMono
-                .map(authentication -> new AuthorizationDecision(authentication.getName().equals(pathUsername)))
+                .map(authentication -> new AuthorizationDecision(Auth.isRightUser(authentication, exchange) || Auth.isAdmin(authentication)))
                 .defaultIfEmpty(new AuthorizationDecision(false));
     }
 }

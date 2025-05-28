@@ -18,8 +18,8 @@ import org.springframework.web.reactive.function.BodyInserters;
 import reactor.core.publisher.Mono;
 import s05t02.interactiveCV.globalVariables.ApiPaths;
 import s05t02.interactiveCV.model.Role;
-import s05t02.interactiveCV.service.security.jwt.JwtUtils;
 import s05t02.interactiveCV.service.security.MyUserDetailsService;
+import s05t02.interactiveCV.service.security.jwt.JwtUtils;
 
 import java.time.Duration;
 import java.time.Instant;

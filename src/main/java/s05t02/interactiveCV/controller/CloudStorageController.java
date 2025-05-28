@@ -1,5 +1,6 @@
 package s05t02.interactiveCV.controller;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Mono;
 import s05t02.interactiveCV.globalVariables.ApiPaths;
@@ -9,13 +10,10 @@ import java.util.Map;
 
 @RestController
 @RequestMapping(ApiPaths.CLOUD_STORAGE_PATH)
+@RequiredArgsConstructor
 public class CloudStorageController {
 
     private final CloudStorageService cloudStorageService;
-
-    public CloudStorageController(CloudStorageService cloudStorageService) {
-        this.cloudStorageService = cloudStorageService;
-    }
 
     @PostMapping("/signature")
     public Mono<Map<String, Object>> getSignature(@PathVariable String username, @RequestBody Map<String, Object> body) {

@@ -14,10 +14,10 @@ public abstract class Entry implements CreatesMongoDbUpdate {
     private boolean projected;
     private boolean highlighted;
 
-    @SuppressWarnings("unchecked")
-    public <T extends Entry> T selfProject() {
-        return this.projected ? (T) this : null;
+    public static <T extends Entry> T project(T entry) {
+        return (entry == null || !entry.isProjected()) ? null : entry;
     }
+
 
     public String getKeyNameInDB() {
         String className = this.getClass().getSimpleName();

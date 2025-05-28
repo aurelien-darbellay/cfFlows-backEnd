@@ -4,28 +4,28 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
 import s05t02.interactiveCV.model.documents.InteractiveDocument;
-import s05t02.interactiveCV.repository.customRepos.InteractiveDocumentRepository;
+import s05t02.interactiveCV.repository.UserRepository;
 
 @Service
 @RequiredArgsConstructor
 public class InteractiveDocumentService {
 
-    private final InteractiveDocumentRepository interactiveDocumentRepository;
+    private final UserRepository repository;
 
     public Mono<InteractiveDocument> addDocumentToUser(String username, InteractiveDocument document) {
-        return interactiveDocumentRepository.addDocToUser(username, document);
+        return repository.addDocToUser(username, document);
     }
 
     public Mono<Void> deleteDocumentFromUser(String username, String docId) {
-        return interactiveDocumentRepository.deleteDocInUser(username, docId);
+        return repository.deleteDocInUser(username, docId);
     }
 
     public Mono<InteractiveDocument> updateDocumentInUser(String username, InteractiveDocument updatedDocument) {
-        return interactiveDocumentRepository.updateDocInUser(username, updatedDocument);
+        return repository.updateDocInUser(username, updatedDocument);
     }
 
     public Mono<InteractiveDocument> getDocumentByIdForUser(String username, String docId) {
-        return interactiveDocumentRepository.getDocInUserById(username, docId);
+        return repository.getDocInUserById(username, docId);
     }
 }
 

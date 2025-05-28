@@ -3,8 +3,8 @@ package s05t02.interactiveCV.model.documents.cv;
 import customCompileChecks.MatchesTypeName;
 import lombok.*;
 import s05t02.interactiveCV.model.documents.InteractiveDocument;
-import s05t02.interactiveCV.model.documents.entries.EntryType;
 import s05t02.interactiveCV.model.documents.entries.concreteEntries.*;
+import s05t02.interactiveCV.model.documents.entries.genEntriesFeatures.Entry;
 import s05t02.interactiveCV.model.documents.entries.genEntriesFeatures.ListEntries;
 
 import java.util.UUID;
@@ -32,7 +32,7 @@ public class InteractiveCv implements InteractiveDocument {
     @Builder.Default
     private ListEntries<Experience> experience = ListEntries.<Experience>builder().build();
     @Builder.Default
-    private ListEntries<Language> language =ListEntries.<Language>builder().build();
+    private ListEntries<Language> language = ListEntries.<Language>builder().build();
     @Builder.Default
     private ListEntries<TechnicalSkill> technicalSkill = ListEntries.<TechnicalSkill>builder().build();
     @Builder.Default
@@ -45,17 +45,17 @@ public class InteractiveCv implements InteractiveDocument {
     public InteractiveCv getProjectedDocument() {
         return this.toBuilder()
                 .id(null)
-                .identity(identity.selfProject())
-                .profession(profession.selfProject())
-                .profilePicture(profilePicture.selfProject())
-                .contact(contact.selfProject())
-                .summary(summary.selfProject())
-                .education(education.selfProject())
-                .experience(experience.selfProject())
-                .portfolio(portfolio.selfProject())
-                .language(language.selfProject())
-                .technicalSkill(technicalSkill.selfProject())
-                .softSkill(softSkill.selfProject())
+                .identity(Entry.project(identity))
+                .profession(Entry.project(profession))
+                .profilePicture(Entry.project(profilePicture))
+                .contact(Entry.project(contact))
+                .summary(Entry.project(summary))
+                .education(ListEntries.project(education))
+                .experience(ListEntries.project(experience))
+                .portfolio(ListEntries.project(portfolio))
+                .language(ListEntries.project(language))
+                .technicalSkill(ListEntries.project(technicalSkill))
+                .softSkill(ListEntries.project(softSkill))
                 .build();
     }
 

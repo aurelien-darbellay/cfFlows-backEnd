@@ -5,7 +5,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.security.authorization.AuthorizationDecision;
 import org.springframework.security.authorization.ReactiveAuthorizationManager;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.web.server.authorization.AuthorizationContext;
 import reactor.core.publisher.Mono;
 
@@ -19,10 +18,7 @@ public class AdminSpaceAuthorizationManager implements ReactiveAuthorizationMana
         log.debug("In admin authorization manager");
         return authenticationMono
                 .map(authentication ->
-                        new AuthorizationDecision(authentication.getAuthorities().stream()
-                                .map(GrantedAuthority::getAuthority)
-                                .toList()
-                                .contains("ROLE_ADMIN")))
+                        new AuthorizationDecision(Auth.isAdmin(authentication)))
                 .defaultIfEmpty(new AuthorizationDecision(false));
     }
 }

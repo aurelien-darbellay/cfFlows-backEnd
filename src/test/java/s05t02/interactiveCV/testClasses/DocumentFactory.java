@@ -10,7 +10,7 @@ public class DocumentFactory {
     public static InteractiveCv populatedInteractiveCv(String id) {
         return InteractiveCv.builder()
                 .id(id)
-                .identity(Identity.builder().projected(true).names(List.of("John Doe")).build())
+                //.identity(Identity.builder().projected(true).names(List.of("John Doe")).build())
                 .profession(Profession.builder().projected(true).generalTitle("Software Engineer").build())
                 .profilePicture(ProfilePicture.builder().projected(false).urlPicture("https://example.com/pic.jpg").build())
                 .contact(Contact.builder().projected(true).email("john@example.com").build())
