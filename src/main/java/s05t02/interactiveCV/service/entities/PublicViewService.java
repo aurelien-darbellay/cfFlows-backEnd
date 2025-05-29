@@ -24,10 +24,11 @@ public class PublicViewService {
     private static final Logger log = LoggerFactory.getLogger(PublicViewService.class);
 
     public Mono<PublicView> savePublicView(String username, InteractiveDocument document) {
-        return interactiveDocumentService.updateDocumentInUser(username, document)
+        return publicViewRepository.save(createNewPublicView(username, document));
+        /*interactiveDocumentService.updateDocumentInUser(username, document)
                 .flatMap(doc -> publicViewRepository.save(createNewPublicView(username, doc)))
                 .doOnSuccess(savedView -> log.debug("Document with id : {}, of type : {} saved as public view by {}.", document.getId(), document.getClass(), username))
-                .doOnError(error -> log.error("Error saving document with id : {} for user {} - Error Message: {}", document.getId(), username, error.getMessage()));
+                .doOnError(error -> log.error("Error saving document with id : {} for user {} - Error Message: {}", document.getId(), username, error.getMessage()));*/
     }
 
     public Mono<PublicView> getPublicViewById(String id) {

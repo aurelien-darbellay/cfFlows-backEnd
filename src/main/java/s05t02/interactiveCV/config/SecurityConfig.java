@@ -13,10 +13,15 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.server.SecurityWebFilterChain;
 import org.springframework.security.web.server.authorization.AuthorizationContext;
 import org.springframework.security.web.server.csrf.CookieServerCsrfTokenRepository;
+import org.springframework.security.web.server.csrf.CsrfToken;
 import org.springframework.security.web.server.csrf.ServerCsrfTokenRepository;
+import org.springframework.security.web.server.csrf.ServerCsrfTokenRequestHandler;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.reactive.CorsConfigurationSource;
 import org.springframework.web.cors.reactive.UrlBasedCorsConfigurationSource;
+import org.springframework.web.server.ServerWebExchange;
+import org.springframework.web.server.WebFilter;
+import reactor.core.publisher.Mono;
 import s05t02.interactiveCV.globalVariables.ApiPaths;
 import s05t02.interactiveCV.service.security.authorization.AdminSpaceAuthorizationManager;
 import s05t02.interactiveCV.service.security.authorization.UserSpaceAuthorizationManager;
@@ -37,7 +42,9 @@ public class SecurityConfig {
     public SecurityWebFilterChain securityWebFilterChain(ServerHttpSecurity http, JwtCookieSecurityContextRepository jwtCookieSecurityContextRepository, JwtCookieLoginSuccessHandler jwtSuccessHandler) {
         log.debug("Security filter chain initialized with JWT cookie support");
         return http
-                .csrf(csrfSpec -> csrfSpec.csrfTokenRepository(csrfTokenRepository()))
+                .csrf(csrfSpec -> csrfSpec
+                        .csrfTokenRepository(csrfTokenRepository())
+                        .csrfTokenRequestHandler(doubleSubmitCsrfTokenHandler()))
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .securityContextRepository(jwtCookieSecurityContextRepository)
 
@@ -56,7 +63,7 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();
-        config.setAllowedOrigins(List.of("http://localhost:5173"));
+        config.setAllowedOrigins(List.of("http://localhost:5173", "http://localhost:8080"));
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         config.setAllowedHeaders(List.of("*"));
         config.setExposedHeaders(List.of("Authorization"));
@@ -93,4 +100,37 @@ public class SecurityConfig {
         return new BCryptPasswordEncoder();
     }
 
+    @Bean
+    public ServerCsrfTokenRequestHandler doubleSubmitCsrfTokenHandler() {
+        return new ServerCsrfTokenRequestHandler() {
+
+            @Override
+            public void handle(ServerWebExchange exchange, Mono<CsrfToken> monoCsrf) {
+                // Expose the CSRF token as an exchange attribute for controller access
+                exchange.getAttributes().put(CsrfToken.class.getName(), monoCsrf);
+            }
+
+            @Override
+            public Mono<String> resolveCsrfTokenValue(ServerWebExchange exchange, CsrfToken token) {
+                // Read CSRF token from the X-XSRF-TOKEN header
+                return Mono.justOrEmpty(exchange.getRequest().getHeaders().getFirst(token.getHeaderName()));
+            }
+        };
+    }
+
+    @Bean
+    public WebFilter csrfLoggingFilter() {
+        return (exchange, chain) -> {
+            Mono<CsrfToken> csrfTokenMono = exchange.<Mono<CsrfToken>>getAttribute(CsrfToken.class.getName());
+            if (csrfTokenMono != null) {
+                return csrfTokenMono.doOnNext(token ->
+                        System.out.println("Spring expects CSRF token: " + token.getToken())
+                ).then(chain.filter(exchange));
+            }
+            return chain.filter(exchange);
+        };
+    }
+
 }
+
+

@@ -34,18 +34,17 @@ class InteractiveDocumentRepositoryImplTest {
         StepVerifier.create(result1)
                 .expectNextMatches(doc -> doc.getTitle().equals("My CV"))
                 .verifyComplete();
-        /*repository.updateDocInUser(USERNAME, InteractiveCv.builder()
-                        .id(DOC_ID)
-                        .title("New Title").build())
-                .block();
-        Mono<InteractiveDocument> result2 = repository.getDocInUserById(USERNAME, DOC_ID);
+        Mono<InteractiveDocument> result2 = repository.updateDocInUser(USERNAME, InteractiveCv.builder()
+                .id(DOC_ID)
+                .title("New Title").build());
+
         StepVerifier.create(result2)
                 .expectNextMatches(doc -> doc.getTitle().equals("New Title"))
                 .verifyComplete();
         repository.deleteDocInUser(USERNAME, DOC_ID).block();
         Mono<InteractiveDocument> result3 = repository.getDocInUserById(USERNAME, DOC_ID);
         StepVerifier.create(result3).verifyComplete();
-        repository.deleteById(USER_ID).block();*/
+        repository.deleteById(USER_ID).block();
     }
 
 
