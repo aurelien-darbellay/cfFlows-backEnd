@@ -13,14 +13,13 @@ class InteractiveCvTest {
     private final static Logger log = LoggerFactory.getLogger(InteractiveCvTest.class);
 
     @Test
-    void getProjectedDocument() {
+    void projectDocument() {
 
         InteractiveCv original = DocumentFactory.populatedInteractiveCv("cv-123");
 
-        InteractiveCv projectedCV = original.getProjectedDocument();
+        InteractiveCv projectedCV = original.projectDocument();
         assertEquals(0, projectedCV.getLanguage().size());
         assertNull(projectedCV.getProfilePicture());
-        assertNull(projectedCV.getSoftSkill());
         assertEquals(2, projectedCV.getTechnicalSkill().size());
         assertEquals(1, projectedCV.getEducation().size());
         log.info(projectedCV.getEducation().get(0).toString());

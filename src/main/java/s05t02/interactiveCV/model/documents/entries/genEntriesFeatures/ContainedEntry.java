@@ -14,11 +14,11 @@ public abstract class ContainedEntry extends Entry implements HasId {
 
     @Override
     public Update createAddUpdate() {
-        return new Update().push("interactiveDocuments.$." + this.getKeyNameInDB(), this);
+        return new Update().push("interactiveDocuments.$." + this.getKeyNameInDB() + ".entries", this);
     }
 
     @Override
     public Update createRemoveUpdate() {
-        return new Update().pull("interactiveDocuments.$." + this.getKeyNameInDB(), Collections.singletonMap("_id", this.getId()));
+        return new Update().pull("interactiveDocuments.$." + this.getKeyNameInDB() + ".entries", Collections.singletonMap("_id", this.getId()));
     }
 }

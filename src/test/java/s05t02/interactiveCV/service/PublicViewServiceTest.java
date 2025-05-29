@@ -30,6 +30,7 @@ class PublicViewServiceTest {
     @Mock
     private PublicViewRepository publicViewRepository;
 
+
     @Mock
     private UserService userService;
 
@@ -61,7 +62,8 @@ class PublicViewServiceTest {
     void savePublicView_shouldSaveNewView() {
         when(interactiveDocumentService.updateDocumentInUser(USERNAME, document))
                 .thenReturn(Mono.just(InteractiveCv.builder().build())); // user returned but unused
-
+        when(interactiveDocumentService.addDocumentToUser(USERNAME, document))
+                .thenReturn(Mono.just(InteractiveCv.builder().build()));
         when(publicViewRepository.save(any())).thenReturn(Mono.just(publicView));
 
         Mono<PublicView> result = publicViewService.savePublicView(USERNAME, document);

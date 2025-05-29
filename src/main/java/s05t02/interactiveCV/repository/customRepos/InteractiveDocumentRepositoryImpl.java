@@ -46,7 +46,7 @@ public class InteractiveDocumentRepositoryImpl implements InteractiveDocumentRep
     @Override
     public Mono<InteractiveDocument> updateDocInUser(String username, InteractiveDocument updatedDoc) {
         Query query = Query.query(Criteria.where("username").is(username).and("interactiveDocuments._id").is(updatedDoc.getId()));
-        Update update = new Update().set("interactiveDocuments." + updatedDoc.getId(), updatedDoc);
+        Update update = new Update().set("interactiveDocuments.$", updatedDoc);
         FindAndModifyOptions options = FindAndModifyOptions.options().returnNew(true);
         return reactiveMongoTemplate.findAndModify(query, update, options, User.class)
                 .flatMap(user ->

@@ -8,7 +8,7 @@ import s05t02.interactiveCV.repository.customRepos.updatesCreators.CreatesMongoD
 
 @Getter
 @Setter
-@SuperBuilder
+@SuperBuilder(toBuilder = true)
 @NoArgsConstructor
 public abstract class Entry implements CreatesMongoDbUpdate {
     private boolean projected;

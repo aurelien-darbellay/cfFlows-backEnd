@@ -20,7 +20,8 @@ public interface InteractiveDocument {
 
     String getTitle();
 
-    <T extends InteractiveDocument> T getProjectedDocument();
+
+    <T extends InteractiveDocument> T projectDocument();
 
     String getId();
 
@@ -41,7 +42,7 @@ public interface InteractiveDocument {
                 try {
                     Object value = field.get(this);
                     if (value != null) {
-                        namedEntries.add(new NamedEntry(field.getName(),(Entry) value));
+                        namedEntries.add(new NamedEntry(field.getName(), (Entry) value));
                     }
                 } catch (IllegalAccessException e) {
                     throw new RuntimeException("Unable to access field: " + field.getName(), e);

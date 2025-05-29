@@ -2,6 +2,8 @@ package s05t02.interactiveCV.controller;
 
 
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -26,6 +28,7 @@ public class UnprotectedRoutesController {
     private final UserService userService;
     private final PublicViewService publicViewService;
     private final PasswordEncoder encoder;
+    private static final Logger log = LoggerFactory.getLogger(UnprotectedRoutesController.class);
 
     @GetMapping("/csrf")
     public Mono<Map<String, String>> csrf(ServerWebExchange exchange) {
@@ -46,6 +49,7 @@ public class UnprotectedRoutesController {
 
     @GetMapping("/public-views")
     Mono<PublicView> getPublicViewById(@RequestParam String id) {
-        return publicViewService.getPublicViewById(id);
+        return publicViewService.getPublicViewById(id)
+                .doOnSuccess(publicView -> log.atDebug().log("Retrieved public view: {}", publicView.toString()));
     }
 }

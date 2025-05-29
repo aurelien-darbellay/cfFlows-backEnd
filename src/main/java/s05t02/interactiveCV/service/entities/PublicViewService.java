@@ -24,11 +24,14 @@ public class PublicViewService {
     private static final Logger log = LoggerFactory.getLogger(PublicViewService.class);
 
     public Mono<PublicView> savePublicView(String username, InteractiveDocument document) {
-        return publicViewRepository.save(createNewPublicView(username, document));
-        /*interactiveDocumentService.updateDocumentInUser(username, document)
-                .flatMap(doc -> publicViewRepository.save(createNewPublicView(username, doc)))
+        return interactiveDocumentService.updateDocumentInUser(username, document)
+                .switchIfEmpty(interactiveDocumentService.addDocumentToUser(username, document))
+                .flatMap(doc -> {
+                    log.atDebug().log(doc.toString());
+                    return publicViewRepository.save(createNewPublicView(username, doc));
+                })
                 .doOnSuccess(savedView -> log.debug("Document with id : {}, of type : {} saved as public view by {}.", document.getId(), document.getClass(), username))
-                .doOnError(error -> log.error("Error saving document with id : {} for user {} - Error Message: {}", document.getId(), username, error.getMessage()));*/
+                .doOnError(error -> log.error("Error saving document with id : {} for user {} - Error Message: {}", document.getId(), username, error.getMessage()));
     }
 
     public Mono<PublicView> getPublicViewById(String id) {
@@ -64,10 +67,10 @@ public class PublicViewService {
                 .map(Tuple2::getT2);
     }
 
-    private PublicView createNewPublicView(String username, InteractiveDocument document) {
+    public static PublicView createNewPublicView(String username, InteractiveDocument document) {
         return PublicView.builder()
                 .username(username)
-                .document(document.getProjectedDocument())
+                .document(document.projectDocument())
                 .dateCreation(LocalDate.now())
                 .dateExpiration(LocalDate.now().plus(Period.ofDays(200)))
                 .build();

@@ -42,7 +42,7 @@ public class InteractiveCv implements InteractiveDocument {
 
     @SuppressWarnings("unchecked")
     @Override
-    public InteractiveCv getProjectedDocument() {
+    public InteractiveCv projectDocument() {
         return this.toBuilder()
                 .id(null)
                 .identity(Entry.project(identity))

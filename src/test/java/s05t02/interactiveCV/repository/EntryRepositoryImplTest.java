@@ -32,7 +32,7 @@ class EntryRepositoryImplTest {
     private UserRepository repository;
 
     @BeforeEach
-    void setUp(){
+    void setUp() {
         repository.save(User.builder()
                 .id(USER_ID)
                 .username(USERNAME)
@@ -52,13 +52,13 @@ class EntryRepositoryImplTest {
         Entry anotherEntry = Experience.builder().description("buufff").build();
         Mono<Entry> result = repository.insertEntryIntoDocument(USERNAME, DOC_ID, anotherEntry);
         StepVerifier.create(result)
-                .expectNextMatches(entry->entry.getKeyNameInDB().equals("experience"))
+                .expectNextMatches(entry -> entry.getKeyNameInDB().equals("experience"))
                 .verifyComplete();
         repository.deleteByUsername(USERNAME).block();
     }
 
     @Test
-    void deleteEntryFromDocument(){
+    void deleteEntryFromDocument() {
         Portfolio portfolioElem = Portfolio.builder().build();
         Summary summary = Summary.builder().build();
         ListEntries<Portfolio> entry = ListEntries.of(List.of(portfolioElem), Portfolio.class);
@@ -68,13 +68,13 @@ class EntryRepositoryImplTest {
                         .summary(summary)
                         .portfolio(entry)
                         .build()).block();
-        Mono<Void> resultVoid = repository.deleteEntryFromDocument(USERNAME,DOC_ID,summary);
+        Mono<Void> resultVoid = repository.deleteEntryFromDocument(USERNAME, DOC_ID, summary);
         StepVerifier.create(resultVoid)
                 .verifyComplete();
     }
 
     @Test
-    void updateEntreInDoc(){
+    void updateEntreInDoc() {
         Portfolio portfolioElem = Portfolio.builder().build();
         Summary summary = Summary.builder().build();
         ListEntries<Portfolio> entry = ListEntries.of(List.of(portfolioElem), Portfolio.class);
@@ -85,14 +85,14 @@ class EntryRepositoryImplTest {
                         .portfolio(entry)
                         .build()).block();
         summary.setText("bla");
-        Mono<Entry> result = repository.updateEntryInDocument(USERNAME,DOC_ID,summary);
+        Mono<Entry> result = repository.updateEntryInDocument(USERNAME, DOC_ID, summary);
         StepVerifier.create(result)
-                .expectNextMatches(summ->((Summary)summ).getText().equals("bla"))
+                .expectNextMatches(summ -> ((Summary) summ).getText().equals("bla"))
                 .verifyComplete();
         portfolioElem.setProjectName("gnoki");
-        Mono<Entry> result1 = repository.updateEntryInDocument(USERNAME,DOC_ID,portfolioElem);
+        Mono<Entry> result1 = repository.updateEntryInDocument(USERNAME, DOC_ID, portfolioElem);
         StepVerifier.create(result1)
-                .expectNextMatches(list->((ListEntries<Portfolio>)list).get(0).getProjectName().equals("gnoki"))
+                .expectNextMatches(list -> ((ListEntries<Portfolio>) list).get(0).getProjectName().equals("gnoki"))
                 .verifyComplete();
     }
 }

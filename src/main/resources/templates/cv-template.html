@@ -73,28 +73,29 @@
             </div>
         </div>
 
-        <div class="section" th:if="${cv.technicalSkill != null and !cv.technicalSkill.isEmpty()}">
+        <div class="section" th:if="${cv.technicalSkill != null and !cv.technicalSkill.entries.isEmpty()}">
             <h2>Tech Skills</h2>
             <ul>
-                <li th:each="skill : ${cv.technicalSkill}" th:if="${skill.keyWords != null}"
+                <li th:each="skill : ${cv.technicalSkill.entries}" th:if="${skill.keyWords != null}"
                     th:text="${skill.keyWords}">Skill
                 </li>
             </ul>
         </div>
 
-        <div class="section" th:if="${cv.softSkill != null and !cv.softSkill.isEmpty()}">
+        <div class="section" th:if="${cv.softSkill != null and !cv.softSkill.entries.isEmpty()}">
             <h2>Soft Skills</h2>
             <ul>
-                <li th:each="skill : ${cv.softSkill}" th:if="${skill.keyWords != null}" th:text="${skill.keyWords}">
+                <li th:each="skill : ${cv.softSkill.entries}" th:if="${skill.keyWords != null}"
+                    th:text="${skill.keyWords}">
                     Soft Skill
                 </li>
             </ul>
         </div>
 
-        <div class="section" th:if="${cv.language != null and !cv.language.isEmpty()}">
+        <div class="section" th:if="${cv.language != null and !cv.language.entries.isEmpty()}">
             <h2>Idiomes</h2>
             <ul>
-                <li th:each="lang : ${cv.language}" th:if="${lang.name != null && lang.level != null}"
+                <li th:each="lang : ${cv.language.entries}" th:if="${lang.name != null && lang.level != null}"
                     th:text="${lang.name + ' - ' + lang.level}">Llengua
                 </li>
             </ul>
@@ -126,9 +127,9 @@
             <p th:text="${cv.summary.text}">Descripció breu del perfil professional.</p>
         </div>
 
-        <div class="section" th:if="${cv.experience != null and !cv.experience.isEmpty()}">
+        <div class="section" th:if="${cv.experience != null and !cv.experience.entries.isEmpty()}">
             <h2>Experiència</h2>
-            <div class="experience" th:each="exp : ${cv.experience}">
+            <div class="experience" th:each="exp : ${cv.experience.entries}">
                 <strong th:if="${exp.position != null}" th:text="${exp.position}">Posició</strong><br/>
                 <em th:if="${exp.nameCompany != null}"
                     th:text="${exp.nameCompany + ' (' + (exp.startDate != null ? exp.startDate : '') + ' - ' + (exp.endDate != null ? exp.endDate : '') + ')'}">
@@ -139,9 +140,9 @@
             </div>
         </div>
 
-        <div class="section" th:if="${cv.education != null and !cv.education.isEmpty()}">
+        <div class="section" th:if="${cv.education != null and !cv.education.entries.isEmpty()}">
             <h2>Formació</h2>
-            <div class="education" th:each="edu : ${cv.education}">
+            <div class="education" th:each="edu : ${cv.education.entries}">
                 <strong th:if="${edu.title != null}" th:text="${edu.title}">Titulació</strong><br/>
                 <em th:if="${edu.trainingCenter != null}"
                     th:text="${edu.trainingCenter + ' (' + edu.graduationYear + ')'}">Centre i any</em><br/>
