@@ -2,6 +2,7 @@ package s05t02.interactiveCV.model.documents.cv;
 
 import customCompileChecks.MatchesTypeName;
 import lombok.*;
+import s05t02.interactiveCV.dto.DocumentDto;
 import s05t02.interactiveCV.model.documents.InteractiveDocument;
 import s05t02.interactiveCV.model.documents.entries.concreteEntries.*;
 import s05t02.interactiveCV.model.documents.entries.genEntriesFeatures.Entry;
@@ -62,5 +63,10 @@ public class InteractiveCv implements InteractiveDocument {
     @Override
     public HtmlTargetCoordinate getHtmlTargetCoordinate() {
         return new HtmlTargetCoordinate("cv", "cv-template");
+    }
+
+    @Override
+    public DocumentDto mapDocToDto() {
+        return null;
     }
 }

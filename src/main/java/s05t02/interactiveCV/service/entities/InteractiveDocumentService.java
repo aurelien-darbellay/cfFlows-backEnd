@@ -28,7 +28,7 @@ public class InteractiveDocumentService {
         return repository.updateDocInUser(username, updatedDocument);
     }
 
-    public Mono<InteractiveDocument> getDocumentByIdForUser(String username, String docId) {
+    public Mono<InteractiveDocument> getDocumentByIdInUser(String username, String docId) {
         return repository.getDocInUserById(username, docId);
     }
 }

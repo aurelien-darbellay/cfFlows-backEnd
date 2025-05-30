@@ -30,13 +30,13 @@ public class UnprotectedRoutesController {
     private final PasswordEncoder encoder;
     private static final Logger log = LoggerFactory.getLogger(UnprotectedRoutesController.class);
 
-    @GetMapping("/csrf")
+    @GetMapping(ApiPaths.CSRF_TOKEN_PATH)
     public Mono<Map<String, String>> csrf(ServerWebExchange exchange) {
         return exchange.<Mono<CsrfToken>>getAttribute(CsrfToken.class.getName())
                 .flatMap(token -> Mono.just(Map.of("token", token.getToken())));
     }
 
-    @PostMapping("/register")
+    @PostMapping(ApiPaths.REGISTER_PATH)
     Mono<ResponseEntity<Void>> registerNewUser(@RequestBody RegistrationRequestDto request) {
         return userService.saveUser(User.builder()
                         .username(request.getUsername())
@@ -44,10 +44,10 @@ public class UnprotectedRoutesController {
                         .firstname(request.getFirstname())
                         .lastname(request.getLastname())
                         .build())
-                .map(user -> ResponseEntity.status(HttpStatus.FOUND).header("Location", ApiPaths.USER_BASE_PATH.replace("{username}", request.getUsername())).build());
+                .map(user -> ResponseEntity.status(HttpStatus.FOUND).header("Location", ApiPaths.USER_DASHBOARD_PATH.replace("{username}", request.getUsername())).build());
     }
 
-    @GetMapping("/public-views")
+    @GetMapping(ApiPaths.PUBLIC_VIEWS_PATH)
     Mono<PublicView> getPublicViewById(@RequestParam String id) {
         return publicViewService.getPublicViewById(id)
                 .doOnSuccess(publicView -> log.atDebug().log("Retrieved public view: {}", publicView.toString()));
