@@ -17,7 +17,7 @@ public class DocumentController {
     private final InteractiveDocumentService documentService;
 
     @PostMapping
-    Mono<InteractiveDocument> createdNewDoc(@PathVariable String username, @RequestParam InteractiveDocumentType type) {
+    Mono<InteractiveDocument> createdNewDoc(@PathVariable String username, @RequestBody InteractiveDocumentType type) {
         return documentService.createDocumentInUser(username,type); //here maybe add error in case user don't exist
     }
 

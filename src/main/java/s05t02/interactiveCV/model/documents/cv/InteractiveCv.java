@@ -2,7 +2,6 @@ package s05t02.interactiveCV.model.documents.cv;
 
 import customCompileChecks.MatchesTypeName;
 import lombok.*;
-import s05t02.interactiveCV.dto.interfaces.CvMapableToDto;
 import s05t02.interactiveCV.model.documents.InteractiveDocument;
 import s05t02.interactiveCV.model.documents.entries.concreteEntries.*;
 import s05t02.interactiveCV.model.documents.entries.genEntriesFeatures.Entry;
@@ -16,8 +15,7 @@ import java.util.UUID;
 @ToString
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = false)
 @MatchesTypeName
-@RequiredArgsConstructor
-public class InteractiveCv implements InteractiveDocument, CvMapableToDto {
+public class InteractiveCv implements InteractiveDocument {
     @MatchesTypeName(ignore = true)
     @Builder.Default
     @EqualsAndHashCode.Include
