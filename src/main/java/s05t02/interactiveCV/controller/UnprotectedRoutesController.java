@@ -6,6 +6,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.ReactiveAuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.server.csrf.CsrfToken;
 import org.springframework.web.bind.annotation.*;
@@ -17,6 +19,7 @@ import s05t02.interactiveCV.model.User;
 import s05t02.interactiveCV.model.publicViews.PublicView;
 import s05t02.interactiveCV.service.entities.PublicViewService;
 import s05t02.interactiveCV.service.entities.UserService;
+import s05t02.interactiveCV.service.security.jwt.JwtCookieSuccessHandler;
 
 import java.util.Map;
 
@@ -28,7 +31,10 @@ public class UnprotectedRoutesController {
     private final UserService userService;
     private final PublicViewService publicViewService;
     private final PasswordEncoder encoder;
+    private final ReactiveAuthenticationManager authManager;
+    private final JwtCookieSuccessHandler successHandler;
     private static final Logger log = LoggerFactory.getLogger(UnprotectedRoutesController.class);
+
 
     @GetMapping(ApiPaths.CSRF_TOKEN_PATH)
     public Mono<Map<String, String>> csrf(ServerWebExchange exchange) {
@@ -37,14 +43,19 @@ public class UnprotectedRoutesController {
     }
 
     @PostMapping(ApiPaths.REGISTER_PATH)
-    Mono<ResponseEntity<Void>> registerNewUser(@RequestBody RegistrationRequestDto request) {
+    Mono<ResponseEntity<Void>> registerNewUser(ServerWebExchange exchange, @RequestBody RegistrationRequestDto request) {
         return userService.saveUser(User.builder()
                         .username(request.getUsername())
                         .hashedPassword(encoder.encode(request.getPassword()))
                         .firstname(request.getFirstname())
                         .lastname(request.getLastname())
                         .build())
-                .map(user -> ResponseEntity.status(HttpStatus.FOUND).header("Location", ApiPaths.USER_DASHBOARD_PATH.replace("{username}", request.getUsername())).build());
+                .flatMap(user->{
+                    UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(request.getUsername(),request.getPassword());
+                    return authManager.authenticate(token);
+                })
+                .map(auth-> successHandler.createJwtCookie(exchange, auth))
+                .map(webExchange -> ResponseEntity.status(HttpStatus.FOUND).header("Location", ApiPaths.USER_DASHBOARD_PATH.replace("{username}", request.getUsername())).build());
     }
 
     @GetMapping(ApiPaths.PUBLIC_VIEWS_PATH)

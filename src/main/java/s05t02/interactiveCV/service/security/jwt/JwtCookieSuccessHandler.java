@@ -17,21 +17,27 @@ import java.util.List;
 
 @Component
 @RequiredArgsConstructor
-public class JwtCookieLoginSuccessHandler implements ServerAuthenticationSuccessHandler {
+public class JwtCookieSuccessHandler implements ServerAuthenticationSuccessHandler {
 
     private final JwtUtils jwtUtils;
 
     @Override
     public Mono<Void> onAuthenticationSuccess(WebFilterExchange webFilterExchange, Authentication authentication) {
         ServerWebExchange exchange = webFilterExchange.getExchange();
-        String username = authentication.getName();
+        createJwtCookie(exchange,authentication);
+        // You can redirect or just complete response here
+        exchange.getResponse().setStatusCode(HttpStatus.FOUND);
+        exchange.getResponse().getHeaders().add(HttpHeaders.LOCATION, ApiPaths.USER_DASHBOARD_PATH.replace("{username}", authentication.getName()));
+        return exchange.getResponse().setComplete();
+    }
 
+    public ServerWebExchange createJwtCookie(ServerWebExchange exchange, Authentication authentication){
+        String username = authentication.getName();
         List<String> roles = authentication.getAuthorities().stream()
                 .map(granted -> String.valueOf(granted.getAuthority()))
                 .toList();
 
         var jwt = jwtUtils.createJwt(username, roles);
-
         ResponseCookie cookie = ResponseCookie.from("jwt", jwt.getTokenValue())
                 .httpOnly(true)
                 .secure(false) // Set to true if using HTTPS
@@ -39,13 +45,8 @@ public class JwtCookieLoginSuccessHandler implements ServerAuthenticationSuccess
                 .sameSite("Lax")
                 .maxAge(Duration.ofHours(2))
                 .build();
-
         exchange.getResponse().addCookie(cookie);
-
-        // You can redirect or just complete response here
-        exchange.getResponse().setStatusCode(HttpStatus.FOUND);
-        exchange.getResponse().getHeaders().add(HttpHeaders.LOCATION, ApiPaths.USER_DASHBOARD_PATH.replace("{username}", username));
-        return exchange.getResponse().setComplete();
+        return exchange;
     }
 }
 

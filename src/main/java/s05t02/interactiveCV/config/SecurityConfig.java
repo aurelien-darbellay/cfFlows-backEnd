@@ -5,9 +5,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.ReactiveAuthenticationManager;
+import org.springframework.security.authentication.UserDetailsRepositoryReactiveAuthenticationManager;
 import org.springframework.security.authorization.ReactiveAuthorizationManager;
 import org.springframework.security.config.annotation.web.reactive.EnableWebFluxSecurity;
 import org.springframework.security.config.web.server.ServerHttpSecurity;
+import org.springframework.security.core.userdetails.ReactiveUserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.server.SecurityWebFilterChain;
@@ -25,7 +28,7 @@ import reactor.core.publisher.Mono;
 import s05t02.interactiveCV.globalVariables.ApiPaths;
 import s05t02.interactiveCV.service.security.authorization.AdminSpaceAuthorizationManager;
 import s05t02.interactiveCV.service.security.authorization.UserSpaceAuthorizationManager;
-import s05t02.interactiveCV.service.security.jwt.JwtCookieLoginSuccessHandler;
+import s05t02.interactiveCV.service.security.jwt.JwtCookieSuccessHandler;
 import s05t02.interactiveCV.service.security.jwt.JwtCookieSecurityContextRepository;
 
 import java.util.List;
@@ -39,7 +42,7 @@ public class SecurityConfig {
 
 
     @Bean
-    public SecurityWebFilterChain securityWebFilterChain(ServerHttpSecurity http, JwtCookieSecurityContextRepository jwtCookieSecurityContextRepository, JwtCookieLoginSuccessHandler jwtSuccessHandler) {
+    public SecurityWebFilterChain securityWebFilterChain(ServerHttpSecurity http, JwtCookieSecurityContextRepository jwtCookieSecurityContextRepository, JwtCookieSuccessHandler jwtSuccessHandler) {
         log.debug("Security filter chain initialized with JWT cookie support");
         return http
                 .csrf(csrfSpec -> csrfSpec
@@ -130,6 +133,17 @@ public class SecurityConfig {
             return chain.filter(exchange);
         };
     }
+
+    @Bean
+    public ReactiveAuthenticationManager authenticationManager(
+            ReactiveUserDetailsService userDetailsService,
+            PasswordEncoder passwordEncoder) {
+        UserDetailsRepositoryReactiveAuthenticationManager mgr =
+                new UserDetailsRepositoryReactiveAuthenticationManager(userDetailsService);
+        mgr.setPasswordEncoder(passwordEncoder);
+        return mgr;
+    }
+
 
 }
 
