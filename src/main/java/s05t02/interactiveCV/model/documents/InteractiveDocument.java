@@ -2,8 +2,8 @@ package s05t02.interactiveCV.model.documents;
 
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
-import s05t02.interactiveCV.dto.DocumentDto;
 import s05t02.interactiveCV.model.documents.entries.genEntriesFeatures.Entry;
 import s05t02.interactiveCV.model.documents.entries.genEntriesFeatures.NamedEntry;
 
@@ -25,6 +25,7 @@ public interface InteractiveDocument {
     <T extends InteractiveDocument> T projectDocument();
 
     String getId();
+    void setId(String id);
 
     @Getter
     @AllArgsConstructor
@@ -52,6 +53,4 @@ public interface InteractiveDocument {
         }
         return namedEntries;
     }
-
-    DocumentDto mapDocToDto();
 }

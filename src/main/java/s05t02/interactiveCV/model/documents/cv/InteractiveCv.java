@@ -2,7 +2,7 @@ package s05t02.interactiveCV.model.documents.cv;
 
 import customCompileChecks.MatchesTypeName;
 import lombok.*;
-import s05t02.interactiveCV.dto.DocumentDto;
+import s05t02.interactiveCV.dto.interfaces.CvMapableToDto;
 import s05t02.interactiveCV.model.documents.InteractiveDocument;
 import s05t02.interactiveCV.model.documents.entries.concreteEntries.*;
 import s05t02.interactiveCV.model.documents.entries.genEntriesFeatures.Entry;
@@ -16,7 +16,8 @@ import java.util.UUID;
 @ToString
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = false)
 @MatchesTypeName
-public class InteractiveCv implements InteractiveDocument {
+@RequiredArgsConstructor
+public class InteractiveCv implements InteractiveDocument, CvMapableToDto {
     @MatchesTypeName(ignore = true)
     @Builder.Default
     @EqualsAndHashCode.Include
@@ -65,8 +66,4 @@ public class InteractiveCv implements InteractiveDocument {
         return new HtmlTargetCoordinate("cv", "cv-template");
     }
 
-    @Override
-    public DocumentDto mapDocToDto() {
-        return null;
-    }
 }

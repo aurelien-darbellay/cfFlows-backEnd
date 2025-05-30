@@ -18,7 +18,7 @@ import java.util.Collections;
 @RequiredArgsConstructor
 public class InteractiveDocumentRepositoryImpl implements InteractiveDocumentRepository {
     private final ReactiveMongoTemplate reactiveMongoTemplate;
-    private static Logger log = LoggerFactory.getLogger(InteractiveDocumentRepository.class);
+    private static final Logger log = LoggerFactory.getLogger(InteractiveDocumentRepository.class);
 
     @Override
     public Mono<InteractiveDocument> addDocToUser(String username, InteractiveDocument document) {

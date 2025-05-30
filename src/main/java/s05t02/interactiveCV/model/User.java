@@ -4,6 +4,7 @@ import lombok.*;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
+import s05t02.interactiveCV.dto.interfaces.UserMapableToDto;
 import s05t02.interactiveCV.model.documents.InteractiveDocument;
 
 import java.util.ArrayList;
@@ -15,7 +16,7 @@ import java.util.List;
 @ToString(exclude = "hashedPassword")
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Document
-public class User {
+public class User implements UserMapableToDto {
     @Id
     @EqualsAndHashCode.Include
     private String id;

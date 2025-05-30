@@ -15,6 +15,8 @@ public class ApiPaths {
     public static final String USER_BASE_PATH = PROTECTED_BASE_PATH + "/users/{username}";
     public static final String USER_DASHBOARD_REL = "/dashboard";
     public static final String USER_DASHBOARD_PATH = USER_BASE_PATH + USER_DASHBOARD_REL;
+    public static final String USER_DELETE_REL = "/delete";
+    public static final String USER_DELETE_PATH = USER_BASE_PATH + USER_DELETE_REL;
 
     public static final String DOC_REL = "/doc";
     public static final String DOC_PATH = USER_BASE_PATH + DOC_REL; //newDoc in Body
@@ -26,9 +28,10 @@ public class ApiPaths {
     public static final String CREATE_PV_PATH = USER_BASE_PATH + "/public-view"; // doc in Body
     public static final String PV_PATH = CREATE_PV_PATH + "/{pvId}";
 
-    public static final String ADD_ENTRY_PATH = DOC_ID_PATH + "/entry/add";
-    public static final String DELETE_ENTRY_PATH = DOC_ID_PATH + "/entry/delete";
-    public static final String UPDATE_ENTRY_PATH = DOC_ID_PATH + "/entry/update";
+    public static final String ENTRY_BASE_PATH = DOC_ID_PATH + "/entry";
+    public static final String ENTRY_ADD_REL = "/add";
+    public static final String ENTRY_DELETE_REL = "/delete";
+    public static final String ENTRY_UPDATE_REL= "/update";
 
     public static final String CLOUD_STORAGE_PATH = USER_BASE_PATH + "/cloud-storage";
     public static final String ADMIN_BASE_PATH = PROTECTED_BASE_PATH + "/admin";
