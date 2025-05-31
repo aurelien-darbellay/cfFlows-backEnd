@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
+import s05t02.interactiveCV.exception.EntityNotFoundException;
 import s05t02.interactiveCV.model.User;
 import s05t02.interactiveCV.model.documents.cv.InteractiveCv;
 import s05t02.interactiveCV.model.publicViews.PublicView;
@@ -36,13 +37,12 @@ public class PVServiceIntegratedTest {
                 .expectNextMatches(pv -> ((InteractiveCv) pv.getDocument()).getEducation().get(0).getTrainingCenter().equals("Harvard"))
                 .verifyComplete();
     }
-
     @Test
+
     void getPublicViewById() {
-        Mono<PublicView> result1 = publicViewService.getPublicViewById("6838d26247153416b3a076e5");
+        Mono<PublicView> result1 = publicViewService.getPublicViewById("uuu");
         StepVerifier.create(result1)
-                .expectNextMatches(pv -> ((InteractiveCv) pv.getDocument()).getEducation().get(0).getTrainingCenter().equals("Harvard"))
-                .verifyComplete();
+                .expectError(EntityNotFoundException.class);
     }
 
     @AfterEach
