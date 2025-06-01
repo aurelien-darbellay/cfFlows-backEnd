@@ -20,7 +20,7 @@ import java.util.List;
 public interface InteractiveDocument {
 
     String getTitle();
-
+    void setTitle(String title);
 
     <T extends InteractiveDocument> T projectDocument();
 

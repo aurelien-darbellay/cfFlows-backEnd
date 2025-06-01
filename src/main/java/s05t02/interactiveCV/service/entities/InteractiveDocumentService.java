@@ -17,8 +17,8 @@ public class InteractiveDocumentService {
     private final UserRepository repository;
     static private final Logger log = LoggerFactory.getLogger(InteractiveDocumentService.class);
 
-    public Mono<InteractiveDocument> createDocumentInUser(String username,InteractiveDocumentType type){
-        return type.createDoc()
+    public Mono<InteractiveDocument> createDocumentInUser(String username,InteractiveDocumentType type, String title){
+        return type.createDoc(title)
                 .flatMap(doc->repository.addDocToUser(username,doc));
     }
 

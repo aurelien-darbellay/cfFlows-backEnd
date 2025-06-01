@@ -14,9 +14,10 @@ public enum InteractiveDocumentType {
     InteractiveDocumentType(Class<? extends InteractiveDocument> clazz){
         this.clazz = clazz;
     }
-    public Mono<InteractiveDocument> createDoc() {
+    public Mono<InteractiveDocument> createDoc(String title) {
         try {
             InteractiveDocument newDoc = this.clazz.getDeclaredConstructor().newInstance();
+            newDoc.setTitle(title);
             newDoc.setId(UUID.randomUUID().toString());
             return Mono.just(newDoc);
         }catch (NoSuchMethodException | InvocationTargetException | InstantiationException | IllegalAccessException e){

@@ -40,6 +40,26 @@ public class InteractiveCv implements InteractiveDocument {
     @Builder.Default
     private ListEntries<Portfolio> portfolio = ListEntries.<Portfolio>builder().build();
 
+    public InteractiveCv() {
+
+    }
+    @Builder
+    public InteractiveCv(String id, String title, Identity identity, Profession profession, ProfilePicture profilePicture, Contact contact, Summary summary, ListEntries<Education> education, ListEntries<Experience> experience, ListEntries<Language> language, ListEntries<TechnicalSkill> technicalSkill, ListEntries<SoftSkill> softSkill, ListEntries<Portfolio> portfolio) {
+        this.id = id;
+        this.title = title;
+        this.identity = identity;
+        this.profession = profession;
+        this.profilePicture = profilePicture;
+        this.contact = contact;
+        this.summary = summary;
+        this.education = education;
+        this.experience = experience;
+        this.language = language;
+        this.technicalSkill = technicalSkill;
+        this.softSkill = softSkill;
+        this.portfolio = portfolio;
+    }
+
     @SuppressWarnings("unchecked")
     @Override
     public InteractiveCv projectDocument() {

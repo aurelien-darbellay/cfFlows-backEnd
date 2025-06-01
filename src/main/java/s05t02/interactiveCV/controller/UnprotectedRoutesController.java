@@ -59,7 +59,7 @@ public class UnprotectedRoutesController {
     }
 
     @GetMapping(ApiPaths.PUBLIC_VIEWS_PATH)
-    Mono<PublicView> getPublicViewById(@RequestParam String id) {
+    Mono<PublicView> getPublicViewById(@RequestParam("id") String id) {
         return publicViewService.getPublicViewById(id)
                 .doOnSuccess(publicView -> log.atDebug().log("Retrieved public view: {}", publicView.toString()));
     }

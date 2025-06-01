@@ -25,7 +25,7 @@ public class PublicViewService {
 
     public Mono<PublicView> savePublicView(String username, InteractiveDocument document) {
         return interactiveDocumentService.updateDocumentInUser(username, document)
-                .switchIfEmpty(interactiveDocumentService.addDocumentToUser(username, document))
+                .onErrorResume(error-> interactiveDocumentService.addDocumentToUser(username, document))
                 .flatMap(doc -> {
                     log.atDebug().log(doc.toString());
                     return publicViewRepository.save(createNewPublicView(username, doc));
