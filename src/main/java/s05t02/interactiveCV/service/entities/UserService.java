@@ -3,21 +3,26 @@ package s05t02.interactiveCV.service.entities;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.util.function.Tuple2;
+import s05t02.interactiveCV.dto.UserDetailsDto;
 import s05t02.interactiveCV.exception.EntityNotFoundException;
 import s05t02.interactiveCV.model.User;
 import s05t02.interactiveCV.repository.UserRepository;
 
 import java.util.Comparator;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
 public class UserService {
 
     private final UserRepository userRepository;
+    private final PasswordEncoder encoder;
     private static final Logger log = LoggerFactory.getLogger(UserService.class);
 
     public Mono<User> saveUser(User user) {
@@ -26,6 +31,15 @@ public class UserService {
                 .doOnError(error -> log.error("Error saving user with id : {} - Error Message: {}", user.getId(), error.getMessage()));
     }
 
+    public Mono<UserDetailsDto> updateUser(UserDetailsDto dto){
+        String oldUsername = SecurityContextHolder.getContext().getAuthentication().getName();
+        return userRepository.findByUsername(oldUsername)
+                .flatMap(user->{
+                    updateNonNullField(user,dto);
+                    return userRepository.save(user);
+                })
+                .map(user-> new UserDetailsDto(user.getUsername(),user.getHashedPassword(),user.getFirstname(),user.getLastname()));
+    }
     public Mono<User> getUserById(String id) {
         return userRepository.findById(id)
                 .switchIfEmpty(Mono.error(new EntityNotFoundException(id)))
@@ -59,5 +73,16 @@ public class UserService {
                 .doOnNext(tuple -> log.debug("User number {}, with username {}, retrieved successfully", tuple.getT1(), tuple.getT2().getUsername()))
                 .doOnError(error -> log.error("Error retrieving user, message : {}", error.getMessage()))
                 .map(Tuple2::getT2);
+    }
+
+    private void updateNonNullField(User user,UserDetailsDto dto){
+        Optional.ofNullable(dto.getUsername())
+                .ifPresent(user::setUsername);
+        Optional.ofNullable(dto.getLastname())
+                .ifPresent(user::setLastname);
+        Optional.ofNullable(dto.getPassword())
+                .ifPresent(pw -> user.setHashedPassword(encoder.encode(pw)));
+        Optional.ofNullable(dto.getFirstname())
+                .ifPresent(user::setFirstname);
     }
 }

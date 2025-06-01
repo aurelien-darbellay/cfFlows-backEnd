@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Mono;
 import s05t02.interactiveCV.dto.DashBoardDto;
+import s05t02.interactiveCV.dto.UserDetailsDto;
 import s05t02.interactiveCV.dto.interfaces.UserMapableToDto;
 import s05t02.interactiveCV.service.entities.UserService;
 
@@ -15,6 +16,10 @@ import static s05t02.interactiveCV.globalVariables.ApiPaths.*;
 public class UserController {
     private final UserService userService;
 
+    @PostMapping
+    Mono<UserDetailsDto> updateUserDetails(@RequestBody UserDetailsDto dto){
+        return userService.updateUser(dto);
+    }
     @GetMapping(USER_DASHBOARD_REL)
     Mono<DashBoardDto> getUserDashBoard(@PathVariable("username") String username) {
         return userService.getUserByUserName(username)
