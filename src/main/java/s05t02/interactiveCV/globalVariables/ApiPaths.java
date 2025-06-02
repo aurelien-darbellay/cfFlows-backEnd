@@ -42,6 +42,7 @@ public class ApiPaths {
     public static final String REGISTER_PATH = "/register";
     public static final String PUBLIC_VIEWS_PATH = "/public-views";//add ?id={pv_id}
     public static final String CSRF_TOKEN_PATH = "/csrf";
+    public static final String TYPES_CONFIG_PATH = "/config";
 
 
     public static String extractUserNameFromBaseUserSpaceUrl(String url) {

@@ -18,7 +18,10 @@ public class AdminSpaceAuthorizationManager implements ReactiveAuthorizationMana
         log.debug("In admin authorization manager");
         return authenticationMono
                 .map(authentication ->
-                        new AuthorizationDecision(Auth.isAdmin(authentication)))
+                {
+                    log.debug("Admin authentication found : " + Auth.isAdmin(authentication));
+                    return new AuthorizationDecision(Auth.isAdmin(authentication));
+                })
                 .defaultIfEmpty(new AuthorizationDecision(false));
     }
 }

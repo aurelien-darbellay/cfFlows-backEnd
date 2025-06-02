@@ -9,10 +9,12 @@ import java.util.UUID;
 
 @Getter
 public enum InteractiveDocumentType {
-    INTERACTIVE_CV(InteractiveCv.class);
+    INTERACTIVE_CV(InteractiveCv.class,"Interactive Cv");
+    private final String simpleName;
     private final Class<? extends InteractiveDocument> clazz;
-    InteractiveDocumentType(Class<? extends InteractiveDocument> clazz){
+    InteractiveDocumentType(Class<? extends InteractiveDocument> clazz, String simpleName){
         this.clazz = clazz;
+        this.simpleName = simpleName;
     }
     public Mono<InteractiveDocument> createDoc(String title) {
         try {

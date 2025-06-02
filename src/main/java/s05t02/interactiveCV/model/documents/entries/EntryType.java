@@ -12,13 +12,13 @@ public enum EntryType {
     SUMMARY("Summary", "3/5 lines max. Packed into one paragraph.", Summary.class, List.of(InteractiveCv.class),1),
     PROFESSION("Profession", "4/5 words. Rendered as a one-liner.", Profession.class, List.of(InteractiveCv.class),1),
     IDENTITY("Identity", "First Names, Last Names", Identity.class, List.of(InteractiveCv.class),1),
-    PROFILE_PICTURE("ProfilePicture", "Profile picture", ProfilePicture.class, List.of(InteractiveCv.class),1),
+    PROFILE_PICTURE("Profile Picture", "Profile picture", ProfilePicture.class, List.of(InteractiveCv.class),1),
     LANGUAGE("Language", "Two fields - name and level", Language.class, List.of(InteractiveCv.class),10),
     EXPERIENCE("Experience", "Position, Name Company, Date Beginning, Date End, Description (two-lines max), Keywords, Link (name + value), File",Experience.class, List.of(InteractiveCv.class),50),
     EDUCATION("Education", "Title, Training Center, Year End, Comments", Education.class, List.of(InteractiveCv.class),20),
     CONTACT("Contact", "Phone, E-mail, LinkedIn, City of Residence, ZipCode,GitHub, Instagram,Facebook", Contact.class, List.of(InteractiveCv.class),1),
-    TECH_SKILL("TechnicalSkill", "Key Words",TechnicalSkill.class, List.of(InteractiveCv.class),100),
-    SOFT_SKILL("SoftSkill", "Key Words", SoftSkill.class, List.of(InteractiveCv.class),20),
+    TECH_SKILL("Technical Skill", "Key Words",TechnicalSkill.class, List.of(InteractiveCv.class),100),
+    SOFT_SKILL("Soft Skill", "Key Words", SoftSkill.class, List.of(InteractiveCv.class),20),
     PORTFOLIO("Portfolio","Link towards deployed project", Portfolio.class,List.of(InteractiveCv.class),5);
 
     private final String simpleName;

@@ -13,6 +13,6 @@ public interface UserMapableToDto extends MapableToDto {
     default DashBoardDto mapToDto() {
         if (!(this instanceof User user)) throw new IllegalInterfaceImplementation(UserMapableToDto.class,User.class);
         List<DocFacade> documentsIds = user.getInteractiveDocuments().stream().map(doc -> DocFacade.of(doc.getId(), doc.getTitle())).toList();
-        return new DashBoardDto(user.getUsername(), user.getFirstname(), user.getLastname(), documentsIds);
+        return new DashBoardDto(user.getUsername(), user.getFirstname(), user.getLastname(), user.getRole().name(), documentsIds);
     }
 }

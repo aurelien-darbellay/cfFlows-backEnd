@@ -15,6 +15,7 @@ import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
 import s05t02.interactiveCV.dto.RegistrationRequestDto;
 import s05t02.interactiveCV.globalVariables.ApiPaths;
+import s05t02.interactiveCV.model.TypesConfig;
 import s05t02.interactiveCV.model.User;
 import s05t02.interactiveCV.model.publicViews.PublicView;
 import s05t02.interactiveCV.service.entities.PublicViewService;
@@ -33,6 +34,7 @@ public class UnprotectedRoutesController {
     private final PasswordEncoder encoder;
     private final ReactiveAuthenticationManager authManager;
     private final JwtCookieSuccessHandler successHandler;
+    private final TypesConfig config;
     private static final Logger log = LoggerFactory.getLogger(UnprotectedRoutesController.class);
 
 
@@ -62,5 +64,10 @@ public class UnprotectedRoutesController {
     Mono<PublicView> getPublicViewById(@RequestParam("id") String id) {
         return publicViewService.getPublicViewById(id)
                 .doOnSuccess(publicView -> log.atDebug().log("Retrieved public view: {}", publicView.toString()));
+    }
+
+    @GetMapping(ApiPaths.TYPES_CONFIG_PATH)
+    Mono<TypesConfig> getTypesConfig(){
+        return Mono.just(config);
     }
 }

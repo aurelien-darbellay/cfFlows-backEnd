@@ -19,7 +19,10 @@ public class UserSpaceAuthorizationManager implements ReactiveAuthorizationManag
         log.debug("In user authorization manager");
         ServerWebExchange exchange = context.getExchange();
         return authenticationMono
-                .map(authentication -> new AuthorizationDecision(Auth.isRightUser(authentication, exchange) || Auth.isAdmin(authentication)))
+                .map(authentication -> {
+                    log.debug("User authentication found");
+                    return new AuthorizationDecision(Auth.isRightUser(authentication, exchange) || Auth.isAdmin(authentication));
+                })
                 .defaultIfEmpty(new AuthorizationDecision(false));
     }
 }

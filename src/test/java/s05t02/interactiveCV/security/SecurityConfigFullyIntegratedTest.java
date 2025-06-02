@@ -143,7 +143,7 @@ public class SecurityConfigFullyIntegratedTest {
         String username = (String) jwt.getClaims().get("sub");
         @SuppressWarnings("unchecked")
         List<String> authorities = (List<String>) jwt.getClaims().get("roles");
-
+        System.out.println(authorities.get(0));
         assertEquals(USERNAME_3, username);
         assertLinesMatch(List.of(ROLE_3.getAuthorityName()), authorities);
     }
