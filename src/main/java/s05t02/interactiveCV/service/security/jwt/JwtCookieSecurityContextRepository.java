@@ -47,7 +47,6 @@ public class JwtCookieSecurityContextRepository implements ServerSecurityContext
                         Jwt jwt = jwtDecoder.decode(token);
                         log.atDebug().log("JWT validated with claims : " + jwt.getClaims());
                         Authentication auth = new JwtAuthenticationToken(jwt,getAuthorities(jwt));
-                        auth.setAuthenticated(true);
                         log.atDebug().log("Auth loaded in security context:" + auth.toString());
                         return Mono.just(new SecurityContextImpl(auth));
                     } catch (JwtException | JwtAuthenticationException e) {

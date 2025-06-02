@@ -1,10 +1,7 @@
 package s05t02.interactiveCV.controller;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Mono;
 import s05t02.interactiveCV.model.documents.entries.genEntriesFeatures.Entry;
 import s05t02.interactiveCV.service.entities.EntryService;
@@ -19,7 +16,7 @@ public class EntryController {
     private final EntryService entryService;
 
     @PostMapping(ENTRY_ADD_REL)
-    Mono<Entry> addEntryInDoc(@PathVariable("username") String username,@PathVariable("docId") String docId,Entry entry){
+    Mono<Entry> addEntryInDoc(@PathVariable("username") String username,@PathVariable("docId") String docId,@RequestBody Entry entry){
         return entryService.addEntry(username,docId,entry);
     }
     @PostMapping(ENTRY_UPDATE_REL)

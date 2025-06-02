@@ -1,5 +1,6 @@
 package s05t02.interactiveCV.model.documents.entries.concreteEntries;
 
+import com.fasterxml.jackson.annotation.JsonTypeName;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
