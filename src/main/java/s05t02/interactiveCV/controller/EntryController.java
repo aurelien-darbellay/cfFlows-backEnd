@@ -16,15 +16,17 @@ public class EntryController {
     private final EntryService entryService;
 
     @PostMapping(ENTRY_ADD_REL)
-    Mono<Entry> addEntryInDoc(@PathVariable("username") String username,@PathVariable("docId") String docId,@RequestBody Entry entry){
-        return entryService.addEntry(username,docId,entry);
+    Mono<Entry> addEntryInDoc(@PathVariable("username") String username, @PathVariable("docId") String docId, @RequestBody Entry entry) {
+        return entryService.addEntry(username, docId, entry);
     }
+
     @PostMapping(ENTRY_UPDATE_REL)
-    Mono<Entry> updateEntryInDoc(@PathVariable("username") String username, @PathVariable("docId") String docId, Entry updatedEntry){
-        return entryService.modifyEntry(username,docId,updatedEntry);
+    Mono<Entry> updateEntryInDoc(@PathVariable("username") String username, @PathVariable("docId") String docId, @RequestBody Entry updatedEntry) {
+        return entryService.modifyEntry(username, docId, updatedEntry);
     }
+
     @PostMapping(ENTRY_DELETE_REL)
-    Mono<Void> deleteEntryInDoc(@PathVariable("username") String username, @PathVariable("docId") String docId, Entry entry){
-        return entryService.removeEntry(username,docId,entry);
+    Mono<Void> deleteEntryInDoc(@PathVariable("username") String username, @PathVariable("docId") String docId, @RequestBody Entry entry) {
+        return entryService.removeEntry(username, docId, entry);
     }
 }

@@ -1,10 +1,11 @@
 package s05t02.interactiveCV.model.documents.entries.concreteEntries;
 
-import com.fasterxml.jackson.annotation.JsonTypeName;
-import lombok.*;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 import lombok.experimental.SuperBuilder;
 import org.springframework.data.annotation.PersistenceCreator;
-import s05t02.interactiveCV.model.documents.entries.EntryType;
 import s05t02.interactiveCV.model.documents.entries.genEntriesFeatures.ContainerEntry;
 
 
@@ -12,8 +13,14 @@ import s05t02.interactiveCV.model.documents.entries.genEntriesFeatures.Container
 @Setter
 @SuperBuilder
 @ToString
-@RequiredArgsConstructor(onConstructor = @__(@PersistenceCreator))
 public class Contact extends ContainerEntry {
+
+    @JsonCreator
+    @PersistenceCreator
+    public Contact() {
+        super();
+    }
+
     private String phoneNumber;
     private String email;
     private String linkedInAccount;

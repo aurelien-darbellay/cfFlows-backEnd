@@ -1,7 +1,10 @@
 package s05t02.interactiveCV.model.documents.entries.concreteEntries;
 
-import com.fasterxml.jackson.annotation.JsonTypeName;
-import lombok.*;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 import lombok.experimental.SuperBuilder;
 import org.springframework.data.annotation.PersistenceCreator;
 import s05t02.interactiveCV.model.documents.entries.genEntriesFeatures.ContainerEntry;
@@ -10,10 +13,16 @@ import s05t02.interactiveCV.model.documents.entries.genEntriesFeatures.Container
 @Setter
 @SuperBuilder
 @ToString
-@RequiredArgsConstructor(onConstructor = @__(@PersistenceCreator))
 public class ProfilePicture extends ContainerEntry {
     public enum Shape {
         SQUARE, TRIANGLE, RECTANGLE, STAR, ROUND
+    }
+
+    @JsonCreator
+    @PersistenceCreator
+    public ProfilePicture(String urlPicture) {
+        super();
+        this.urlPicture = urlPicture;
     }
 
     private final String urlPicture;

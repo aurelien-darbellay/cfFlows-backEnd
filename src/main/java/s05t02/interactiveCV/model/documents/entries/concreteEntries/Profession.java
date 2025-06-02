@@ -1,8 +1,7 @@
 package s05t02.interactiveCV.model.documents.entries.concreteEntries;
 
-import com.fasterxml.jackson.annotation.JsonTypeName;
+import com.fasterxml.jackson.annotation.JsonCreator;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 import lombok.experimental.SuperBuilder;
@@ -13,8 +12,14 @@ import s05t02.interactiveCV.model.documents.entries.genEntriesFeatures.Container
 @Setter
 @SuperBuilder
 @ToString
-@RequiredArgsConstructor(onConstructor = @__(@PersistenceCreator))
 public class Profession extends ContainerEntry {
+
+    @JsonCreator
+    @PersistenceCreator
+    public Profession() {
+        super();
+    }
+
     private String generalTitle;
     private String specificTitle;
 }

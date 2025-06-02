@@ -1,8 +1,8 @@
 package s05t02.interactiveCV.model.documents.entries.concreteEntries;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 import lombok.experimental.SuperBuilder;
@@ -13,8 +13,14 @@ import s05t02.interactiveCV.model.documents.entries.genEntriesFeatures.Container
 @Setter
 @SuperBuilder
 @ToString
-@RequiredArgsConstructor(onConstructor = @__(@PersistenceCreator))
+@JsonTypeName("SUMMARY")
 public class Summary extends ContainerEntry {
+    @JsonCreator
+    @PersistenceCreator
+    public Summary() {
+        super();
+    }
+
     private String title;
     private String text;
 }
