@@ -3,13 +3,17 @@ package s05t02.interactiveCV.service.entities;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.ReactiveSecurityContextHolder;
+import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.util.function.Tuple2;
-import s05t02.interactiveCV.dto.UserDetailsDto;
+import s05t02.interactiveCV.dto.DashBoardDto;
+import s05t02.interactiveCV.dto.UserUpdateRequestDto;
+import s05t02.interactiveCV.dto.interfaces.UserMapableToDto;
 import s05t02.interactiveCV.exception.EntityNotFoundException;
 import s05t02.interactiveCV.model.User;
 import s05t02.interactiveCV.repository.UserRepository;
@@ -31,15 +35,18 @@ public class UserService {
                 .doOnError(error -> log.error("Error saving user with id : {} - Error Message: {}", user.getId(), error.getMessage()));
     }
 
-    public Mono<UserDetailsDto> updateUser(UserDetailsDto dto){
-        String oldUsername = SecurityContextHolder.getContext().getAuthentication().getName();
-        return userRepository.findByUsername(oldUsername)
-                .flatMap(user->{
-                    updateNonNullField(user,dto);
+    public Mono<DashBoardDto> updateUser(UserUpdateRequestDto dto) {
+        return ReactiveSecurityContextHolder.getContext()
+                .map(SecurityContext::getAuthentication)
+                .map(Authentication::getName)
+                .flatMap(userRepository::findByUsername)
+                .flatMap(user -> {
+                    updateNonNullField(user, dto);
                     return userRepository.save(user);
                 })
-                .map(user-> new UserDetailsDto(user.getUsername(),user.getHashedPassword(),user.getFirstname(),user.getLastname()));
+                .map(UserMapableToDto::mapToDto);
     }
+
     public Mono<User> getUserById(String id) {
         return userRepository.findById(id)
                 .switchIfEmpty(Mono.error(new EntityNotFoundException(id)))
@@ -75,7 +82,7 @@ public class UserService {
                 .map(Tuple2::getT2);
     }
 
-    private void updateNonNullField(User user,UserDetailsDto dto){
+    private void updateNonNullField(User user, UserUpdateRequestDto dto) {
         Optional.ofNullable(dto.getUsername())
                 .ifPresent(user::setUsername);
         Optional.ofNullable(dto.getLastname())
