@@ -2,7 +2,6 @@ package s05t02.interactiveCV.model.documents;
 
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Getter;
 import s05t02.interactiveCV.model.documents.entries.genEntriesFeatures.Entry;
 import s05t02.interactiveCV.model.documents.entries.genEntriesFeatures.NamedEntry;
@@ -20,11 +19,13 @@ import java.util.List;
 public interface InteractiveDocument {
 
     String getTitle();
+
     void setTitle(String title);
 
     <T extends InteractiveDocument> T projectDocument();
 
     String getId();
+
     void setId(String id);
 
     @Getter
