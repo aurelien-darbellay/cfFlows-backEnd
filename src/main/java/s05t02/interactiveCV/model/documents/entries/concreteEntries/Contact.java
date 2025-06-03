@@ -1,6 +1,7 @@
 package s05t02.interactiveCV.model.documents.entries.concreteEntries;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -13,6 +14,7 @@ import s05t02.interactiveCV.model.documents.entries.genEntriesFeatures.Container
 @Setter
 @SuperBuilder
 @ToString
+@EqualsAndHashCode(callSuper = false)
 public class Contact extends ContainerEntry {
 
     @JsonCreator

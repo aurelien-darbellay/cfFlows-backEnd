@@ -17,6 +17,7 @@ import s05t02.interactiveCV.model.documents.InteractiveDocument;
 import s05t02.interactiveCV.model.documents.InteractiveDocumentType;
 import s05t02.interactiveCV.model.documents.cv.InteractiveCv;
 import s05t02.interactiveCV.service.entities.InteractiveDocumentService;
+
 import static org.mockito.Mockito.when;
 import static org.springframework.security.test.web.reactive.server.SecurityMockServerConfigurers.csrf;
 import static s05t02.interactiveCV.globalVariables.ApiPaths.DOC_PATH;
@@ -58,7 +59,7 @@ public class DocumentControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .bodyValue(request)
                 .exchange()
-                .expectStatus().isOk()
+                .expectStatus().isCreated()
                 .expectBody(InteractiveDocument.class)
                 .value(doc -> {
                     assert doc.getId().equals(testDocId);
@@ -74,7 +75,7 @@ public class DocumentControllerTest {
                 .post()
                 .uri(DOC_PATH, testUsername)
                 .contentType(MediaType.APPLICATION_JSON)
-                .bodyValue(new DocumentCreationDto("hola",null))
+                .bodyValue(new DocumentCreationDto("hola", null))
                 .exchange()
                 .expectStatus().isBadRequest();
 
@@ -146,7 +147,7 @@ public class DocumentControllerTest {
     @WithMockUser(username = "testuser")
     void deleteDocument_ShouldReturnNoContent() {
         when(documentService.deleteDocumentFromUser(testUsername, testDocId))
-                .thenReturn(Mono.error(new MatchingFailureException(testUsername,testDocId)));
+                .thenReturn(Mono.error(new MatchingFailureException(testUsername, testDocId)));
 
         webTestClient.mutateWith(csrf())
                 .post()

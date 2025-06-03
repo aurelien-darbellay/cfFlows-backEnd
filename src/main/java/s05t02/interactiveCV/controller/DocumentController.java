@@ -8,9 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Mono;
 import s05t02.interactiveCV.dto.DocumentCreationDto;
-import s05t02.interactiveCV.dto.interfaces.Dto;
 import s05t02.interactiveCV.model.documents.InteractiveDocument;
-import s05t02.interactiveCV.model.documents.InteractiveDocumentType;
 import s05t02.interactiveCV.service.entities.InteractiveDocumentService;
 
 import static s05t02.interactiveCV.globalVariables.ApiPaths.*;
@@ -22,10 +20,11 @@ public class DocumentController {
     private final InteractiveDocumentService documentService;
     private static final Logger log = LoggerFactory.getLogger(DocumentController.class);
 
+    @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
     Mono<InteractiveDocument> createdNewDoc(@PathVariable("username") String username, @Valid @RequestBody DocumentCreationDto dto) {
-        log.atDebug().log("Creating new document of type {}",dto.getType());
-        return documentService.createDocumentInUser(username,dto.getType(),dto.getTitle()); //here maybe add error in case user don't exist
+        log.atDebug().log("Creating new document of type {}", dto.getType());
+        return documentService.createDocumentInUser(username, dto.getType(), dto.getTitle()); //here maybe add error in case user don't exist
     }
 
     @GetMapping(DOC_ID_REL)

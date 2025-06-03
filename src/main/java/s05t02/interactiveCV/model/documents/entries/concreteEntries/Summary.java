@@ -2,6 +2,7 @@ package s05t02.interactiveCV.model.documents.entries.concreteEntries;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonTypeName;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -14,6 +15,7 @@ import s05t02.interactiveCV.model.documents.entries.genEntriesFeatures.Container
 @SuperBuilder
 @ToString
 @JsonTypeName("SUMMARY")
+@EqualsAndHashCode(callSuper = false)
 public class Summary extends ContainerEntry {
     @JsonCreator
     @PersistenceCreator

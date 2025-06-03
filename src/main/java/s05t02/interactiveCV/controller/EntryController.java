@@ -1,6 +1,9 @@
 package s05t02.interactiveCV.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Mono;
 import s05t02.interactiveCV.model.documents.entries.genEntriesFeatures.Entry;
@@ -14,7 +17,9 @@ import static s05t02.interactiveCV.globalVariables.ApiPaths.*;
 public class EntryController {
 
     private final EntryService entryService;
+    private static final Logger log = LoggerFactory.getLogger(EntryController.class);
 
+    @ResponseStatus(HttpStatus.CREATED)
     @PostMapping(ENTRY_ADD_REL)
     Mono<Entry> addEntryInDoc(@PathVariable("username") String username, @PathVariable("docId") String docId, @RequestBody Entry entry) {
         return entryService.addEntry(username, docId, entry);
@@ -25,6 +30,7 @@ public class EntryController {
         return entryService.modifyEntry(username, docId, updatedEntry);
     }
 
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     @PostMapping(ENTRY_DELETE_REL)
     Mono<Void> deleteEntryInDoc(@PathVariable("username") String username, @PathVariable("docId") String docId, @RequestBody Entry entry) {
         return entryService.removeEntry(username, docId, entry);
