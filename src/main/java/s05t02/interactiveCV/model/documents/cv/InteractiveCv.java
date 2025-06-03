@@ -1,5 +1,6 @@
 package s05t02.interactiveCV.model.documents.cv;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import customCompileChecks.MatchesTypeName;
 import lombok.*;
 import s05t02.interactiveCV.model.documents.InteractiveDocument;
@@ -79,6 +80,7 @@ public class InteractiveCv implements InteractiveDocument {
                 .build();
     }
 
+    @JsonIgnore
     @Override
     public HtmlTargetCoordinate getHtmlTargetCoordinate() {
         return new HtmlTargetCoordinate("cv", "cv-template");

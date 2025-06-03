@@ -4,6 +4,7 @@ import jakarta.validation.UnexpectedTypeException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpCookie;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContext;
@@ -47,11 +48,11 @@ public class JwtCookieSecurityContextRepository implements ServerSecurityContext
                         Jwt jwt = jwtDecoder.decode(token);
                         log.atDebug().log("JWT validated with claims : " + jwt.getClaims());
                         Authentication auth = new JwtAuthenticationToken(jwt,getAuthorities(jwt));
-                        log.atDebug().log("Auth loaded in security context:" + auth.toString());
+                        log.atDebug().log("Auth loaded in security context:" + auth);
                         return Mono.just(new SecurityContextImpl(auth));
                     } catch (JwtException | JwtAuthenticationException e) {
                         log.atDebug().log("invalid JWT");
-                        return Mono.error(new JwtAuthenticationException(e.getMessage())); // invalid JWT
+                        return Mono.error(new BadCredentialsException("Invalid JWT: " + e.getMessage(), e));// invalid JWT
                     }
                 });
     }

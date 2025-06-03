@@ -1,5 +1,6 @@
 package s05t02.interactiveCV.controller;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.ReactiveAuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -23,9 +24,9 @@ public class UserController {
     private final ReactiveAuthenticationManager authManager;
 
     @PostMapping
-    Mono<DashBoardDto> updateUserDetails(ServerWebExchange exchange, @RequestBody UserUpdateRequestDto dto) {
+    Mono<DashBoardDto> updateUserDetails(ServerWebExchange exchange, @Valid @RequestBody UserUpdateRequestDto dto) {
         return userService.updateUser(dto)
-                .delayUntil(ignored -> {
+                .delayUntil(dashBoardDto -> {
                     UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(dto.getUsername(), dto.getPassword());
                     return authManager.authenticate(token)
                             .doOnSuccess(authentication -> {

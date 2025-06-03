@@ -230,7 +230,7 @@ public class SecurityConfigTest {
         Jwt jwt = jwtUtils.createJwt("unexistingUser", List.of(Role.USER.getAuthorityName()));
         client.mutateWith(csrf())
                 .get()
-                .uri(ApiPaths.USER_BASE_PATH.replace("{username}", "unexistingUser"))
+                .uri(ApiPaths.USER_DASHBOARD_PATH.replace("{username}", "unexistingUser"))
                 .cookie("jwt", jwt.getTokenValue())
                 .exchange()
                 .expectStatus().isNotFound();

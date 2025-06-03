@@ -3,6 +3,7 @@ package s05t02.interactiveCV.service.cloud;
 import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
 import reactor.core.publisher.Mono;
+import s05t02.interactiveCV.model.documents.entries.genEntriesFeatures.interfaces.PointsToFileInCloud;
 import s05t02.interactiveCV.service.entities.UserService;
 
 import java.time.Instant;
@@ -40,12 +41,7 @@ public class CloudinaryService implements CloudStorageService {
     }
 
     @Override
-    public Mono<Void> saveMetaData(String username, String docId, CloudMetaData metaData) {
-        return null;/*userService.getUserByUserName(username)
-                .map(user -> user.getDocuments().stream()
-                        .filter(doc -> doc.getId().equals(docId)).findFirst().orElse(null))
-                .flatMap(interactiveDocument -> {
-
-                });*/
+    public Mono<Void> saveMetaData(String username, String docId, CloudMetaData metaData, PointsToFileInCloud entry) {
+        return null;
     }
 }

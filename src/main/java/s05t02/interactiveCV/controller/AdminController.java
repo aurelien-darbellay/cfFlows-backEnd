@@ -10,7 +10,6 @@ import s05t02.interactiveCV.dto.interfaces.UserMapableToDto;
 import s05t02.interactiveCV.service.entities.UserService;
 
 import static s05t02.interactiveCV.globalVariables.ApiPaths.ADMIN_BASE_PATH;
-import static s05t02.interactiveCV.globalVariables.ApiPaths.USER_BASE_PATH;
 
 @RequiredArgsConstructor
 @RestController

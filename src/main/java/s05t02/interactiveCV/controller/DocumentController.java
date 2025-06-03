@@ -1,5 +1,6 @@
 package s05t02.interactiveCV.controller;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,7 +23,7 @@ public class DocumentController {
     private static final Logger log = LoggerFactory.getLogger(DocumentController.class);
 
     @PostMapping
-    Mono<InteractiveDocument> createdNewDoc(@PathVariable("username") String username, @RequestBody DocumentCreationDto dto) {
+    Mono<InteractiveDocument> createdNewDoc(@PathVariable("username") String username, @Valid @RequestBody DocumentCreationDto dto) {
         log.atDebug().log("Creating new document of type {}",dto.getType());
         return documentService.createDocumentInUser(username,dto.getType(),dto.getTitle()); //here maybe add error in case user don't exist
     }

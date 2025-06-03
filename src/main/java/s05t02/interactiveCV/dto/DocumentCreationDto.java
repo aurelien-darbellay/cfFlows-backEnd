@@ -3,6 +3,7 @@ package s05t02.interactiveCV.dto;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
 import s05t02.interactiveCV.model.documents.InteractiveDocumentType;
@@ -11,7 +12,7 @@ import s05t02.interactiveCV.model.documents.InteractiveDocumentType;
 public class DocumentCreationDto {
     @NotBlank(message = "Title is required")
     private final String title;
-    @NotBlank(message = "Type is required")
+    @NotNull(message = "Type is required")
     private final InteractiveDocumentType type;
 
     @JsonCreator

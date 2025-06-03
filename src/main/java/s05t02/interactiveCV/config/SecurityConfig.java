@@ -5,6 +5,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 import org.springframework.security.authentication.ReactiveAuthenticationManager;
 import org.springframework.security.authentication.UserDetailsRepositoryReactiveAuthenticationManager;
 import org.springframework.security.authorization.ReactiveAuthorizationManager;
@@ -26,6 +27,7 @@ import org.springframework.web.server.ServerWebExchange;
 import org.springframework.web.server.WebFilter;
 import reactor.core.publisher.Mono;
 import s05t02.interactiveCV.globalVariables.ApiPaths;
+import s05t02.interactiveCV.service.security.MyUserDetailsService;
 import s05t02.interactiveCV.service.security.authorization.AdminSpaceAuthorizationManager;
 import s05t02.interactiveCV.service.security.authorization.UserSpaceAuthorizationManager;
 import s05t02.interactiveCV.service.security.jwt.JwtCookieSuccessHandler;
@@ -142,7 +144,6 @@ public class SecurityConfig {
         mgr.setPasswordEncoder(passwordEncoder);
         return mgr;
     }
-
 
 }
 
