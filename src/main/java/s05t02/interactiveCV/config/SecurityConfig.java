@@ -52,7 +52,10 @@ public class SecurityConfig {
                         .csrfTokenRequestHandler(doubleSubmitCsrfTokenHandler()))
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .securityContextRepository(jwtCookieSecurityContextRepository)
-                .formLogin(formLoginSpec -> formLoginSpec.authenticationSuccessHandler(jwtSuccessHandler))
+                .formLogin(formLoginSpec -> formLoginSpec
+                        .loginPage("/api/login")
+                        .authenticationSuccessHandler(jwtSuccessHandler)
+                )
                 .authorizeExchange(exchanges -> exchanges
                         .pathMatchers(ApiPaths.USER_BASE_PATH.replace("{username}", "**"))
                         .access(userSpaceAuthManager())

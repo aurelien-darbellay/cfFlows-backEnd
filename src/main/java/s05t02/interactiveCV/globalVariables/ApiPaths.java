@@ -9,8 +9,9 @@ public class ApiPaths {
     public static final String BACK_ORIGIN = "http://localhost:8080";
     public static final String FRONT_ORIGIN = "http://localhost:5173";
 
+    public static final String BASE_PATH = "/api";
     //protected paths
-    public static final String PROTECTED_BASE_PATH = "/api";
+    public static final String PROTECTED_BASE_PATH = BASE_PATH + "/protected";
     /// /user path
     public static final String USER_BASE_PATH = PROTECTED_BASE_PATH + "/users/{username}";
     public static final String USER_DASHBOARD_REL = "/dashboard";
@@ -38,11 +39,11 @@ public class ApiPaths {
 
 
     //unprotected path
-    public static final String LOGIN_PATH = "/login";
-    public static final String REGISTER_PATH = "/register";
-    public static final String PUBLIC_VIEWS_PATH = "/public-views";//add ?id={pv_id}
-    public static final String CSRF_TOKEN_PATH = "/csrf";
-    public static final String TYPES_CONFIG_PATH = "/config";
+    public static final String LOGIN_PATH = BASE_PATH +"/login";
+    public static final String REGISTER_PATH = BASE_PATH + "/register";
+    public static final String PUBLIC_VIEWS_PATH = BASE_PATH + "/public-views";//add ?id={pv_id}
+    public static final String CSRF_TOKEN_PATH = BASE_PATH + "/csrf";
+    public static final String TYPES_CONFIG_PATH = BASE_PATH + "/config";
 
 
     public static String extractUserNameFromBaseUserSpaceUrl(String url) {
