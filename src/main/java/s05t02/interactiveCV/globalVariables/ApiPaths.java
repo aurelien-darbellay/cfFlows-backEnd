@@ -13,7 +13,7 @@ public class ApiPaths {
     //protected paths
     public static final String PROTECTED_BASE_PATH = BASE_PATH + "/protected";
     /// /user path
-    public static final String USER_BASE_PATH = PROTECTED_BASE_PATH + "/users/{username}";
+    public static final String USER_BASE_PATH = PROTECTED_BASE_PATH + "/users";
     public static final String USER_DASHBOARD_REL = "/dashboard";
     public static final String USER_DASHBOARD_PATH = USER_BASE_PATH + USER_DASHBOARD_REL;
     public static final String USER_DELETE_REL = "/delete";
@@ -32,14 +32,14 @@ public class ApiPaths {
     public static final String ENTRY_BASE_PATH = DOC_ID_PATH + "/entry";
     public static final String ENTRY_ADD_REL = "/add";
     public static final String ENTRY_DELETE_REL = "/delete";
-    public static final String ENTRY_UPDATE_REL= "/update";
+    public static final String ENTRY_UPDATE_REL = "/update";
 
     public static final String CLOUD_STORAGE_PATH = USER_BASE_PATH + "/cloud-storage";
     public static final String ADMIN_BASE_PATH = PROTECTED_BASE_PATH + "/admin";
 
 
-    //unprotected path
-    public static final String LOGIN_PATH = BASE_PATH +"/login";
+    //unprotected paths
+    public static final String LOGIN_PATH = BASE_PATH + "/login";
     public static final String REGISTER_PATH = BASE_PATH + "/register";
     public static final String PUBLIC_VIEWS_PATH = BASE_PATH + "/public-views";//add ?id={pv_id}
     public static final String CSRF_TOKEN_PATH = BASE_PATH + "/csrf";

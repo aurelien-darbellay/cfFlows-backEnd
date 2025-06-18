@@ -67,7 +67,7 @@ public class EntryControllerIntegrationTest {
 
         webTestClient.mutateWith(csrf())
                 .post()
-                .uri(ENTRY_BASE_PATH + ENTRY_ADD_REL, testUsername, testDocId)
+                .uri(ENTRY_BASE_PATH + ENTRY_ADD_REL, testDocId)
                 .cookie("jwt", validJwtToken)
                 .contentType(MediaType.APPLICATION_JSON)
                 .bodyValue(testEntry)
@@ -81,7 +81,7 @@ public class EntryControllerIntegrationTest {
     void addEntry_ShouldReturnUnauthorized_WhenNoJwtCookie() {
         webTestClient.mutateWith(csrf())
                 .post()
-                .uri(ENTRY_BASE_PATH + ENTRY_ADD_REL, testUsername, testDocId)
+                .uri(ENTRY_BASE_PATH + ENTRY_ADD_REL, testDocId)
                 .contentType(MediaType.APPLICATION_JSON)
                 .bodyValue(testEntry)
                 .exchange()
@@ -92,7 +92,7 @@ public class EntryControllerIntegrationTest {
     void addEntry_ShouldReturnForbidden_WhenInvalidJwt() {
         webTestClient.mutateWith(csrf())
                 .post()
-                .uri(ENTRY_BASE_PATH + ENTRY_ADD_REL, testUsername, testDocId)
+                .uri(ENTRY_BASE_PATH + ENTRY_ADD_REL, testDocId)
                 .cookie("jwt", "invalid-token")
                 .contentType(MediaType.APPLICATION_JSON)
                 .bodyValue(testEntry)
@@ -108,7 +108,7 @@ public class EntryControllerIntegrationTest {
 
         webTestClient.mutateWith(csrf())
                 .post()
-                .uri(ENTRY_BASE_PATH + ENTRY_UPDATE_REL, testUsername, testDocId)
+                .uri(ENTRY_BASE_PATH + ENTRY_UPDATE_REL, testDocId)
                 .cookie("jwt", validJwtToken)
                 .contentType(MediaType.APPLICATION_JSON)
                 .bodyValue(updatedEntry)
@@ -125,7 +125,7 @@ public class EntryControllerIntegrationTest {
 
         webTestClient.mutateWith(csrf())
                 .post()
-                .uri(ENTRY_BASE_PATH + ENTRY_DELETE_REL, testUsername, testDocId)
+                .uri(ENTRY_BASE_PATH + ENTRY_DELETE_REL, testDocId)
                 .cookie("jwt", validJwtToken)
                 .contentType(MediaType.APPLICATION_JSON)
                 .bodyValue(testEntry)
@@ -135,9 +135,12 @@ public class EntryControllerIntegrationTest {
 
     @Test
     void allEntryEndpoints_ShouldRequireCsrfProtection() {
+
+        when(entryService.modifyEntry(eq(testUsername), eq(testDocId), any(Entry.class)))
+                .thenReturn(Mono.just(testEntry));
         // Test without CSRF token
         webTestClient.post()
-                .uri(ENTRY_BASE_PATH + ENTRY_ADD_REL, testUsername, testDocId)
+                .uri(ENTRY_BASE_PATH + ENTRY_ADD_REL, testDocId)
                 .cookie("jwt", validJwtToken)
                 .contentType(MediaType.APPLICATION_JSON)
                 .bodyValue(testEntry)
@@ -147,12 +150,12 @@ public class EntryControllerIntegrationTest {
         // Test with CSRF token
         webTestClient.mutateWith(csrf())
                 .post()
-                .uri(ENTRY_BASE_PATH + ENTRY_ADD_REL, testUsername, testDocId)
+                .uri(ENTRY_BASE_PATH + ENTRY_UPDATE_REL, testDocId)
                 .cookie("jwt", validJwtToken)
                 .contentType(MediaType.APPLICATION_JSON)
                 .bodyValue(testEntry)
                 .exchange()
-                .expectStatus().isCreated();
+                .expectStatus().isOk();
     }
 
 
@@ -163,7 +166,7 @@ public class EntryControllerIntegrationTest {
 
         webTestClient.mutateWith(csrf())
                 .post()
-                .uri(ENTRY_BASE_PATH + ENTRY_UPDATE_REL, testUsername, "missing-doc")
+                .uri(ENTRY_BASE_PATH + ENTRY_UPDATE_REL, "missing-doc")
                 .cookie("jwt", validJwtToken)
                 .contentType(MediaType.APPLICATION_JSON)
                 .bodyValue(testEntry)

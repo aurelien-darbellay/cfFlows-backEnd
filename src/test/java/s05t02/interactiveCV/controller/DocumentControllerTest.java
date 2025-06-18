@@ -55,7 +55,7 @@ public class DocumentControllerTest {
 
         webTestClient.mutateWith(csrf())
                 .post()
-                .uri(DOC_PATH, testUsername)
+                .uri(DOC_PATH)
                 .contentType(MediaType.APPLICATION_JSON)
                 .bodyValue(request)
                 .exchange()
@@ -73,7 +73,7 @@ public class DocumentControllerTest {
         // Test empty title
         webTestClient.mutateWith(csrf())
                 .post()
-                .uri(DOC_PATH, testUsername)
+                .uri(DOC_PATH)
                 .contentType(MediaType.APPLICATION_JSON)
                 .bodyValue(new DocumentCreationDto("hola", null))
                 .exchange()
@@ -82,7 +82,7 @@ public class DocumentControllerTest {
         // Test null type
         webTestClient.mutateWith(csrf())
                 .post()
-                .uri(DOC_PATH, testUsername)
+                .uri(DOC_PATH)
                 .contentType(MediaType.APPLICATION_JSON)
                 .bodyValue(new DocumentCreationDto("", InteractiveDocumentType.INTERACTIVE_CV))
                 .exchange()
@@ -99,7 +99,7 @@ public class DocumentControllerTest {
                 .thenReturn(Mono.just(mockDocument));
 
         webTestClient.get()
-                .uri(DOC_PATH + ApiPaths.DOC_ID_REL, testUsername, testDocId)
+                .uri(DOC_PATH + ApiPaths.DOC_ID_REL, testDocId)
                 .exchange()
                 .expectStatus().isOk()
                 .expectBody(InteractiveDocument.class)
@@ -115,7 +115,7 @@ public class DocumentControllerTest {
                 .thenReturn(Mono.error(new EntityNotFoundException("invalid")));
 
         webTestClient.get()
-                .uri(DOC_PATH + ApiPaths.DOC_ID_REL, testUsername, "invalid")
+                .uri(DOC_PATH + ApiPaths.DOC_ID_REL, "invalid")
                 .exchange()
                 .expectStatus().isNotFound();
     }
@@ -132,7 +132,7 @@ public class DocumentControllerTest {
 
         webTestClient.mutateWith(csrf())
                 .post()
-                .uri(DOC_PATH + ApiPaths.DOC_ID_REL, testUsername, testDocId)
+                .uri(DOC_PATH + ApiPaths.DOC_ID_REL, testDocId)
                 .contentType(MediaType.APPLICATION_JSON)
                 .bodyValue(updatedDoc)
                 .exchange()
@@ -151,8 +151,7 @@ public class DocumentControllerTest {
 
         webTestClient.mutateWith(csrf())
                 .post()
-                .uri(DOC_PATH + ApiPaths.DOC_ID_REL + ApiPaths.DELETE_DOC_REL,
-                        testUsername, testDocId)
+                .uri(DOC_PATH + ApiPaths.DOC_ID_REL + ApiPaths.DELETE_DOC_REL, testDocId)
                 .exchange()
                 .expectStatus().isNotFound();
     }
@@ -166,21 +165,8 @@ public class DocumentControllerTest {
                 .expectStatus().isFound();
 
         webTestClient.get()
-                .uri(DOC_PATH + ApiPaths.DOC_ID_REL, testUsername, testDocId)
+                .uri(DOC_PATH + ApiPaths.DOC_ID_REL, testDocId)
                 .exchange()
                 .expectStatus().isFound();
-    }
-
-    @Test
-    @WithMockUser(username = "otheruser")
-    void operations_ShouldValidateUsernameOwnership() {
-        // Simulate trying to access another user's documents
-        /*when(documentService.getDocumentByIdInUser(testUsername, testDocId))
-                .thenReturn(Mono.error(new SecurityException("Forbidden")));*/
-
-        webTestClient.get()
-                .uri(DOC_PATH + ApiPaths.DOC_ID_REL, testUsername, testDocId)
-                .exchange()
-                .expectStatus().isForbidden();
     }
 }

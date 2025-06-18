@@ -5,7 +5,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
 import org.springframework.security.authentication.ReactiveAuthenticationManager;
 import org.springframework.security.authentication.UserDetailsRepositoryReactiveAuthenticationManager;
 import org.springframework.security.authorization.ReactiveAuthorizationManager;
@@ -27,11 +26,11 @@ import org.springframework.web.server.ServerWebExchange;
 import org.springframework.web.server.WebFilter;
 import reactor.core.publisher.Mono;
 import s05t02.interactiveCV.globalVariables.ApiPaths;
-import s05t02.interactiveCV.service.security.MyUserDetailsService;
+import s05t02.interactiveCV.service.security.CustomReactiveAuthenticationFailureHandler;
 import s05t02.interactiveCV.service.security.authorization.AdminSpaceAuthorizationManager;
 import s05t02.interactiveCV.service.security.authorization.UserSpaceAuthorizationManager;
-import s05t02.interactiveCV.service.security.jwt.JwtCookieSuccessHandler;
 import s05t02.interactiveCV.service.security.jwt.JwtCookieSecurityContextRepository;
+import s05t02.interactiveCV.service.security.jwt.JwtCookieSuccessHandler;
 
 import java.util.List;
 
@@ -44,7 +43,7 @@ public class SecurityConfig {
 
 
     @Bean
-    public SecurityWebFilterChain securityWebFilterChain(ServerHttpSecurity http, JwtCookieSecurityContextRepository jwtCookieSecurityContextRepository, JwtCookieSuccessHandler jwtSuccessHandler) {
+    public SecurityWebFilterChain securityWebFilterChain(ServerHttpSecurity http, JwtCookieSecurityContextRepository jwtCookieSecurityContextRepository, JwtCookieSuccessHandler jwtSuccessHandler, CustomReactiveAuthenticationFailureHandler failureHandler) {
         log.debug("Security filter chain initialized with JWT cookie support");
         return http
                 .csrf(csrfSpec -> csrfSpec
@@ -55,9 +54,10 @@ public class SecurityConfig {
                 .formLogin(formLoginSpec -> formLoginSpec
                         .loginPage("/api/login")
                         .authenticationSuccessHandler(jwtSuccessHandler)
+                        .authenticationFailureHandler(failureHandler)
                 )
                 .authorizeExchange(exchanges -> exchanges
-                        .pathMatchers(ApiPaths.USER_BASE_PATH.replace("{username}", "**"))
+                        .pathMatchers(ApiPaths.USER_BASE_PATH + "/**")
                         .access(userSpaceAuthManager())
                         .pathMatchers(ApiPaths.ADMIN_BASE_PATH)
                         .access(adminSpaceAuthManager())

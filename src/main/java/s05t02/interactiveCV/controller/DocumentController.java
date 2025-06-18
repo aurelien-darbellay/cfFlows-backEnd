@@ -22,25 +22,29 @@ public class DocumentController {
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
-    Mono<InteractiveDocument> createdNewDoc(@PathVariable("username") String username, @Valid @RequestBody DocumentCreationDto dto) {
+    Mono<InteractiveDocument> createdNewDoc(@Valid @RequestBody DocumentCreationDto dto) {
         log.atDebug().log("Creating new document of type {}", dto.getType());
-        return documentService.createDocumentInUser(username, dto.getType(), dto.getTitle()); //here maybe add error in case user don't exist
+        return RetrieveUserInRequest.getCurrentUsername()
+                .flatMap(username -> documentService.createDocumentInUser(username, dto.getType(), dto.getTitle()));
     }
 
     @GetMapping(DOC_ID_REL)
-    Mono<InteractiveDocument> getDocById(@PathVariable("username") String username, @PathVariable("docId") String docId) {
-        return documentService.getDocumentByIdInUser(username, docId);
+    Mono<InteractiveDocument> getDocById(@PathVariable("docId") String docId) {
+        return RetrieveUserInRequest.getCurrentUsername()
+                .flatMap(username -> documentService.getDocumentByIdInUser(username, docId));
     }
 
     @PostMapping(DOC_ID_REL)
-    Mono<InteractiveDocument> updateDocInUser(@PathVariable("username") String username, @RequestBody InteractiveDocument updatedDoc) {
-        return documentService.updateDocumentInUser(username, updatedDoc);
+    Mono<InteractiveDocument> updateDocInUser(@RequestBody InteractiveDocument updatedDoc) {
+        return RetrieveUserInRequest.getCurrentUsername()
+                .flatMap(username -> documentService.updateDocumentInUser(username, updatedDoc));
     }
 
     @PostMapping(DOC_ID_REL + DELETE_DOC_REL)
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    Mono<Void> deleteDocById(@PathVariable("username") String username, @PathVariable("docId") String docId) {
-        return documentService.deleteDocumentFromUser(username, docId);
+    Mono<Void> deleteDocById(@PathVariable("docId") String docId) {
+        return RetrieveUserInRequest.getCurrentUsername()
+                .flatMap(username -> documentService.deleteDocumentFromUser(username, docId));
     }
 
 

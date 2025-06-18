@@ -21,18 +21,21 @@ public class EntryController {
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping(ENTRY_ADD_REL)
-    Mono<Entry> addEntryInDoc(@PathVariable("username") String username, @PathVariable("docId") String docId, @RequestBody Entry entry) {
-        return entryService.addEntry(username, docId, entry);
+    Mono<Entry> addEntryInDoc(@PathVariable("docId") String docId, @RequestBody Entry entry) {
+        return RetrieveUserInRequest.getCurrentUsername()
+                .flatMap(username -> entryService.addEntry(username, docId, entry));
     }
 
     @PostMapping(ENTRY_UPDATE_REL)
-    Mono<Entry> updateEntryInDoc(@PathVariable("username") String username, @PathVariable("docId") String docId, @RequestBody Entry updatedEntry) {
-        return entryService.modifyEntry(username, docId, updatedEntry);
+    Mono<Entry> updateEntryInDoc(@PathVariable("docId") String docId, @RequestBody Entry updatedEntry) {
+        return RetrieveUserInRequest.getCurrentUsername()
+                .flatMap(username -> entryService.modifyEntry(username, docId, updatedEntry));
     }
 
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @PostMapping(ENTRY_DELETE_REL)
-    Mono<Void> deleteEntryInDoc(@PathVariable("username") String username, @PathVariable("docId") String docId, @RequestBody Entry entry) {
-        return entryService.removeEntry(username, docId, entry);
+    Mono<Void> deleteEntryInDoc(@PathVariable("docId") String docId, @RequestBody Entry entry) {
+        return RetrieveUserInRequest.getCurrentUsername()
+                .flatMap(username -> entryService.removeEntry(username, docId, entry));
     }
 }

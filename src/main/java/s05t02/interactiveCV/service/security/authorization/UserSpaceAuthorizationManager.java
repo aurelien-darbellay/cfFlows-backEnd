@@ -16,11 +16,11 @@ public class UserSpaceAuthorizationManager implements ReactiveAuthorizationManag
 
     @Override
     public Mono<AuthorizationDecision> check(Mono<Authentication> authenticationMono, AuthorizationContext context) {
-        log.debug("In user authorization manager");
+        log.atDebug().log("In user authorization manager");
         ServerWebExchange exchange = context.getExchange();
         return authenticationMono
                 .map(authentication -> {
-                    log.debug("User authentication found");
+                    log.atDebug().log("User authentication found");
                     return new AuthorizationDecision(Auth.isRightUser(authentication, exchange) || Auth.isAdmin(authentication));
                 })
                 .defaultIfEmpty(new AuthorizationDecision(false));

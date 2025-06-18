@@ -110,7 +110,7 @@ public class UserControllerTest {
 
         webTestClient.mutateWith(mockUser(testUsername))
                 .get()
-                .uri(USER_BASE_PATH + USER_DASHBOARD_REL, testUsername)
+                .uri(USER_BASE_PATH + USER_DASHBOARD_REL)
                 .exchange()
                 .expectStatus().isOk()
                 .expectBody(DashBoardDto.class)
@@ -127,7 +127,7 @@ public class UserControllerTest {
 
         webTestClient.mutateWith(mockUser("nonexistent"))
                 .get()
-                .uri(USER_BASE_PATH + USER_DASHBOARD_REL, "nonexistent")
+                .uri(USER_BASE_PATH + USER_DASHBOARD_REL)
                 .exchange()
                 .expectStatus().isNotFound();
     }
@@ -138,9 +138,9 @@ public class UserControllerTest {
                 .thenReturn(Mono.empty());
 
         webTestClient.mutateWith(csrf())
-                .mutateWith(mockUser(testUsername).roles("ADMIN"))
+                .mutateWith(mockUser(testUsername))
                 .post()
-                .uri(USER_BASE_PATH + USER_DELETE_REL, testUsername)
+                .uri(USER_BASE_PATH + USER_DELETE_REL)
                 .exchange()
                 .expectStatus().isOk();
     }
@@ -150,7 +150,7 @@ public class UserControllerTest {
     void updateUserDetails_ShouldRequireAuthentication() {
         webTestClient.mutateWith(csrf())
                 .post() // No authentication
-                .uri(USER_BASE_PATH, "je")
+                .uri(USER_BASE_PATH)
                 .contentType(MediaType.APPLICATION_JSON)
                 .bodyValue(new UserUpdateRequestDto(testUsername, "pass", "first", "last", "USER"))
                 .exchange()

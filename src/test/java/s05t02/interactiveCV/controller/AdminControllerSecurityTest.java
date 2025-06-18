@@ -2,12 +2,9 @@ package s05t02.interactiveCV.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient;
-import org.springframework.boot.test.autoconfigure.web.reactive.WebFluxTest;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
@@ -17,16 +14,13 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import reactor.core.publisher.Flux;
-import s05t02.interactiveCV.config.SecurityConfig;
 import s05t02.interactiveCV.dto.DashBoardDto;
 import s05t02.interactiveCV.globalVariables.ApiPaths;
 import s05t02.interactiveCV.model.User;
 import s05t02.interactiveCV.service.entities.UserService;
-import s05t02.interactiveCV.service.security.MyUserDetailsService;
 
 import java.util.List;
 import java.util.Map;
-
 
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
@@ -93,7 +87,7 @@ public class AdminControllerSecurityTest {
         when(userService.getAllUser()).thenReturn(Flux.just(user));
 
         webTestClient.get()
-                .uri("/api/admin")
+                .uri(ApiPaths.ADMIN_BASE_PATH)
                 .cookie("jwt", "mock-token")
                 .accept(MediaType.APPLICATION_JSON)
                 .exchange()
@@ -114,7 +108,8 @@ public class AdminControllerSecurityTest {
     }
 
     @Test
-    @WithMockUser(roles = "ADMIN") // Alternative approach using Spring Security test support
+    @WithMockUser(roles = "ADMIN")
+        // Alternative approach using Spring Security test support
     void getAdminDashboard_WithMockAdminUser_ShouldReturnData() {
         // Mock service response
         User user = User.builder().build();

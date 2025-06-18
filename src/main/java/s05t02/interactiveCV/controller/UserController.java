@@ -36,13 +36,15 @@ public class UserController {
     }
 
     @GetMapping(USER_DASHBOARD_REL)
-    Mono<DashBoardDto> getUserDashBoard(@PathVariable("username") String username) {
-        return userService.getUserByUserName(username)
-                .map(UserMapableToDto::mapToDto);
+    Mono<DashBoardDto> getUserDashBoard() {
+        return RetrieveUserInRequest.getCurrentUsername()
+                .flatMap(username -> userService.getUserByUserName(username)
+                        .map(UserMapableToDto::mapToDto));
     }
 
     @PostMapping(USER_DELETE_REL)
-    Mono<Void> deleteUserByUsername(@PathVariable("username") String username) {
-        return userService.deleteUserByUserName(username);
+    Mono<Void> deleteUserByUsername() {
+        return RetrieveUserInRequest.getCurrentUsername()
+                .flatMap(userService::deleteUserByUserName);
     }
 }

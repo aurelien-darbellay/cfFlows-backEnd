@@ -215,17 +215,6 @@ public class SecurityConfigTest {
     }
 
     @Test
-    void UnAuthorizedWhenTryingToAccessSomeoneElseSpace() {
-        Jwt jwt = jwtUtils.createJwt("alice", List.of(Role.USER.getAuthorityName()));
-        client.mutateWith(csrf())
-                .get()
-                .uri(ApiPaths.USER_BASE_PATH.replace("{username}", "aurelien"))
-                .cookie("jwt", jwt.getTokenValue())
-                .exchange()
-                .expectStatus().isForbidden();
-    }
-
-    @Test
     void AuthorizedWhenTryingToAccessMySpace() {
         Jwt jwt = jwtUtils.createJwt("unexistingUser", List.of(Role.USER.getAuthorityName()));
         client.mutateWith(csrf())

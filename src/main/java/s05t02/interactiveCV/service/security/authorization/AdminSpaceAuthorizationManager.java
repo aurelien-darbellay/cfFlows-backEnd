@@ -15,11 +15,11 @@ public class AdminSpaceAuthorizationManager implements ReactiveAuthorizationMana
 
     @Override
     public Mono<AuthorizationDecision> check(Mono<Authentication> authenticationMono, AuthorizationContext context) {
-        log.debug("In admin authorization manager");
+        log.atDebug().log("In admin authorization manager");
         return authenticationMono
                 .map(authentication ->
                 {
-                    log.debug("Admin authentication found : " + Auth.isAdmin(authentication));
+                    log.atDebug().log("Admin authentication found : " + Auth.isAdmin(authentication));
                     return new AuthorizationDecision(Auth.isAdmin(authentication));
                 })
                 .defaultIfEmpty(new AuthorizationDecision(false));
