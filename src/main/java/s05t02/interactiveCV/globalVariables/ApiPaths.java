@@ -12,6 +12,7 @@ public class ApiPaths {
     public static final String BASE_PATH = "/api";
     //protected paths
     public static final String PROTECTED_BASE_PATH = BASE_PATH + "/protected";
+    public static final String AUTHENTICATION_CHECK_PATH = PROTECTED_BASE_PATH + "/me";
     /// /user path
     public static final String USER_BASE_PATH = PROTECTED_BASE_PATH + "/users";
     public static final String USER_DASHBOARD_REL = "/dashboard";

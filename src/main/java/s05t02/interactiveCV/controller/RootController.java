@@ -27,7 +27,7 @@ import java.util.Map;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/")
-public class UnprotectedRoutesController {
+public class RootController {
 
     private final UserService userService;
     private final PublicViewService publicViewService;
@@ -35,7 +35,7 @@ public class UnprotectedRoutesController {
     private final ReactiveAuthenticationManager authManager;
     private final JwtCookieSuccessHandler successHandler;
     private final TypesConfig config;
-    private static final Logger log = LoggerFactory.getLogger(UnprotectedRoutesController.class);
+    private static final Logger log = LoggerFactory.getLogger(RootController.class);
 
 
     @GetMapping(ApiPaths.CSRF_TOKEN_PATH)
@@ -52,11 +52,11 @@ public class UnprotectedRoutesController {
                         .firstname(request.getFirstname())
                         .lastname(request.getLastname())
                         .build())
-                .flatMap(user->{
-                    UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(request.getUsername(),request.getPassword());
+                .flatMap(user -> {
+                    UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword());
                     return authManager.authenticate(token);
                 })
-                .map(auth-> successHandler.createJwtCookie(exchange, auth))
+                .map(auth -> successHandler.createJwtCookie(exchange, auth))
                 .map(webExchange -> ResponseEntity.status(HttpStatus.FOUND).header("Location", ApiPaths.USER_DASHBOARD_PATH.replace("{username}", request.getUsername())).build());
     }
 
@@ -67,7 +67,12 @@ public class UnprotectedRoutesController {
     }
 
     @GetMapping(ApiPaths.TYPES_CONFIG_PATH)
-    Mono<TypesConfig> getTypesConfig(){
+    Mono<TypesConfig> getTypesConfig() {
         return Mono.just(config);
+    }
+
+    @GetMapping(ApiPaths.AUTHENTICATION_CHECK_PATH)
+    Mono<Void> isAuthenticated() {
+        return Mono.empty();
     }
 }

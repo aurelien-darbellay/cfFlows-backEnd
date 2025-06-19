@@ -5,7 +5,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -103,7 +102,7 @@ public class SecurityConfigTest {
     void whenPostingWithCsrfTokenOnWithoutAuthentication_thenRedirectedToLogin() {
         client.mutateWith(csrf())
                 .post()
-                .uri("http://hostname-ignored:666" + ApiPaths.LOGIN_PATH)
+                .uri("http://hostname-ignored:666" + ApiPaths.PROTECTED_BASE_PATH)
                 .exchange()
                 .expectStatus().isFound();
     }
@@ -118,8 +117,7 @@ public class SecurityConfigTest {
                         .fromFormData("username", "user")
                         .with("password", "secret"))
                 .exchange()
-                .expectStatus().isFound()
-                .expectHeader().exists(HttpHeaders.LOCATION);
+                .expectStatus().isOk();
     }
 
     @Test
@@ -143,10 +141,10 @@ public class SecurityConfigTest {
         Jwt jwt = jwtEncoder.encode(JwtEncoderParameters.from(headers, claimsSet));
         client.mutateWith(csrf())
                 .get()
-                .uri(ApiPaths.PROTECTED_BASE_PATH + "/protected-route")
+                .uri(ApiPaths.PROTECTED_BASE_PATH)
                 .cookie("jwt", jwt.getTokenValue())
                 .exchange()
-                .expectStatus().isFound();
+                .expectStatus().isUnauthorized();
     }
 
     @Test

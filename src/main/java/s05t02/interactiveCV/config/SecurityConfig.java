@@ -31,6 +31,7 @@ import s05t02.interactiveCV.service.security.authorization.AdminSpaceAuthorizati
 import s05t02.interactiveCV.service.security.authorization.UserSpaceAuthorizationManager;
 import s05t02.interactiveCV.service.security.jwt.JwtCookieSecurityContextRepository;
 import s05t02.interactiveCV.service.security.jwt.JwtCookieSuccessHandler;
+import s05t02.interactiveCV.service.security.jwt.JwtLogoutSuccessHandler;
 
 import java.util.List;
 
@@ -43,7 +44,11 @@ public class SecurityConfig {
 
 
     @Bean
-    public SecurityWebFilterChain securityWebFilterChain(ServerHttpSecurity http, JwtCookieSecurityContextRepository jwtCookieSecurityContextRepository, JwtCookieSuccessHandler jwtSuccessHandler, CustomReactiveAuthenticationFailureHandler failureHandler) {
+    public SecurityWebFilterChain securityWebFilterChain(ServerHttpSecurity http,
+                                                         JwtCookieSecurityContextRepository jwtCookieSecurityContextRepository,
+                                                         JwtCookieSuccessHandler jwtSuccessHandler,
+                                                         CustomReactiveAuthenticationFailureHandler failureHandler,
+                                                         JwtLogoutSuccessHandler logoutSuccessHandler) {
         log.debug("Security filter chain initialized with JWT cookie support");
         return http
                 .csrf(csrfSpec -> csrfSpec
@@ -56,6 +61,9 @@ public class SecurityConfig {
                         .authenticationSuccessHandler(jwtSuccessHandler)
                         .authenticationFailureHandler(failureHandler)
                 )
+                .logout(logout -> logout
+                        .logoutUrl("/api/logout")
+                        .logoutSuccessHandler(logoutSuccessHandler))
                 .authorizeExchange(exchanges -> exchanges
                         .pathMatchers(ApiPaths.USER_BASE_PATH + "/**")
                         .access(userSpaceAuthManager())
@@ -86,7 +94,8 @@ public class SecurityConfig {
         CookieServerCsrfTokenRepository csrfTokenRepository = CookieServerCsrfTokenRepository.withHttpOnlyFalse();
         csrfTokenRepository.setCookieCustomizer(builder -> builder
                 .sameSite("Lax")   // or "Lax", "None"
-                .secure(false)         // important if using SameSite=None
+                .secure(false)//
+                .maxAge(3600)// important if using SameSite=None
                 .path("/")            // optional, sets cookie path
         );
         return csrfTokenRepository;

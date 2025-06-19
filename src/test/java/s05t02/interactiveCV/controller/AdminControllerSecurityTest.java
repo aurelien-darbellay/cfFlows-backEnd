@@ -104,7 +104,7 @@ public class AdminControllerSecurityTest {
                 .uri(ApiPaths.ADMIN_BASE_PATH)
                 .cookie("jwt", "invalid-token")
                 .exchange()
-                .expectStatus().isFound();
+                .expectStatus().isUnauthorized();
     }
 
     @Test

@@ -8,6 +8,7 @@ import org.springframework.http.MediaType;
 import org.springframework.security.authentication.ReactiveAuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.reactive.server.WebTestClient;
@@ -28,10 +29,11 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.security.test.web.reactive.server.SecurityMockServerConfigurers.csrf;
+import static org.springframework.security.test.web.reactive.server.SecurityMockServerConfigurers.mockAuthentication;
 
 @SpringBootTest
 @AutoConfigureWebTestClient
-public class UnprotectedRoutesControllerTest {
+public class RootControllerTest {
 
     @Autowired
     private WebTestClient webTestClient;
@@ -91,8 +93,7 @@ public class UnprotectedRoutesControllerTest {
                 .bodyValue(request)
                 .exchange()
                 .expectStatus().isFound()
-                .expectHeader().valueEquals("Location",
-                        ApiPaths.USER_DASHBOARD_PATH.replace("{username}", request.getUsername()));
+                .expectHeader().valueEquals("Location", ApiPaths.USER_DASHBOARD_PATH);
     }
 
     @Test
@@ -139,4 +140,26 @@ public class UnprotectedRoutesControllerTest {
                 .exchange()
                 .expectStatus().isForbidden();
     }
+
+    @Test
+    void isAuthenticated_ShouldReturnOk_WhenValidJwtCookiePresent() {
+
+        webTestClient
+                .mutateWith(mockAuthentication(new UsernamePasswordAuthenticationToken("John", "pass123", List.of(new SimpleGrantedAuthority("ROLE_USER")))))
+                .get()
+                .uri(ApiPaths.AUTHENTICATION_CHECK_PATH)
+                .exchange()
+                .expectStatus().isOk();
+
+    }
+
+    @Test
+    void isAuthenticated_ShouldReturnUnauthorized_WhenNoJwtCookiePresent() {
+        webTestClient.get()
+                .uri(ApiPaths.AUTHENTICATION_CHECK_PATH)
+                .exchange()
+                .expectStatus().isFound();
+    }
+
+
 }

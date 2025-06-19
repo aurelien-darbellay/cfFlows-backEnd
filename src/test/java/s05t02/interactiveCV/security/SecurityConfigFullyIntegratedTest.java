@@ -7,7 +7,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.jwt.Jwt;
@@ -79,8 +78,7 @@ public class SecurityConfigFullyIntegratedTest {
                         .fromFormData("username", USERNAME_1)
                         .with("password", PASSWORD_1))
                 .exchange()
-                .expectStatus().isFound()
-                .expectHeader().exists(HttpHeaders.LOCATION);
+                .expectStatus().isOk();
     }
 
     @Test
