@@ -14,7 +14,6 @@ import reactor.core.publisher.Mono;
 import s05t02.interactiveCV.globalVariables.ApiPaths;
 import s05t02.interactiveCV.service.cloud.CloudStorageService;
 
-import java.util.List;
 import java.util.Map;
 
 import static org.mockito.ArgumentMatchers.any;
@@ -73,7 +72,7 @@ public class CloudStorageControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .bodyValue(Map.of("fileName", "test.jpg"))
                 .exchange()
-                .expectStatus().isFound();
+                .expectStatus().isUnauthorized();
     }
 
     @Test

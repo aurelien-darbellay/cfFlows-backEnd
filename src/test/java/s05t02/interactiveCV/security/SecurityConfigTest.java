@@ -59,11 +59,11 @@ public class SecurityConfigTest {
     }
 
     @Test
-    void whenNoCredentials_thenProtectedEndpointRedirectTowardsLogin() {
+    void whenNoCredentials_thenUnAuthorized() {
         client.get()
                 .uri(ApiPaths.PROTECTED_BASE_PATH + "/protected")      // ← your secured URI
                 .exchange()
-                .expectStatus().isFound();
+                .expectStatus().isUnauthorized();
     }
 
     @Test
@@ -99,12 +99,12 @@ public class SecurityConfigTest {
     }
 
     @Test
-    void whenPostingWithCsrfTokenOnWithoutAuthentication_thenRedirectedToLogin() {
+    void whenPostingWithCsrfTokenOnWithoutAuthentication_thenUnAuthorized() {
         client.mutateWith(csrf())
                 .post()
                 .uri("http://hostname-ignored:666" + ApiPaths.PROTECTED_BASE_PATH)
                 .exchange()
-                .expectStatus().isFound();
+                .expectStatus().isUnauthorized();
     }
 
     @Test

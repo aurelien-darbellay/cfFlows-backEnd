@@ -154,6 +154,6 @@ public class UserControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .bodyValue(new UserUpdateRequestDto(testUsername, "pass", "first", "last", "USER"))
                 .exchange()
-                .expectStatus().isFound();
+                .expectStatus().isUnauthorized();
     }
 }

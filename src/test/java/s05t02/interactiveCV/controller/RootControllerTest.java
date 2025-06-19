@@ -158,7 +158,7 @@ public class RootControllerTest {
         webTestClient.get()
                 .uri(ApiPaths.AUTHENTICATION_CHECK_PATH)
                 .exchange()
-                .expectStatus().isFound();
+                .expectStatus().isUnauthorized();
     }
 
 

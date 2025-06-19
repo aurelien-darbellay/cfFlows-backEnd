@@ -85,7 +85,7 @@ public class EntryControllerIntegrationTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .bodyValue(testEntry)
                 .exchange()
-                .expectStatus().isFound();
+                .expectStatus().isUnauthorized();
     }
 
     @Test

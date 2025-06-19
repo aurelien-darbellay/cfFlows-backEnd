@@ -69,11 +69,11 @@ public class AdminControllerSecurityTest {
     }
 
     @Test
-    void getAdminDashboard_ShouldFoundWithoutJwt() {
+    void getAdminDashboard_ShouldUnAuthorizedWithoutJwt() {
         webTestClient.get()
                 .uri(ApiPaths.ADMIN_BASE_PATH)
                 .exchange()
-                .expectStatus().isFound();
+                .expectStatus().isUnauthorized();
     }
 
     @Test

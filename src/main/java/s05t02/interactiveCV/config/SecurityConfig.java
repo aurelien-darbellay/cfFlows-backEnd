@@ -5,6 +5,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.ReactiveAuthenticationManager;
 import org.springframework.security.authentication.UserDetailsRepositoryReactiveAuthenticationManager;
 import org.springframework.security.authorization.ReactiveAuthorizationManager;
@@ -14,6 +15,7 @@ import org.springframework.security.core.userdetails.ReactiveUserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.server.SecurityWebFilterChain;
+import org.springframework.security.web.server.ServerAuthenticationEntryPoint;
 import org.springframework.security.web.server.authorization.AuthorizationContext;
 import org.springframework.security.web.server.csrf.CookieServerCsrfTokenRepository;
 import org.springframework.security.web.server.csrf.CsrfToken;
@@ -64,6 +66,8 @@ public class SecurityConfig {
                 .logout(logout -> logout
                         .logoutUrl("/api/logout")
                         .logoutSuccessHandler(logoutSuccessHandler))
+                .exceptionHandling(exceptionHandlingSpec -> exceptionHandlingSpec
+                        .authenticationEntryPoint(unauthorizedEntryPoint()))
                 .authorizeExchange(exchanges -> exchanges
                         .pathMatchers(ApiPaths.USER_BASE_PATH + "/**")
                         .access(userSpaceAuthManager())
@@ -156,6 +160,15 @@ public class SecurityConfig {
         mgr.setPasswordEncoder(passwordEncoder);
         return mgr;
     }
+
+    @Bean
+    public ServerAuthenticationEntryPoint unauthorizedEntryPoint() {
+        return (exchange, ex) -> {
+            exchange.getResponse().setStatusCode(HttpStatus.UNAUTHORIZED);
+            return exchange.getResponse().setComplete();
+        };
+    }
+
 
 }
 

@@ -162,11 +162,11 @@ public class DocumentControllerTest {
                 .post()
                 .uri(DOC_PATH, testUsername)
                 .exchange()
-                .expectStatus().isFound();
+                .expectStatus().isUnauthorized();
 
         webTestClient.get()
                 .uri(DOC_PATH + ApiPaths.DOC_ID_REL, testDocId)
                 .exchange()
-                .expectStatus().isFound();
+                .expectStatus().isUnauthorized();
     }
 }
