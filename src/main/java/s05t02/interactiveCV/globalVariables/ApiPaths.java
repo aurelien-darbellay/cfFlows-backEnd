@@ -41,6 +41,7 @@ public class ApiPaths {
 
     //unprotected paths
     public static final String LOGIN_PATH = BASE_PATH + "/login";
+    public static final String LOGOUT_PATH = BASE_PATH + "/logout";
     public static final String REGISTER_PATH = BASE_PATH + "/register";
     public static final String PUBLIC_VIEWS_PATH = BASE_PATH + "/public-views";//add ?id={pv_id}
     public static final String CSRF_TOKEN_PATH = BASE_PATH + "/csrf";
