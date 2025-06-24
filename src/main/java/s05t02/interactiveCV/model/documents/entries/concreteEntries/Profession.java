@@ -1,6 +1,7 @@
 package s05t02.interactiveCV.model.documents.entries.concreteEntries;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
@@ -14,6 +15,7 @@ import s05t02.interactiveCV.model.documents.entries.genEntriesFeatures.Container
 @SuperBuilder
 @ToString
 @EqualsAndHashCode(callSuper = false)
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Profession extends ContainerEntry {
 
     @JsonCreator

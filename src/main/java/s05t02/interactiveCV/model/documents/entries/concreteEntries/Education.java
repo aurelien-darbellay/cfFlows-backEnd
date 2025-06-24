@@ -1,6 +1,7 @@
 package s05t02.interactiveCV.model.documents.entries.concreteEntries;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 import org.springframework.data.annotation.PersistenceCreator;
@@ -15,6 +16,7 @@ import java.util.UUID;
 @SuperBuilder
 @ToString
 @EqualsAndHashCode(callSuper = false, onlyExplicitlyIncluded = true)
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Education extends ContainedEntry implements PointsToFileInCloud {
 
     @JsonCreator

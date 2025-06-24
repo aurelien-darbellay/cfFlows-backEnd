@@ -1,6 +1,7 @@
 package s05t02.interactiveCV.model.documents.entries.concreteEntries;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 import org.springframework.data.annotation.PersistenceCreator;
@@ -14,6 +15,7 @@ import java.util.List;
 @SuperBuilder
 @ToString
 @EqualsAndHashCode(callSuper = false)
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Identity extends ContainerEntry {
     @JsonCreator
     @PersistenceCreator

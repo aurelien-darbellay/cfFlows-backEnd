@@ -1,6 +1,7 @@
 package s05t02.interactiveCV.model.documents.entries.concreteEntries;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 import org.springframework.data.annotation.PersistenceCreator;
@@ -11,6 +12,7 @@ import s05t02.interactiveCV.model.documents.entries.genEntriesFeatures.Container
 @SuperBuilder
 @ToString
 @EqualsAndHashCode(callSuper = false)
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class ProfilePicture extends ContainerEntry {
     public enum Shape {
         SQUARE, TRIANGLE, RECTANGLE, STAR, ROUND

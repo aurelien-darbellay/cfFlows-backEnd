@@ -1,6 +1,7 @@
 package s05t02.interactiveCV.model.documents.cv;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import customCompileChecks.MatchesTypeName;
 import lombok.*;
 import s05t02.interactiveCV.model.documents.InteractiveDocument;
@@ -15,6 +16,7 @@ import java.util.UUID;
 @Builder(toBuilder = true)
 @ToString
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = false)
+@JsonIgnoreProperties(ignoreUnknown = true)
 @MatchesTypeName
 public class InteractiveCv implements InteractiveDocument {
     @MatchesTypeName(ignore = true)
@@ -44,6 +46,7 @@ public class InteractiveCv implements InteractiveDocument {
     public InteractiveCv() {
 
     }
+
     @Builder
     public InteractiveCv(String id, String title, Identity identity, Profession profession, ProfilePicture profilePicture, Contact contact, Summary summary, ListEntries<Education> education, ListEntries<Experience> experience, ListEntries<Language> language, ListEntries<TechnicalSkill> technicalSkill, ListEntries<SoftSkill> softSkill, ListEntries<Portfolio> portfolio) {
         this.id = id;
