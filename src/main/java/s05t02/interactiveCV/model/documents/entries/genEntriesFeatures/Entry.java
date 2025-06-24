@@ -26,8 +26,15 @@ import s05t02.interactiveCV.repository.customRepos.updatesCreators.CreatesMongoD
         @JsonSubTypes.Type(value = Profession.class, name = "PROFESSION"),
         @JsonSubTypes.Type(value = ProfilePicture.class, name = "PROFILE_PICTURE"),
         @JsonSubTypes.Type(value = SoftSkill.class, name = "SOFT_SKILL"),
-        @JsonSubTypes.Type(value = TechnicalSkill.class, name = "TECH_SKILL"),
+        @JsonSubTypes.Type(value = TechnicalSkill.class, name = "TECHNICAL_SKILL"),
         @JsonSubTypes.Type(value = Language.class, name = "LANGUAGE"),
+        @JsonSubTypes.Type(value = ListEntriesSubTypes.EducationListEntries.class, name = "LIST_EDUCATION"),
+        @JsonSubTypes.Type(value = ListEntriesSubTypes.ExperienceListEntries.class, name = "LIST_EXPERIENCE"),
+        @JsonSubTypes.Type(value = ListEntriesSubTypes.LanguageListEntries.class, name = "LIST_LANGUAGE"),
+        @JsonSubTypes.Type(value = ListEntriesSubTypes.PortfolioListEntries.class, name = "LIST_PORTFOLIO"),
+        @JsonSubTypes.Type(value = ListEntriesSubTypes.SoftSkillListEntries.class, name = "LIST_SOFT_SKILL"),
+        @JsonSubTypes.Type(value = ListEntriesSubTypes.TechnicalSkillListEntries.class, name = "LIST_TECHNICAL_SKILL"),
+
 })
 public abstract class Entry implements CreatesMongoDbUpdate {
     private boolean projected;
