@@ -40,5 +40,4 @@ public class ListEntries<T extends Entry> extends ContainerEntry implements List
         return this.get(0).getKeyNameInDB();
     }
 
-
 }

@@ -22,6 +22,7 @@ public class EntryController {
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping(ENTRY_ADD_REL)
     Mono<Entry> addEntryInDoc(@PathVariable("docId") String docId, @RequestBody Entry entry) {
+        log.atDebug().log("Entry name in db: {}", entry.getKeyNameInDB());
         return RetrieveUserInRequest.getCurrentUsername()
                 .flatMap(username -> entryService.addEntry(username, docId, entry));
     }
