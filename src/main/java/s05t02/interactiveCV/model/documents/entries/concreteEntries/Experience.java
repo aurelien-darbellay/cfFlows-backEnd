@@ -31,7 +31,7 @@ public class Experience extends ContainedEntry implements PointsToFileInCloud {
     @EqualsAndHashCode.Include
     @Builder.Default
     private final String id = UUID.randomUUID().toString();
-    private String position;
+    private String role;
     private String nameCompany;
     private LocalDate startDate;
     private LocalDate endDate;

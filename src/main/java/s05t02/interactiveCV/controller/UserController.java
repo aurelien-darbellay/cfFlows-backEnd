@@ -10,6 +10,9 @@ import reactor.core.publisher.Mono;
 import s05t02.interactiveCV.dto.DashBoardDto;
 import s05t02.interactiveCV.dto.UserUpdateRequestDto;
 import s05t02.interactiveCV.dto.interfaces.UserMapableToDto;
+import s05t02.interactiveCV.model.documents.InteractiveDocument;
+import s05t02.interactiveCV.model.publicViews.PublicView;
+import s05t02.interactiveCV.service.entities.PublicViewService;
 import s05t02.interactiveCV.service.entities.UserService;
 import s05t02.interactiveCV.service.security.jwt.JwtCookieSuccessHandler;
 
@@ -20,6 +23,7 @@ import static s05t02.interactiveCV.globalVariables.ApiPaths.*;
 @RequestMapping(USER_BASE_PATH)
 public class UserController {
     private final UserService userService;
+    private final PublicViewService publicViewService;
     private final JwtCookieSuccessHandler successHandler;
     private final ReactiveAuthenticationManager authManager;
 
@@ -46,5 +50,11 @@ public class UserController {
     Mono<Void> deleteUserByUsername() {
         return RetrieveUserInRequest.getCurrentUsername()
                 .flatMap(userService::deleteUserByUserName);
+    }
+
+    @PostMapping(PV_PATH_REL)
+    Mono<PublicView> createPublicView(@PathVariable String id, @RequestBody InteractiveDocument document) {
+        return RetrieveUserInRequest.getCurrentUsername()
+                .flatMap(username -> publicViewService.savePublicView(username, document, id));
     }
 }

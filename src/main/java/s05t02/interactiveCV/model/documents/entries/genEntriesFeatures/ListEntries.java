@@ -25,6 +25,7 @@ public class ListEntries<T extends Entry> extends ContainerEntry implements List
     }
 
     public static <T extends Entry> ListEntries<T> project(ListEntries<T> listEntries) {
+        if (listEntries == null) return null;
         List<T> entries = listEntries.getEntries();
         if (!listEntries.isProjected() || entries.isEmpty()) {
             return listEntries.toBuilder().entries(new ArrayList<>()).build();

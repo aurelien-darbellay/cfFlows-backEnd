@@ -25,10 +25,21 @@ public class PublicViewService {
 
     public Mono<PublicView> savePublicView(String username, InteractiveDocument document) {
         return interactiveDocumentService.updateDocumentInUser(username, document)
-                .onErrorResume(error-> interactiveDocumentService.addDocumentToUser(username, document))
+                .onErrorResume(error -> interactiveDocumentService.addDocumentToUser(username, document))
                 .flatMap(doc -> {
                     log.atDebug().log(doc.toString());
                     return publicViewRepository.save(createNewPublicView(username, doc));
+                })
+                .doOnSuccess(savedView -> log.debug("Document with id : {}, of type : {} saved as public view by {}.", document.getId(), document.getClass(), username))
+                .doOnError(error -> log.error("Error saving document with id : {} for user {} - Error Message: {}", document.getId(), username, error.getMessage()));
+    }
+
+    public Mono<PublicView> savePublicView(String username, InteractiveDocument document, String id) {
+        return interactiveDocumentService.updateDocumentInUser(username, document)
+                .onErrorResume(error -> interactiveDocumentService.addDocumentToUser(username, document))
+                .flatMap(doc -> {
+                    log.atDebug().log(doc.toString());
+                    return publicViewRepository.save(createNewPublicView(username, doc, id));
                 })
                 .doOnSuccess(savedView -> log.debug("Document with id : {}, of type : {} saved as public view by {}.", document.getId(), document.getClass(), username))
                 .doOnError(error -> log.error("Error saving document with id : {} for user {} - Error Message: {}", document.getId(), username, error.getMessage()));
@@ -69,6 +80,16 @@ public class PublicViewService {
 
     public static PublicView createNewPublicView(String username, InteractiveDocument document) {
         return PublicView.builder()
+                .username(username)
+                .document(document.projectDocument())
+                .dateCreation(LocalDate.now())
+                .dateExpiration(LocalDate.now().plus(Period.ofDays(200)))
+                .build();
+    }
+
+    public static PublicView createNewPublicView(String username, InteractiveDocument document, String id) {
+        return PublicView.builder()
+                .id(id)
                 .username(username)
                 .document(document.projectDocument())
                 .dateCreation(LocalDate.now())

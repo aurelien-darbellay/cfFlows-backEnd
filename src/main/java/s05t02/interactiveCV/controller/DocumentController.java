@@ -46,6 +46,4 @@ public class DocumentController {
         return RetrieveUserInRequest.getCurrentUsername()
                 .flatMap(username -> documentService.deleteDocumentFromUser(username, docId));
     }
-
-
 }
