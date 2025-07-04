@@ -44,11 +44,14 @@ public class UserController {
     }
 
     @GetMapping(USER_DASHBOARD_REL)
-    Mono<DashBoardDto> getUserDashBoard() {
-        return RetrieveUserInRequest.getCurrentUsername()
-                .flatMap(username -> userService.getUserByUserName(username)
+    public Mono<DashBoardDto> getUserDashBoard(
+            @RequestParam(value = "targetUser", required = false) String targetUser) {
+        return ControllerUtils.resolveUserOrAdminOverride(
+                targetUser,
+                username -> userService.getUserByUserName(username)
                         .map(UserMapableToDto::mapToDto));
     }
+
 
     @PostMapping(USER_DELETE_REL)
     Mono<Void> deleteUserByUsername(@RequestBody Map<String, String> userIdentifier) {

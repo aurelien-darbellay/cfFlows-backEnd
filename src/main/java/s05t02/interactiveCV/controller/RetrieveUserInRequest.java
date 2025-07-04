@@ -8,4 +8,11 @@ public class RetrieveUserInRequest {
         return ReactiveSecurityContextHolder.getContext()
                 .map(context -> context.getAuthentication().getName());
     }
+
+    public static Mono<Boolean> isAdmin() {
+        return ReactiveSecurityContextHolder.getContext()
+                .map(ctx -> ctx.getAuthentication().getAuthorities().stream()
+                        .anyMatch(auth -> "ROLE_ADMIN".equals(auth.getAuthority())));
+    }
+
 }

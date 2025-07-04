@@ -29,9 +29,10 @@ public class DocumentController {
     }
 
     @GetMapping(DOC_ID_REL)
-    Mono<InteractiveDocument> getDocById(@PathVariable("docId") String docId) {
-        return RetrieveUserInRequest.getCurrentUsername()
-                .flatMap(username -> documentService.getDocumentByIdInUser(username, docId));
+    Mono<InteractiveDocument> getDocById(@PathVariable("docId") String docId, @RequestParam(value = "targetUser", required = false) String targetUser) {
+        return ControllerUtils.resolveUserOrAdminOverride(
+                targetUser,
+                username -> documentService.getDocumentByIdInUser(username, docId));
     }
 
     @PostMapping(DOC_ID_REL)
