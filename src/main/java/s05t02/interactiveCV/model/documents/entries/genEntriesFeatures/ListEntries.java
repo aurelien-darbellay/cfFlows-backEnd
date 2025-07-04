@@ -3,6 +3,8 @@ package s05t02.interactiveCV.model.documents.entries.genEntriesFeatures;
 import lombok.*;
 import lombok.experimental.Delegate;
 import lombok.experimental.SuperBuilder;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import s05t02.interactiveCV.model.documents.entries.genEntriesFeatures.interfaces.ListLike;
 
 import java.util.ArrayList;
@@ -17,6 +19,7 @@ public class ListEntries<T extends Entry> extends ContainerEntry implements List
     @Delegate
     @Builder.Default
     private List<T> entries = new ArrayList<>();
+    static private Logger log = LoggerFactory.getLogger(ListEntries.class);
 
     public static <T extends Entry> ListEntries<T> of(List<T> collection, Class<T> clazz) {
         ListEntries<T> newList = ListEntries.<T>builder().build();
@@ -26,14 +29,16 @@ public class ListEntries<T extends Entry> extends ContainerEntry implements List
 
     public static <T extends Entry> ListEntries<T> project(ListEntries<T> listEntries) {
         if (listEntries == null) return null;
-        List<T> entries = listEntries.getEntries();
-        if (!listEntries.isProjected() || entries.isEmpty()) {
-            return listEntries.toBuilder().entries(new ArrayList<>()).build();
+        log.atDebug().log("ListEntries position is {}", listEntries.getPosition());
+        if (!listEntries.isProjected()) {
+            listEntries.setEntries(new ArrayList<>());
+            return listEntries;
         }
-        @SuppressWarnings("unchecked")
-        Class<T> clazz = (Class<T>) entries.get(0).getClass();
-        return ListEntries.of(entries.stream().filter(Entry::isProjected).toList(), clazz);
+        List<T> filteredEntries = listEntries.getEntries().stream().filter(Entry::isProjected).toList();
+        listEntries.setEntries(filteredEntries);
+        return listEntries;
     }
+
 
     @Override
     public String getKeyNameInDB() {
