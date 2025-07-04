@@ -11,6 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.server.reactive.ServerHttpResponse;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.security.web.server.WebFilterExchange;
@@ -42,7 +43,7 @@ public class JwtCookieSuccessHandler implements ServerAuthenticationSuccessHandl
         log.atDebug().log("Jwt created :" + jwt.getClaims().toString());
         Map<String, Object> bodyMap = Map.of(
                 "username", ((UserDetails) authentication.getPrincipal()).getUsername(),
-                "authorities", authentication.getAuthorities()
+                "authorities", authentication.getAuthorities().stream().map(GrantedAuthority::getAuthority).toList()
         );
         String bodyJson;
         try {
