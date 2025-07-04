@@ -29,6 +29,7 @@ public class ApiPaths {
 
     public static final String PVs_PATH_REL = "/public-view"; // doc in Body
     public static final String PV_PATH_REL = PVs_PATH_REL + "/{id}";
+    public static final String PV_DELETE = "/public-view/delete/{id}";
 
     public static final String ENTRY_BASE_PATH = DOC_ID_PATH + "/entry";
     public static final String ENTRY_ADD_REL = "/add";

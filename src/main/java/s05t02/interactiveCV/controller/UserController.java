@@ -68,4 +68,9 @@ public class UserController {
                         .collectList()
                         .map(facades -> PublicViewsDashboardDto.of(username, facades)));
     }
+
+    @PostMapping(PV_DELETE)
+    Mono<Void> deletePublicView(@PathVariable String id) {
+        return publicViewService.deletePublicView(id);
+    }
 }
