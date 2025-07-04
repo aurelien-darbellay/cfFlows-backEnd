@@ -18,6 +18,8 @@ import s05t02.interactiveCV.service.entities.PublicViewService;
 import s05t02.interactiveCV.service.entities.UserService;
 import s05t02.interactiveCV.service.security.jwt.JwtCookieSuccessHandler;
 
+import java.util.Map;
+
 import static s05t02.interactiveCV.globalVariables.ApiPaths.*;
 
 @RequiredArgsConstructor
@@ -49,9 +51,9 @@ public class UserController {
     }
 
     @PostMapping(USER_DELETE_REL)
-    Mono<Void> deleteUserByUsername() {
-        return RetrieveUserInRequest.getCurrentUsername()
-                .flatMap(userService::deleteUserByUserName);
+    Mono<Void> deleteUserByUsername(@RequestBody Map<String, String> userIdentifier) {
+        String username = userIdentifier.get("username");
+        return userService.deleteUserByUserName(username);
     }
 
     @PostMapping(PV_PATH_REL)
