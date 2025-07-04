@@ -10,7 +10,6 @@ import s05t02.interactiveCV.model.documents.entries.genEntriesFeatures.interface
 import s05t02.interactiveCV.service.cloud.CloudMetaData;
 
 import java.time.LocalDate;
-import java.util.List;
 import java.util.UUID;
 
 @Getter
@@ -36,7 +35,7 @@ public class Experience extends ContainedEntry implements PointsToFileInCloud {
     private LocalDate startDate;
     private LocalDate endDate;
     private String description;
-    private List<String> keywords;
+    private String keywords;
     private String nameLink;
     private String linkUrl;
     private String cloudDocumentName;
