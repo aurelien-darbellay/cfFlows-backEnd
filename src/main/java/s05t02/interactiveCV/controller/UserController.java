@@ -8,7 +8,9 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
 import s05t02.interactiveCV.dto.DashBoardDto;
+import s05t02.interactiveCV.dto.PublicViewsDashboardDto;
 import s05t02.interactiveCV.dto.UserUpdateRequestDto;
+import s05t02.interactiveCV.dto.interfaces.PublicViewMapableToDto;
 import s05t02.interactiveCV.dto.interfaces.UserMapableToDto;
 import s05t02.interactiveCV.model.documents.InteractiveDocument;
 import s05t02.interactiveCV.model.publicViews.PublicView;
@@ -56,5 +58,14 @@ public class UserController {
     Mono<PublicView> createPublicView(@PathVariable String id, @RequestBody InteractiveDocument document) {
         return RetrieveUserInRequest.getCurrentUsername()
                 .flatMap(username -> publicViewService.savePublicView(username, document, id));
+    }
+
+    @GetMapping(PVs_PATH_REL)
+    Mono<PublicViewsDashboardDto> getPublicViews() {
+        return RetrieveUserInRequest.getCurrentUsername()
+                .flatMap(username -> publicViewService.getAllPublicViewsFromUser(username)
+                        .map(PublicViewMapableToDto::mapToDto)
+                        .collectList()
+                        .map(facades -> PublicViewsDashboardDto.of(username, facades)));
     }
 }
