@@ -37,6 +37,8 @@ public class ApiPaths {
     public static final String ENTRY_UPDATE_REL = "/update";
 
     public static final String CLOUD_STORAGE_PATH = USER_BASE_PATH + "/cloud-storage";
+    public static final String CLOUD_SIGNATURE_PATH = CLOUD_STORAGE_PATH + "/signature";
+    public static final String CLOUD_DELETE_ASSET_PATH = CLOUD_STORAGE_PATH + "/delete";
     public static final String ADMIN_BASE_PATH = PROTECTED_BASE_PATH + "/admin";
 
 

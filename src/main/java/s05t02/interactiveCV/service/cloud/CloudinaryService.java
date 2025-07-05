@@ -5,6 +5,7 @@ import com.cloudinary.utils.ObjectUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import reactor.core.publisher.Mono;
+import reactor.core.scheduler.Schedulers;
 import s05t02.interactiveCV.model.documents.entries.genEntriesFeatures.interfaces.PointsToFileInCloud;
 
 import java.time.Instant;
@@ -47,5 +48,18 @@ public class CloudinaryService implements CloudStorageService {
     @Override
     public Mono<Void> saveMetaData(String username, String docId, CloudMetaData metaData, PointsToFileInCloud entry) {
         return null;
+    }
+
+    @Override
+    public Mono<Void> deleteAsset(String publicId) {
+        return Mono.fromCallable(() -> {
+            Map options = ObjectUtils.asMap("invalidate", true);
+            Map result = cloudinary.uploader().destroy(publicId, options);
+            String outcome = (String) result.get("result");
+            if (!"ok".equalsIgnoreCase(outcome) && !"not found".equalsIgnoreCase(outcome)) {
+                throw new RuntimeException("Cloudinary deletion failed: " + outcome);
+            }
+            return Void.TYPE;
+        }).subscribeOn(Schedulers.boundedElastic()).then();
     }
 }

@@ -24,5 +24,11 @@ public class CloudStorageController {
         return RetrieveUserInRequest.getCurrentUsername()
                 .flatMap(username -> cloudStorageService.authenticateUpload(username, fileName));
     }
+
+    @PostMapping("/delete")
+    public Mono<Void> deleteAsset(@RequestBody Map<String, String> fileInfo) {
+        String publicId = fileInfo.get("publicId");
+        return cloudStorageService.deleteAsset(publicId);
+    }
 }
 
