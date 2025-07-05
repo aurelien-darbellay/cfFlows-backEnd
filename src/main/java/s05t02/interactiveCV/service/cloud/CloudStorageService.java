@@ -7,7 +7,7 @@ import java.util.Map;
 
 
 public interface CloudStorageService {
-    Mono<Map<String, Object>> authenticateUpload(String username, Map<String, Object> body);
+    Mono<Map<String, Object>> authenticateUpload(String username, String fileName);
 
     Mono<Void> saveMetaData(String username, String docId, CloudMetaData metaData, PointsToFileInCloud entry);
 }

@@ -16,7 +16,6 @@ import s05t02.interactiveCV.service.cloud.CloudStorageService;
 
 import java.util.Map;
 
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 import static org.springframework.security.test.web.reactive.server.SecurityMockServerConfigurers.csrf;
@@ -47,7 +46,7 @@ public class CloudStorageControllerTest {
         );
 
 
-        when(cloudStorageService.authenticateUpload(anyString(), any()))
+        when(cloudStorageService.authenticateUpload(anyString(), anyString()))
                 .thenReturn(Mono.just(mockResponse));
 
         Map<String, Object> requestBody = Map.of("fileName", "test.jpg");
@@ -90,7 +89,7 @@ public class CloudStorageControllerTest {
     @Test
     @WithMockUser(username = "testuser", roles = "USER")
     void getSignature_ShouldHandleServiceErrors() {
-        when(cloudStorageService.authenticateUpload(anyString(), any()))
+        when(cloudStorageService.authenticateUpload(anyString(), anyString()))
                 .thenReturn(Mono.error(new RuntimeException("Cloud service error")));
 
         webTestClient.mutateWith(csrf())

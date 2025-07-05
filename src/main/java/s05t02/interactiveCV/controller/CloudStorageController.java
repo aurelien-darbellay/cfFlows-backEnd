@@ -1,7 +1,5 @@
 package s05t02.interactiveCV.controller;
 
-import jakarta.validation.Valid;
-import jakarta.validation.constraints.NotEmpty;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -21,12 +19,10 @@ public class CloudStorageController {
     private final CloudStorageService cloudStorageService;
 
     @PostMapping("/signature")
-    public Mono<Map<String, Object>> getSignature(@RequestBody
-                                                  @Valid
-                                                  @NotEmpty(message = "Request body must not be empty")
-                                                  Map<String, Object> body) {
+    public Mono<Map<String, Object>> getSignature(@RequestBody Map<String, String> fileInfo) {
+        String fileName = fileInfo.get("fileName");
         return RetrieveUserInRequest.getCurrentUsername()
-                .flatMap(username -> cloudStorageService.authenticateUpload(username, body));
+                .flatMap(username -> cloudStorageService.authenticateUpload(username, fileName));
     }
 }
 

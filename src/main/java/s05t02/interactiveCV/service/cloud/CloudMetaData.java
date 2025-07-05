@@ -12,7 +12,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
         @JsonSubTypes.Type(value = CloudinaryMetaData.class, name = "CLOUDINARYMETADATA"),
 })
 public interface CloudMetaData {
-    String getId();
+    String id();
 
-    String getPublicUrl();
+    String publicUrl();
 }
