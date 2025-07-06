@@ -66,9 +66,10 @@ public class UserController {
     }
 
     @GetMapping(PVs_PATH_REL)
-    Mono<PublicViewsDashboardDto> getPublicViews() {
-        return RetrieveUserInRequest.getCurrentUsername()
-                .flatMap(username -> publicViewService.getAllPublicViewsFromUser(username)
+    Mono<PublicViewsDashboardDto> getPublicViews(@RequestParam(value = "targetUser", required = false) String targetUser) {
+        return ControllerUtils.resolveUserOrAdminOverride(
+                targetUser,
+                username -> publicViewService.getAllPublicViewsFromUser(username)
                         .map(PublicViewMapableToDto::mapToDto)
                         .collectList()
                         .map(facades -> PublicViewsDashboardDto.of(username, facades)));

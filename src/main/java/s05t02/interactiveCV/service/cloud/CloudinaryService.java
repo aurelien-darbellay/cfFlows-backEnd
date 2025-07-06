@@ -33,6 +33,7 @@ public class CloudinaryService implements CloudStorageService {
         paramsToSign.put("timestamp", timestamp);
         paramsToSign.put("folder", usernameToSign);
         paramsToSign.put("public_id", fileName);
+        //paramsToSign.put("access", "public");
         log.atDebug().log("Params to sign:{}", paramsToSign);
         String signature = cloudinary.apiSignRequest(paramsToSign, cloudinary.config.apiSecret);
         Map<String, Object> resp = new HashMap<>();
@@ -53,7 +54,8 @@ public class CloudinaryService implements CloudStorageService {
     @Override
     public Mono<Void> deleteAsset(String publicId) {
         return Mono.fromCallable(() -> {
-            Map options = ObjectUtils.asMap("invalidate", true);
+            Map options = ObjectUtils.asMap(
+                    "invalidate", true);
             Map result = cloudinary.uploader().destroy(publicId, options);
             String outcome = (String) result.get("result");
             if (!"ok".equalsIgnoreCase(outcome) && !"not found".equalsIgnoreCase(outcome)) {
