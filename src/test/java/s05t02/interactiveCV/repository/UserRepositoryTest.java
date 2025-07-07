@@ -14,6 +14,7 @@ import s05t02.interactiveCV.model.documents.InteractiveDocument;
 import s05t02.interactiveCV.model.documents.cv.InteractiveCv;
 import s05t02.interactiveCV.model.documents.entries.concreteEntries.*;
 import s05t02.interactiveCV.model.documents.entries.genEntriesFeatures.ListEntries;
+import s05t02.interactiveCV.service.cloud.CloudinaryMetaData;
 
 import java.util.List;
 
@@ -87,7 +88,7 @@ class UserRepositoryTest {
     @Test
     void buildAndSaveUserWithCompleteCV() {
         Summary summary = Summary.builder().title("About me").text("This is a very short text about me").build();
-        ProfilePicture picture = ProfilePicture.builder().urlPicture("http:super").shape(ProfilePicture.Shape.ROUND).size(100).build();
+        ProfilePicture picture = ProfilePicture.builder().cloudMetaData(new CloudinaryMetaData("good", "http://super")).shape(ProfilePicture.Shape.ROUND).size(100).build();
         Identity identity = Identity.builder().names(List.of("Aurelien")).lastNames(List.of("Darbellay", "Courvoisier")).build();
         Profession profession = Profession.builder().generalTitle("Developer").specificTitle("Java Spring Boot").build();
         ListEntries<Education> education = ListEntries.<Education>builder().build();

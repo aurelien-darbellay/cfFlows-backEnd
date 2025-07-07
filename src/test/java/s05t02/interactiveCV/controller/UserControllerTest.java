@@ -22,6 +22,7 @@ import s05t02.interactiveCV.service.security.jwt.JwtCookieSuccessHandler;
 
 import java.time.Instant;
 import java.util.List;
+import java.util.Map;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
@@ -141,6 +142,7 @@ public class UserControllerTest {
                 .mutateWith(mockUser(testUsername))
                 .post()
                 .uri(USER_BASE_PATH + USER_DELETE_REL)
+                .bodyValue(Map.of("username", testUsername))
                 .exchange()
                 .expectStatus().isOk();
     }
