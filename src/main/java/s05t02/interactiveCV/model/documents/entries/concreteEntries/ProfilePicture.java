@@ -15,7 +15,7 @@ import s05t02.interactiveCV.model.documents.entries.genEntriesFeatures.Container
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class ProfilePicture extends ContainerEntry {
     public enum Shape {
-        SQUARE, TRIANGLE, RECTANGLE, STAR, ROUND
+        SQUARE, RECTANGLE, STAR, ROUND, MATCH
     }
 
     @JsonCreator
