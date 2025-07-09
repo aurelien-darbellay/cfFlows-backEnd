@@ -21,12 +21,12 @@ public class ProfilePicture extends ContainerEntry {
 
     @JsonCreator
     @PersistenceCreator
-    public ProfilePicture(CloudMetaData cloudMetaData) {
+    public ProfilePicture(CloudMetaData documentCloudMetadata) {
         super();
-        this.cloudMetaData = cloudMetaData;
+        this.documentCloudMetadata = documentCloudMetadata;
     }
 
-    private final CloudMetaData cloudMetaData;
+    private final CloudMetaData documentCloudMetadata;
     @Builder.Default
     private Shape shape = Shape.ROUND;
 
