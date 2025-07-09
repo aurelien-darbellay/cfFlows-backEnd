@@ -13,7 +13,7 @@ public class DocumentFactory {
                 .id(id)
                 //.identity(Identity.builder().projected(true).names(List.of("John Doe")).build())
                 .profession(Profession.builder().projected(true).generalTitle("Software Engineer").build())
-                .profilePicture(ProfilePicture.builder().projected(false).documentCloudMetaData(new CloudinaryMetaData("example", "https://example.com/pic.jpg")).build())
+                .profilePicture(ProfilePicture.builder().projected(false).documentCloudMetadata(new CloudinaryMetaData("example", "https://example.com/pic.jpg")).build())
                 .contact(Contact.builder().projected(true).email("john@example.com").build())
                 .summary(Summary.builder().projected(false).text("Summary that should be excluded.").build())
                 .education(ListEntries.<Education>builder()

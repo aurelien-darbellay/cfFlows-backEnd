@@ -19,6 +19,7 @@ public class ApiPaths {
     public static final String USER_DASHBOARD_PATH = USER_BASE_PATH + USER_DASHBOARD_REL;
     public static final String USER_DELETE_REL = "/delete";
     public static final String USER_DELETE_PATH = USER_BASE_PATH + USER_DELETE_REL;
+    public static final String USER_GENERATE_PDF_REL = "/pdf";
 
     public static final String DOC_REL = "/doc";
     public static final String DOC_PATH = USER_BASE_PATH + DOC_REL; //newDoc in Body

@@ -14,6 +14,7 @@ import s05t02.interactiveCV.dto.interfaces.PublicViewMapableToDto;
 import s05t02.interactiveCV.dto.interfaces.UserMapableToDto;
 import s05t02.interactiveCV.model.documents.InteractiveDocument;
 import s05t02.interactiveCV.model.publicViews.PublicView;
+import s05t02.interactiveCV.service.PdfService;
 import s05t02.interactiveCV.service.entities.PublicViewService;
 import s05t02.interactiveCV.service.entities.UserService;
 import s05t02.interactiveCV.service.security.jwt.JwtCookieSuccessHandler;
@@ -30,6 +31,7 @@ public class UserController {
     private final PublicViewService publicViewService;
     private final JwtCookieSuccessHandler successHandler;
     private final ReactiveAuthenticationManager authManager;
+    private final PdfService pdfService;
 
     @PostMapping
     Mono<DashBoardDto> updateUserDetails(ServerWebExchange exchange, @Valid @RequestBody UserUpdateRequestDto dto) {
@@ -79,4 +81,11 @@ public class UserController {
     Mono<Void> deletePublicView(@PathVariable String id) {
         return publicViewService.deletePublicView(id);
     }
+
+    @PostMapping(USER_GENERATE_PDF_REL)
+    Mono<Void> printDocumentToPdf(@RequestBody InteractiveDocument document) {
+        return Mono.fromCallable(() -> pdfService.printDocumentToPdf(document)).then();
+
+    }
+
 }

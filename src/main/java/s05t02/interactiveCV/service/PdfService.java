@@ -9,6 +9,9 @@ import s05t02.interactiveCV.model.documents.InteractiveDocument;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 @Service
 @RequiredArgsConstructor
@@ -23,7 +26,7 @@ public class PdfService {
     }
 
     public byte[] generatePdf(InteractiveDocument document) throws IOException {
-        String html = generateHtml(document);  // Get rendered HTML
+        String html = generateHtml(document.projectDocument());  // Get rendered HTML
 
         ByteArrayOutputStream out = new ByteArrayOutputStream();
         PdfRendererBuilder builder = new PdfRendererBuilder();
@@ -31,6 +34,14 @@ public class PdfService {
         builder.toStream(out);               // Output stream (PDF goes here)
         builder.run();                       // Convert HTML → PDF
         return out.toByteArray();  // return the PDF as byte array
+    }
+
+    public byte[] printDocumentToPdf(InteractiveDocument document) throws IOException {
+        byte[] pdfBytes = generatePdf(document);
+        Files.createDirectories(Paths.get("test-output"));
+        Path path = Paths.get("test-output/generated-cv.pdf");
+        Files.write(path, pdfBytes);
+        return pdfBytes;
     }
 }
 

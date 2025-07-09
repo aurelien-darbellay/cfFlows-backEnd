@@ -61,7 +61,10 @@
 <div class="container">
     <!-- LEFT COLUMN -->
     <div class="left-column">
-        <img class="photo" th:if="${cv.profilePicture != null}" th:src="${cv.profilePicture.urlPicture}" alt="Foto"/>
+        <img class="photo"
+             th:if="${cv.profilePicture != null and cv.profilePicture.documentCloudMetadata != null and cv.profilePicture.documentCloudMetadata.publicUrl != null}"
+             th:src="${cv.profilePicture.documentCloudMetadata.publicUrl}"
+             alt="Foto"/>
 
         <div class="section" th:if="${cv.contact != null}">
             <h2>Contacte</h2>
@@ -130,7 +133,7 @@
         <div class="section" th:if="${cv.experience != null and !cv.experience.entries.isEmpty()}">
             <h2>Experiència</h2>
             <div class="experience" th:each="exp : ${cv.experience.entries}">
-                <strong th:if="${exp.position != null}" th:text="${exp.position}">Posició</strong><br/>
+                <strong th:if="${exp.role != null}" th:text="${exp.role}">Posició</strong><br/>
                 <em th:if="${exp.nameCompany != null}"
                     th:text="${exp.nameCompany + ' (' + (exp.startDate != null ? exp.startDate : '') + ' - ' + (exp.endDate != null ? exp.endDate : '') + ')'}">
                     Empresa i dates
