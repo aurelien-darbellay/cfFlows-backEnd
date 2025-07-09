@@ -12,7 +12,7 @@ import s05t02.interactiveCV.service.cloud.CloudMetaData;
 @Setter
 @SuperBuilder
 @ToString
-@EqualsAndHashCode(callSuper = false)
+@EqualsAndHashCode(callSuper = true)
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class ProfilePicture extends ContainerEntry {
     public enum Shape {

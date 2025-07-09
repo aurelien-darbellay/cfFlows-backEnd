@@ -14,8 +14,8 @@ import s05t02.interactiveCV.model.documents.entries.genEntriesFeatures.interface
 public abstract class ContainerEntry extends Entry implements Positioned, Colored, Sized {
     private Position position;
     private String color;
-    private Entry previousEntry;
-    private Entry nextEntry;
+    private String previousEntry;
+    private String nextEntry;
     private double size;
 
     public ContainerEntry() {

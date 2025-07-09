@@ -1,16 +1,23 @@
 package s05t02.interactiveCV.model.documents.entries.genEntriesFeatures;
 
+import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import com.fasterxml.jackson.annotation.Nulls;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 import s05t02.interactiveCV.model.documents.entries.concreteEntries.*;
+import s05t02.interactiveCV.model.documents.entries.genEntriesFeatures.interfaces.HasId;
 import s05t02.interactiveCV.repository.customRepos.updatesCreators.CreatesMongoDbUpdate;
+
+import java.util.UUID;
 
 @Getter
 @Setter
 @SuperBuilder(toBuilder = true)
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @JsonTypeInfo(
         use = JsonTypeInfo.Id.NAME,
         include = JsonTypeInfo.As.PROPERTY,
@@ -36,13 +43,21 @@ import s05t02.interactiveCV.repository.customRepos.updatesCreators.CreatesMongoD
         @JsonSubTypes.Type(value = ListEntriesSubTypes.ListEntriesTechnicalSkill.class, name = "LIST_TECHNICAL_SKILL"),
 
 })
-public abstract class Entry implements CreatesMongoDbUpdate {
+public abstract class Entry implements CreatesMongoDbUpdate, HasId {
     private boolean projected;
     private boolean highlighted;
+    @EqualsAndHashCode.Include
+    @JsonSetter(nulls = Nulls.SKIP)
+    private String id = UUID.randomUUID().toString();
 
-    public Entry() {
+    public Entry(String id) {
         this.projected = true;
         this.highlighted = false;
+        this.id = id == null ? UUID.randomUUID().toString() : id;
+
+    }
+
+    public Entry() {
     }
 
     public static <T extends Entry> T project(T entry) {

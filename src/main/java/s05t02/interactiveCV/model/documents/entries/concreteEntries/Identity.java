@@ -14,7 +14,7 @@ import java.util.List;
 @Setter
 @SuperBuilder
 @ToString
-@EqualsAndHashCode(callSuper = false)
+@EqualsAndHashCode(callSuper = true)
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Identity extends ContainerEntry {
     @JsonCreator

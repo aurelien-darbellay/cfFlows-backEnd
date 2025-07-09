@@ -15,7 +15,7 @@ import s05t02.interactiveCV.model.documents.entries.genEntriesFeatures.Container
 @Setter
 @SuperBuilder
 @ToString
-@EqualsAndHashCode(callSuper = false)
+@EqualsAndHashCode(callSuper = true)
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Contact extends ContainerEntry {
 
