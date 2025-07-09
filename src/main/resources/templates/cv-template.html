@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ca" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8"/>
     <title>CV</title>
@@ -55,6 +55,33 @@
         .experience, .education {
           margin-bottom: 15px;
         }
+        .photo {
+           width: 100%;
+           height: auto;
+           margin-bottom: 20px;
+           object-fit: cover;
+        }
+        .shape-round {
+          border-radius: 50%;
+        }
+        .shape-square {
+          aspect-ratio: 1 / 1;
+        }
+        .shape-star {
+          clip-path: polygon(
+            50% 0%,
+            61% 35%,
+            98% 35%,
+            68% 57%,
+            79% 91%,
+            50% 70%,
+            21% 91%,
+            32% 57%,
+            2% 35%,
+            39% 35%
+          );
+        }
+
     </style>
 </head>
 <body>
@@ -64,20 +91,21 @@
         <img class="photo"
              th:if="${cv.profilePicture != null and cv.profilePicture.documentCloudMetadata != null and cv.profilePicture.documentCloudMetadata.publicUrl != null}"
              th:src="${cv.profilePicture.documentCloudMetadata.publicUrl}"
-             alt="Foto"/>
+             th:class="${cv.profilePicture.shape} == 'ROUND' ? 'photo shape-round' :'photo'"
+             alt="Photo"/>
 
         <div class="section" th:if="${cv.contact != null}">
-            <h2>Contacte</h2>
+            <h2>Contact Information</h2>
             <div class="contact-info">
-                <p th:if="${cv.contact.phoneNumber != null}" th:text="${cv.contact.phoneNumber}">Telèfon</p>
-                <p th:if="${cv.contact.email != null}" th:text="${cv.contact.email}">Correu electrònic</p>
+                <p th:if="${cv.contact.phoneNumber != null}" th:text="${cv.contact.phoneNumber}">Phone</p>
+                <p th:if="${cv.contact.email != null}" th:text="${cv.contact.email}">Email</p>
                 <p th:if="${cv.contact.cityOfResidence != null}"
-                   th:text="${cv.contact.cityOfResidence + ' (' + cv.contact.zipCode + ')'}">Municipi + CP</p>
+                   th:text="${cv.contact.cityOfResidence + ' (' + cv.contact.zipCode + ')'}">City + Zip Code</p>
             </div>
         </div>
 
         <div class="section" th:if="${cv.technicalSkill != null and !cv.technicalSkill.entries.isEmpty()}">
-            <h2>Tech Skills</h2>
+            <h2>Technical Skills</h2>
             <ul>
                 <li th:each="skill : ${cv.technicalSkill.entries}" th:if="${skill.keyWords != null}"
                     th:text="${skill.keyWords}">Skill
@@ -96,10 +124,10 @@
         </div>
 
         <div class="section" th:if="${cv.language != null and !cv.language.entries.isEmpty()}">
-            <h2>Idiomes</h2>
+            <h2>Languages</h2>
             <ul>
                 <li th:each="lang : ${cv.language.entries}" th:if="${lang.name != null && lang.level != null}"
-                    th:text="${lang.name + ' - ' + lang.level}">Llengua
+                    th:text="${lang.name + ' - ' + lang.level}">Language
                 </li>
             </ul>
         </div>
@@ -118,7 +146,7 @@
     <div class="right-column">
         <h1 th:if="${cv.identity != null and !cv.identity.names.isEmpty()}"
             th:text="${cv.identity.names[0] + ' ' + (!cv.identity.lastNames.isEmpty() ? cv.identity.lastNames[0] : '')}">
-            NOM I COGNOM
+            NAME AND SURNAME
         </h1>
         <h3 th:if="${cv.profession != null and cv.profession.specificTitle != null}"
             th:text="${cv.profession.specificTitle}">
@@ -126,30 +154,30 @@
         </h3>
 
         <div class="section" th:if="${cv.summary != null and cv.summary.text != null}">
-            <h2>Perfil</h2>
-            <p th:text="${cv.summary.text}">Descripció breu del perfil professional.</p>
+            <h2>Profile</h2>
+            <p th:text="${cv.summary.text}">Brief description of professional profile.</p>
         </div>
 
         <div class="section" th:if="${cv.experience != null and !cv.experience.entries.isEmpty()}">
-            <h2>Experiència</h2>
+            <h2>Experience</h2>
             <div class="experience" th:each="exp : ${cv.experience.entries}">
-                <strong th:if="${exp.role != null}" th:text="${exp.role}">Posició</strong><br/>
+                <strong th:if="${exp.role != null}" th:text="${exp.role}">Position</strong><br/>
                 <em th:if="${exp.nameCompany != null}"
                     th:text="${exp.nameCompany + ' (' + (exp.startDate != null ? exp.startDate : '') + ' - ' + (exp.endDate != null ? exp.endDate : '') + ')'}">
-                    Empresa i dates
+                    Company and dates
                 </em><br/>
-                <p th:if="${exp.description != null}" th:text="${exp.description}">Descripció breu del projecte i
-                    funcions.</p>
+                <p th:if="${exp.description != null}" th:text="${exp.description}">Brief project and role
+                    description.</p>
             </div>
         </div>
 
         <div class="section" th:if="${cv.education != null and !cv.education.entries.isEmpty()}">
-            <h2>Formació</h2>
+            <h2>Education</h2>
             <div class="education" th:each="edu : ${cv.education.entries}">
-                <strong th:if="${edu.title != null}" th:text="${edu.title}">Titulació</strong><br/>
+                <strong th:if="${edu.title != null}" th:text="${edu.title}">Degree</strong><br/>
                 <em th:if="${edu.trainingCenter != null}"
-                    th:text="${edu.trainingCenter + ' (' + edu.graduationYear + ')'}">Centre i any</em><br/>
-                <p th:if="${edu.comments != null}" th:text="${edu.comments}">Detalls de la formació.</p>
+                    th:text="${edu.trainingCenter + ' (' + edu.graduationYear + ')'}">Institution and year</em><br/>
+                <p th:if="${edu.comments != null}" th:text="${edu.comments}">Education details.</p>
             </div>
         </div>
     </div>

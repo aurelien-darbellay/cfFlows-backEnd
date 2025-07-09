@@ -8,6 +8,8 @@ import org.thymeleaf.context.Context;
 import s05t02.interactiveCV.model.documents.InteractiveDocument;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -41,6 +43,13 @@ public class PdfService {
         Files.createDirectories(Paths.get("test-output"));
         Path path = Paths.get("test-output/generated-cv.pdf");
         Files.write(path, pdfBytes);
+        // Act: Generate HTML
+        String html = generateHtml(document);
+        // Save to file
+        File outputFile = new File("test-output/generated-cv.html");
+        try (FileWriter writer = new FileWriter(outputFile)) {
+            writer.write(html);
+        }
         return pdfBytes;
     }
 }
