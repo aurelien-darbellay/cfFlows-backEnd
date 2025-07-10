@@ -4,8 +4,11 @@
     <meta charset="UTF-8"/>
     <title>CV</title>
     <style>
+        * {
+            box-sizing: border-box;
+        }
         body {
-          font-family: Arial, sans-serif;
+          font-family: 'Poppins', sans-serif;
           margin: 0;
           padding: 0;
           color: #333;
@@ -24,7 +27,7 @@
         }
 
         .left-column {
-          width: 35%;
+          width: 28%;
           background-color: #f4f4f4;
           padding: 20px;
         }
@@ -36,10 +39,43 @@
         h2 {
           margin-top: 20px;
           border-bottom: 1px solid #ccc;
-          padding-bottom: 5px;
+          padding-bottom: 2px;
+        }
+        h3{
+            margin-bottom: 3px;
+        }
+        h4 {
+            margin-top:0px;
+            font-weight: 400;
+            font-style: italic;
         }
         ul {
+          list-style-type: none;
           padding-left: 20px;
+        }
+
+        p {
+          margin:0px;
+        }
+        .comments {
+            margin-top: 0px;
+            font-weight:300;
+            font-style:italic;
+            margin-bottom:0px;
+            padding:0px;
+        }
+        .center {
+            font-weight:400;
+            margin-top:0px;
+            margin-bottom:0px;
+            padding:0;
+        }
+        .skills li {
+            margin:0px;
+            padding:0px;
+        }
+        body, p, li {
+          line-height: 1.3;
         }
         .section {
           margin-bottom: 25px;
@@ -50,10 +86,15 @@
           margin-bottom: 20px;
         }
         .contact-info, .socials {
-          font-size: 0.9em;
+          font-size: 0.85em;
+        }
+        .contact-info p, .socials p {
+            margin: 1px;
+            padding: 0px;
         }
         .experience, .education {
-          margin-bottom: 15px;
+          margin-bottom: 7px;
+          margin-top: 7px;
         }
         .photo {
            width: 100%;
@@ -61,25 +102,8 @@
            margin-bottom: 20px;
            object-fit: cover;
         }
-        .shape-round {
-          border-radius: 50%;
-        }
-        .shape-square {
-          aspect-ratio: 1 / 1;
-        }
-        .shape-star {
-          clip-path: polygon(
-            50% 0%,
-            61% 35%,
-            98% 35%,
-            68% 57%,
-            79% 91%,
-            50% 70%,
-            21% 91%,
-            32% 57%,
-            2% 35%,
-            39% 35%
-          );
+        .skills{
+            font-size:0.85em;
         }
 
     </style>
@@ -91,22 +115,29 @@
         <img class="photo"
              th:if="${cv.profilePicture != null and cv.profilePicture.documentCloudMetadata != null and cv.profilePicture.documentCloudMetadata.publicUrl != null}"
              th:src="${cv.profilePicture.documentCloudMetadata.publicUrl}"
-             th:class="${cv.profilePicture.shape} == 'ROUND' ? 'photo shape-round' :'photo'"
              alt="Photo"/>
 
         <div class="section" th:if="${cv.contact != null}">
-            <h2>Contact Information</h2>
+            <h2>Contact</h2>
             <div class="contact-info">
-                <p th:if="${cv.contact.phoneNumber != null}" th:text="${cv.contact.phoneNumber}">Phone</p>
                 <p th:if="${cv.contact.email != null}" th:text="${cv.contact.email}">Email</p>
+                <p th:if="${cv.contact.phoneNumber != null}" th:text="${cv.contact.phoneNumber}">Phone</p>
                 <p th:if="${cv.contact.cityOfResidence != null}"
-                   th:text="${cv.contact.cityOfResidence + ' (' + cv.contact.zipCode + ')'}">City + Zip Code</p>
+                   th:text="${cv.contact.cityOfResidence}">City</p>
+            </div>
+            <div class="socials" th:if="${cv.contact != null}">
+                <p th:if="${cv.contact.gitHubAccount != null}">
+                    <a th:href="${cv.contact.gitHubAccount}">GitHub</a>
+                </p>
+                <p th:if="${cv.contact.linkedInAccount != null}">
+                    <a th:href="${cv.contact.linkedInAccount}">LinkedIn</a>
+                </p>
             </div>
         </div>
 
         <div class="section" th:if="${cv.technicalSkill != null and !cv.technicalSkill.entries.isEmpty()}">
             <h2>Technical Skills</h2>
-            <ul>
+            <ul class="skills">
                 <li th:each="skill : ${cv.technicalSkill.entries}" th:if="${skill.keyWords != null}"
                     th:text="${skill.keyWords}">Skill
                 </li>
@@ -115,7 +146,7 @@
 
         <div class="section" th:if="${cv.softSkill != null and !cv.softSkill.entries.isEmpty()}">
             <h2>Soft Skills</h2>
-            <ul>
+            <ul class="skills">
                 <li th:each="skill : ${cv.softSkill.entries}" th:if="${skill.keyWords != null}"
                     th:text="${skill.keyWords}">
                     Soft Skill
@@ -125,20 +156,11 @@
 
         <div class="section" th:if="${cv.language != null and !cv.language.entries.isEmpty()}">
             <h2>Languages</h2>
-            <ul>
+            <ul class="skills">
                 <li th:each="lang : ${cv.language.entries}" th:if="${lang.name != null && lang.level != null}"
                     th:text="${lang.name + ' - ' + lang.level}">Language
                 </li>
             </ul>
-        </div>
-
-        <div class="section socials" th:if="${cv.contact != null}">
-            <p th:if="${cv.contact.gitHubAccount != null}">
-                <a th:href="${cv.contact.gitHubAccount}">GitHub</a>
-            </p>
-            <p th:if="${cv.contact.linkedInAccount != null}">
-                <a th:href="${cv.contact.linkedInAccount}">LinkedIn</a>
-            </p>
         </div>
     </div>
 
@@ -148,10 +170,14 @@
             th:text="${cv.identity.names[0] + ' ' + (!cv.identity.lastNames.isEmpty() ? cv.identity.lastNames[0] : '')}">
             NAME AND SURNAME
         </h1>
-        <h3 th:if="${cv.profession != null and cv.profession.specificTitle != null}"
-            th:text="${cv.profession.specificTitle}">
+        <h3 th:if="${cv.profession != null and cv.profession.generalTitle != null}"
+            th:text="${cv.profession.generalTitle}">
             Web Developer / Data Analyst
         </h3>
+        <h4 th:if="${cv.profession != null and cv.profession.specificTitle != null}"
+            th:text="${cv.profession.specificTitle}">
+            Web Developer / Data Analyst
+        </h4>
 
         <div class="section" th:if="${cv.summary != null and cv.summary.text != null}">
             <h2>Profile</h2>
@@ -162,11 +188,16 @@
             <h2>Experience</h2>
             <div class="experience" th:each="exp : ${cv.experience.entries}">
                 <strong th:if="${exp.role != null}" th:text="${exp.role}">Position</strong><br/>
-                <em th:if="${exp.nameCompany != null}"
-                    th:text="${exp.nameCompany + ' (' + (exp.startDate != null ? exp.startDate : '') + ' - ' + (exp.endDate != null ? exp.endDate : '') + ')'}">
+                <p class="center" th:if="${exp.nameCompany != null}"
+                   th:text="${exp.nameCompany + ' ('
+                                + (exp.startDate != null ? #temporals.format(exp.startDate, 'dd/MM/yyyy') : '')
+                                + ' - '
+                                + (exp.endDate != null ? #temporals.format(exp.endDate, 'dd/MM/yyyy') : '')
+                                + ')'}">
                     Company and dates
-                </em><br/>
-                <p th:if="${exp.description != null}" th:text="${exp.description}">Brief project and role
+                </p>
+                <p class="comments" th:if="${exp.description != null}" th:text="${exp.description}">Brief project and
+                    role
                     description.</p>
             </div>
         </div>
@@ -175,10 +206,13 @@
             <h2>Education</h2>
             <div class="education" th:each="edu : ${cv.education.entries}">
                 <strong th:if="${edu.title != null}" th:text="${edu.title}">Degree</strong><br/>
-                <em th:if="${edu.trainingCenter != null}"
-                    th:text="${edu.trainingCenter + ' (' + edu.graduationYear + ')'}">Institution and year</em><br/>
-                <p th:if="${edu.comments != null}" th:text="${edu.comments}">Education details.</p>
+                <p class="center" th:if="${edu.trainingCenter != null}"
+                   th:text="${edu.trainingCenter + (edu.graduationYear != 0 ? ' (' + edu.graduationYear + ')' : '')}">
+                    Institution and year
+                </p>
+                <p class="comments" th:if="${edu.comments != null}" th:text="${edu.comments}">Education details.</p>
             </div>
+
         </div>
     </div>
 </div>

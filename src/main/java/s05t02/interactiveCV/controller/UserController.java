@@ -14,9 +14,9 @@ import s05t02.interactiveCV.dto.interfaces.PublicViewMapableToDto;
 import s05t02.interactiveCV.dto.interfaces.UserMapableToDto;
 import s05t02.interactiveCV.model.documents.InteractiveDocument;
 import s05t02.interactiveCV.model.publicViews.PublicView;
-import s05t02.interactiveCV.service.PdfService;
 import s05t02.interactiveCV.service.entities.PublicViewService;
 import s05t02.interactiveCV.service.entities.UserService;
+import s05t02.interactiveCV.service.pdfService.PdfService;
 import s05t02.interactiveCV.service.security.jwt.JwtCookieSuccessHandler;
 
 import java.util.Map;
@@ -83,8 +83,8 @@ public class UserController {
     }
 
     @PostMapping(USER_GENERATE_PDF_REL)
-    Mono<Void> printDocumentToPdf(@RequestBody InteractiveDocument document) {
-        return Mono.fromCallable(() -> pdfService.printDocumentToPdf(document)).then();
+    Mono<byte[]> printDocumentToPdf(@RequestBody InteractiveDocument document) {
+        return Mono.fromCallable(() -> pdfService.printDocumentToPdf(document));
 
     }
 

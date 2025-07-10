@@ -6,11 +6,11 @@ import org.junit.jupiter.api.Test;
 import org.thymeleaf.spring6.SpringTemplateEngine;
 import org.thymeleaf.templateresolver.ClassLoaderTemplateResolver;
 import s05t02.interactiveCV.model.documents.cv.InteractiveCv;
+import s05t02.interactiveCV.service.pdfService.PdfService;
 import s05t02.interactiveCV.testClasses.DocumentFactory;
 
 import java.io.File;
 import java.io.FileWriter;
-import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -39,7 +39,7 @@ public class PdfServiceTest {
     }
 
     @Test
-    void testGenerateHtmlAndSaveToFile() throws IOException {
+    void testGenerateHtmlAndSaveToFile() throws Exception {
         // Arrange: Build a sample InteractiveCv (you can improve this with real test data)
         InteractiveCv sampleCv = DocumentFactory.populatedInteractiveCv("test");
 
@@ -61,7 +61,7 @@ public class PdfServiceTest {
     }
 
     @Test
-    void generatePdfAndSaveToFile() throws IOException {
+    void generatePdfAndSaveToFile() throws Exception {
         InteractiveCv sampleCv = DocumentFactory.populatedInteractiveCv("test");
         byte[] pdfBytes = pdfService.generatePdf(sampleCv);
         Files.createDirectories(Paths.get("test-output"));

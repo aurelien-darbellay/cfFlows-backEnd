@@ -26,7 +26,7 @@ public class ProfilePicture extends ContainerEntry {
         this.documentCloudMetadata = documentCloudMetadata;
     }
 
-    private final CloudMetaData documentCloudMetadata;
+    private CloudMetaData documentCloudMetadata;
     @Builder.Default
     private Shape shape = Shape.ROUND;
 

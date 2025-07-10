@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import customCompileChecks.MatchesTypeName;
 import lombok.*;
 import s05t02.interactiveCV.model.documents.InteractiveDocument;
+import s05t02.interactiveCV.model.documents.WithProfilePicture;
 import s05t02.interactiveCV.model.documents.entries.concreteEntries.*;
 import s05t02.interactiveCV.model.documents.entries.genEntriesFeatures.Entry;
 import s05t02.interactiveCV.model.documents.entries.genEntriesFeatures.ListEntries;
@@ -18,7 +19,7 @@ import java.util.UUID;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = false)
 @JsonIgnoreProperties(ignoreUnknown = true)
 @MatchesTypeName
-public class InteractiveCv implements InteractiveDocument {
+public class InteractiveCv implements InteractiveDocument, WithProfilePicture {
     @MatchesTypeName(ignore = true)
     @Builder.Default
     @EqualsAndHashCode.Include
