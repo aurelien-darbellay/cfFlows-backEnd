@@ -118,7 +118,8 @@
              alt="Photo"/>
 
         <div class="section" th:if="${cv.contact != null}">
-            <h2>Contact</h2>
+            <h2 th:text="${(cv.contact.header != null and !#strings.isEmpty(cv.contact.header)) ? cv.contact.header : 'Contact'}">
+                Contact</h2>
             <div class="contact-info">
                 <p th:if="${cv.contact.email != null}" th:text="${cv.contact.email}">Email</p>
                 <p th:if="${cv.contact.phoneNumber != null}" th:text="${cv.contact.phoneNumber}">Phone</p>
@@ -136,7 +137,8 @@
         </div>
 
         <div class="section" th:if="${cv.technicalSkill != null and !cv.technicalSkill.entries.isEmpty()}">
-            <h2>Technical Skills</h2>
+            <h2 th:text="${(cv.technicalSkill.header != null and !#strings.isEmpty(cv.technicalSkill.header)) ? cv.technicalSkill.header : 'Technical Skills'}">
+                Technical Skills</h2>
             <ul class="skills">
                 <li th:each="skill : ${cv.technicalSkill.entries}" th:if="${skill.keyWords != null}"
                     th:text="${skill.keyWords}">Skill
@@ -145,7 +147,8 @@
         </div>
 
         <div class="section" th:if="${cv.softSkill != null and !cv.softSkill.entries.isEmpty()}">
-            <h2>Soft Skills</h2>
+            <h2 th:text="${(cv.softSkill.header != null and !#strings.isEmpty(cv.softSkill.header)) ? cv.softSkill.header : 'Soft Skills'}">
+                Soft Skills</h2>
             <ul class="skills">
                 <li th:each="skill : ${cv.softSkill.entries}" th:if="${skill.keyWords != null}"
                     th:text="${skill.keyWords}">
@@ -153,9 +156,20 @@
                 </li>
             </ul>
         </div>
-
+        <div class="section" th:if="${cv.portfolio != null and !cv.portfolio.entries.isEmpty()}">
+            <h2 th:text="${(cv.portfolio.header != null and !#strings.isEmpty(cv.portfolio.header)) ? cv.portfolio.header : 'Portfolio'}">
+                Portfolio
+            </h2>
+            <ul class="skills">
+                <li th:each="item : ${cv.portfolio.entries}"
+                    th:if="${item.projectName != null and item.projectUrl != null}">
+                    <a th:href="${item.projectUrl}" th:text="${item.projectName}">Project</a>
+                </li>
+            </ul>
+        </div>
         <div class="section" th:if="${cv.language != null and !cv.language.entries.isEmpty()}">
-            <h2>Languages</h2>
+            <h2 th:text="${(cv.language.header != null and !#strings.isEmpty(cv.language.header)) ? cv.language.header : 'Languages'}">
+                Languages</h2>
             <ul class="skills">
                 <li th:each="lang : ${cv.language.entries}" th:if="${lang.name != null && lang.level != null}"
                     th:text="${lang.name + ' - ' + lang.level}">Language
@@ -180,12 +194,14 @@
         </h4>
 
         <div class="section" th:if="${cv.summary != null and cv.summary.text != null}">
-            <h2>Profile</h2>
+            <h2 th:text="${(cv.summary.header != null and !#strings.isEmpty(cv.summary.header)) ? cv.summary.header : 'Profile'}">
+                Profile</h2>
             <p th:text="${cv.summary.text}">Brief description of professional profile.</p>
         </div>
 
         <div class="section" th:if="${cv.experience != null and !cv.experience.entries.isEmpty()}">
-            <h2>Experience</h2>
+            <h2 th:text="${(cv.experience.header != null and !#strings.isEmpty(cv.experience.header)) ? cv.experience.header : 'Experience'}">
+                Experience</h2>
             <div class="experience" th:each="exp : ${cv.experience.entries}">
                 <strong th:if="${exp.role != null}" th:text="${exp.role}">Position</strong><br/>
                 <p class="center" th:if="${exp.nameCompany != null}"
@@ -203,7 +219,8 @@
         </div>
 
         <div class="section" th:if="${cv.education != null and !cv.education.entries.isEmpty()}">
-            <h2>Education</h2>
+            <h2 th:text="${(cv.education.header != null and !#strings.isEmpty(cv.education.header)) ? cv.education.header : 'Education'}">
+                Education</h2>
             <div class="education" th:each="edu : ${cv.education.entries}">
                 <strong th:if="${edu.title != null}" th:text="${edu.title}">Degree</strong><br/>
                 <p class="center" th:if="${edu.trainingCenter != null}"
