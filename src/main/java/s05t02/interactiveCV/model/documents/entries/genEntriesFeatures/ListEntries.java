@@ -31,10 +31,10 @@ public class ListEntries<T extends Entry> extends ContainerEntry implements List
         if (listEntries == null) return null;
         log.atDebug().log("ListEntries position is {}", listEntries.getPosition());
         if (!listEntries.isProjected()) {
-            listEntries.setEntries(new ArrayList<>());
-            return listEntries;
+            return null;
         }
         List<T> filteredEntries = listEntries.getEntries().stream().filter(Entry::isProjected).toList();
+        if (filteredEntries.isEmpty()) return null;
         listEntries.setEntries(filteredEntries);
         return listEntries;
     }

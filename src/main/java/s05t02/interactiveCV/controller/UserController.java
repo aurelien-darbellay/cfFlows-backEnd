@@ -87,5 +87,4 @@ public class UserController {
         return Mono.fromCallable(() -> pdfService.printDocumentToPdf(document));
 
     }
-
 }
