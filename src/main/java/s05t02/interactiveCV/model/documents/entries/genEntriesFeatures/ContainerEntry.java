@@ -16,6 +16,7 @@ public abstract class ContainerEntry extends Entry implements Positioned, Colore
     private String color;
     private String previousEntry;
     private String nextEntry;
+    private String header;
     private double size;
 
     public ContainerEntry() {

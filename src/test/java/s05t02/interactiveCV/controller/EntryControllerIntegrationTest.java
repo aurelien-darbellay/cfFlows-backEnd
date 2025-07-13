@@ -42,7 +42,7 @@ public class EntryControllerIntegrationTest {
 
     private final String testUsername = "testuser";
     private final String testDocId = "doc123";
-    private final Entry testEntry = Summary.builder().title("hola").build();
+    private final Entry testEntry = Summary.builder().id("123").title("hola").build();
     private String validJwtToken;
 
     @BeforeEach
@@ -102,7 +102,7 @@ public class EntryControllerIntegrationTest {
 
     @Test
     void updateEntry_ShouldReturnUpdatedEntry_WhenAuthorized() {
-        Entry updatedEntry = Contact.builder().cityOfResidence("harley").build();
+        Entry updatedEntry = Contact.builder().id("234").cityOfResidence("harley").build();
         when(entryService.modifyEntry(testUsername, testDocId, updatedEntry))
                 .thenReturn(Mono.just(updatedEntry));
 

@@ -44,7 +44,7 @@ public class PdfServiceTest {
         InteractiveCv sampleCv = DocumentFactory.populatedInteractiveCv("test");
 
         // Act: Generate HTML
-        String html = pdfService.generateHtml(sampleCv);
+        String html = pdfService.generateHtml(sampleCv.projectDocument());
 
         // Ensure output folder exists
         Files.createDirectories(Paths.get("test-output"));
