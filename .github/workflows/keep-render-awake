@@ -3,7 +3,7 @@ name: Keep Render Awake
 on:
   schedule:
     # Runs every 10 minutes (GitHub Actions cron syntax)
-    - cron: "*/1 * * * *"
+    - cron: "*/12 * * * *"
 
 jobs:
   ping:
