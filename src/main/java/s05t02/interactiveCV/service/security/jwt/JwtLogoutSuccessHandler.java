@@ -18,11 +18,15 @@ public class JwtLogoutSuccessHandler implements ServerLogoutSuccessHandler {
     @Value("${cookie.secure}")
     private boolean jwtSecure;
 
+    @Value("${cookie.sameSite}")
+    private String jwtSameSite;
+
     @Override
     public Mono<Void> onLogoutSuccess(WebFilterExchange exchange, Authentication authentication) {
         ResponseCookie expiredCookie = ResponseCookie.from(JWT_COOKIE_NAME, "")
                 .httpOnly(true)
-                .secure(jwtSecure) // Set to true if using HTTPS
+                .secure(jwtSecure)
+                .sameSite(jwtSameSite)// Set to true if using HTTPS
                 .path("/")
                 .maxAge(0)
                 .build();
