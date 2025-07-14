@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.buffer.DataBuffer;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseCookie;
@@ -31,6 +32,12 @@ public class JwtCookieSuccessHandler implements ServerAuthenticationSuccessHandl
 
     @Autowired
     ObjectMapper objectMapper;
+
+    @Value("${cookie.sameSite}")
+    private String jwtSameSite;
+
+    @Value("${cookie.secure}")
+    private boolean jwtSecure;
 
     private final JwtUtils jwtUtils;
     private static final Logger log = LoggerFactory.getLogger(JwtCookieSuccessHandler.class);
@@ -66,9 +73,9 @@ public class JwtCookieSuccessHandler implements ServerAuthenticationSuccessHandl
         Jwt jwt = jwtUtils.createJwt(username, roles);
         ResponseCookie cookie = ResponseCookie.from("jwt", jwt.getTokenValue())
                 .httpOnly(true)
-                .secure(false) // Set to true if using HTTPS
+                .secure(jwtSecure) // Set to true if using HTTPS
                 .path("/")
-                .sameSite("Lax")
+                .sameSite(jwtSameSite)
                 .maxAge(Duration.ofHours(2))
                 .build();
         exchange.getResponse().addCookie(cookie);
