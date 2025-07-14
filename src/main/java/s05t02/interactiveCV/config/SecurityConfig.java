@@ -3,6 +3,7 @@ package s05t02.interactiveCV.config;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpStatus;
@@ -44,6 +45,18 @@ public class SecurityConfig {
 
     private final Logger log = LoggerFactory.getLogger(SecurityConfig.class);
 
+    @Value("${cookie.sameSite}")
+    private String csrfSameSite;
+
+    @Value("${cookie.secure}")
+    private boolean csrfSecure;
+
+    @Value("${app.frontend.origin}")
+    private String frontendOrigin;
+
+    @Value("${app.backend.origin}")
+    private String backendOrigin;
+
 
     @Bean
     public SecurityWebFilterChain securityWebFilterChain(ServerHttpSecurity http,
@@ -82,7 +95,7 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();
-        config.setAllowedOrigins(List.of(ApiPaths.FRONT_ORIGIN, ApiPaths.BACK_ORIGIN));
+        config.setAllowedOrigins(List.of(frontendOrigin, backendOrigin));
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         config.setAllowedHeaders(List.of("*"));
         config.setExposedHeaders(List.of("Authorization"));
@@ -97,8 +110,8 @@ public class SecurityConfig {
     public ServerCsrfTokenRepository csrfTokenRepository() {
         CookieServerCsrfTokenRepository csrfTokenRepository = CookieServerCsrfTokenRepository.withHttpOnlyFalse();
         csrfTokenRepository.setCookieCustomizer(builder -> builder
-                .sameSite("Lax")   // or "Lax", "None"
-                .secure(false)//
+                .sameSite(csrfSameSite)   // or "Lax", "None"
+                .secure(csrfSecure)//
                 .maxAge(3600)// important if using SameSite=None
                 .path("/")            // optional, sets cookie path
         );

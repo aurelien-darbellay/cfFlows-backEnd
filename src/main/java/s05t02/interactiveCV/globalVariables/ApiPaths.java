@@ -5,10 +5,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class ApiPaths {
-
-    public static final String BACK_ORIGIN = "http://localhost:8080";
-    public static final String FRONT_ORIGIN = "http://localhost:5173";
-
+    
     public static final String BASE_PATH = "/api";
     //protected paths
     public static final String PROTECTED_BASE_PATH = BASE_PATH + "/protected";
