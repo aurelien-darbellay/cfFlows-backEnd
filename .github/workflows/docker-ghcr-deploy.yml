@@ -1,4 +1,4 @@
-name: Build and Push to GHCR
+name: Build and Push to GHCR, then Deploy to Render
 
 on:
   push:
@@ -6,7 +6,7 @@ on:
       - main
 
 jobs:
-  build-and-push:
+  build-push-deploy:
     runs-on: ubuntu-latest
 
     permissions:
@@ -36,3 +36,7 @@ jobs:
           context: .
           push: true
           tags: ghcr.io/${{ secrets.GHCR_USERNAME }}/interactive-cv-backend:latest
+
+      - name: Trigger Render Deploy Hook
+        run: |
+          curl -X POST ${{ secrets.RENDER_DEPLOY_HOOK_URL }}
