@@ -1,34 +1,36 @@
 # ============================
-# ---- Stage 1: Build JAR ----
+# ---- Stage 1: Builder ----
 # ============================
 FROM gradle:8.4-jdk17-alpine AS builder
 
 WORKDIR /app
 
-# Copy Gradle wrapper and settings first
-COPY settings.gradle build.gradle gradlew /app/
+# Copy Gradle wrapper and configuration *first* for caching
+COPY gradlew settings.gradle build.gradle /app/
 COPY gradle /app/gradle
 
-# Ensure gradlew is executable
-RUN chmod +x gradlew
+# Ensure wrapper is executable
+RUN chmod +x /app/gradlew
 
 # Pre-download dependencies
-RUN ./gradlew --no-daemon build -x test || return 0
+RUN ./gradlew --no-daemon build -x test || true
 
-# Now copy the actual source code
+# Now copy *all* sources
 COPY . /app
 
-# Build the jar
+# Ensure wrapper is executable AGAIN (in case COPY overwrote it)
+RUN chmod +x /app/gradlew
+
+# Build the fat jar
 RUN ./gradlew --no-daemon clean bootJar
 
-# =============================
-# ---- Stage 2: Run JAR ----
-# =============================
+# ============================
+# ---- Stage 2: Runner ----
+# ============================
 FROM eclipse-temurin:17-jdk-alpine
 
 WORKDIR /app
 
-# Copy the built jar from the builder stage
 COPY --from=builder /app/build/libs/*.jar app.jar
 
 EXPOSE 8080
