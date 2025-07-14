@@ -4,7 +4,6 @@ import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.Nulls;
-import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
@@ -49,7 +48,6 @@ public abstract class Entry implements CreatesMongoDbUpdate, HasId {
     private boolean highlighted;
     @EqualsAndHashCode.Include
     @JsonSetter(nulls = Nulls.SKIP)
-    @Builder.Default
     private String id = UUID.randomUUID().toString();
 
     public Entry(String id) {
