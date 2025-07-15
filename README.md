@@ -27,6 +27,7 @@ Authentication is via **JWT** in an httpOnly cookie with a **CSRF double-submit*
 - JUnit 5 / Reactor Test
 - Java 21
 - Gradle 8.14
+- Cloudinary Service
 
 ---
 
