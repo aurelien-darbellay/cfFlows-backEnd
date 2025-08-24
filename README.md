@@ -124,7 +124,7 @@ https://localhost:8080/webjars/swagger-ui/index.html
 ## 🔗 GitHub
 
 You can find the source code for this project on GitHub:  
-https://github.com/aurelien-darbellay/s05t02_2
+https://github.com/aurelien-darbellay/cvFlows-backEnd
 
 Docker image hosted in GitHub Packages:  
 https://ghcr.io/aurelien-darbellay/interactive-cv-backend:latest
